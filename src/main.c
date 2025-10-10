@@ -1,15 +1,22 @@
+#define SDL_MAIN_HANDLED
 #define SDL_MAIN_USE_CALLBACKS
 #include <SDL3/SDL_main.h>
 #include <SDL3/SDL.h>
+
+#ifdef __EMSCRIPTEN__
+#include <SDL_ttf.h>
+#include <SDL_image.h>
+#else
 #include <SDL3_ttf/SDL_ttf.h>
+#include <SDL3_image/SDL_image.h>
+#endif
 
 #define CLAY_IMPLEMENTATION
-#include "../../clay.h"
+#include "../clay.h"
+#include "../SDL3/clay_renderer_SDL3.c"
+#include "../clay-video-demo.c"
 
 #include <stdio.h>
-
-#include "../../renderers/SDL3/clay_renderer_SDL3.c"
-#include "../shared-layouts/clay-video-demo.c"
 
 static const Uint32 FONT_ID = 0;
 
