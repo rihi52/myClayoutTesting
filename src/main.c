@@ -60,19 +60,30 @@ Clay_RenderCommandArray ClayRedBackgroundLayout(void)
             .padding = CLAY_PADDING_ALL(16),
             .childGap = 16
         },
-        .backgroundColor = { 255, 0, 0, 255 }
-    }) {
-        CLAY(CLAY_ID("BuildButton"), {
-        .layout = { .padding = { 16, 16, 8, 8 }},
-        .backgroundColor = {140, 140, 140, 140 },
-        .cornerRadius = CLAY_CORNER_RADIUS(5)
-        }) {
-            CLAY_TEXT(CLAY_STRING("Build Encounter"), CLAY_TEXT_CONFIG({
-                .fontId = FONT_ID_BODY_16,
-                .fontSize = 16,
-                .textColor = { 255, 255, 255, 255}
-            }));
-        }
+        .backgroundColor = COLOR_BLUE
+    }) {/* Center container start */
+        CLAY(CLAY_ID("CenterContainer"), {
+            .layout = {
+            .layoutDirection = CLAY_TOP_TO_BOTTOM,
+            .sizing = layoutExpand,
+            .padding = CLAY_PADDING_ALL(16),
+            .childGap = 16
+        },
+        .cornerRadius = CLAY_CORNER_RADIUS(25),
+        .backgroundColor = { 100, 100, 100, 255 }
+        }) {/* Build button start */
+            CLAY(CLAY_ID("BuildButton"), {
+            .layout = { .padding = { 16, 16, 8, 8 }},
+            .backgroundColor = {85, 255, 85, 255 },
+            .cornerRadius = CLAY_CORNER_RADIUS(15)
+            }) {
+                CLAY_TEXT(CLAY_STRING("Build Encounter"), CLAY_TEXT_CONFIG({
+                    .fontId = FONT_ID_BODY_16,
+                    .fontSize = 16,
+                    .textColor = { 0, 0, 0, 255}
+                }));
+            }/* Build button end */ 
+        };        
     };
 
     return Clay_EndLayout();
