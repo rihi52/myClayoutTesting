@@ -10,6 +10,19 @@
 #include "../SDL3/clay_renderer_SDL3.c"
 
 #include <stdio.h>
+#include "styles.h"
+
+/*========================================================================* 
+ *  SECTION - Styles                                                      * 
+ *========================================================================* 
+ */
+const Clay_LayoutConfig ParentWindow = (Clay_LayoutConfig) {
+    .sizing = { CLAY_SIZING_GROW(0), CLAY_SIZING_GROW(0)},
+    .padding = { 16, 16, 16, 16},
+    .childGap = 16,
+    .childAlignment =  { CLAY_ALIGN_X_CENTER, CLAY_ALIGN_Y_CENTER },
+    .layoutDirection = CLAY_LEFT_TO_RIGHT
+};
 
 const int FONT_ID_BODY_16 = 0;
 Clay_Color COLOR_WHITE = { 255, 255, 255, 255};
@@ -54,21 +67,11 @@ Clay_RenderCommandArray ClayRedBackgroundLayout(void)
 
     // Define one element that covers the whole screen
     CLAY(CLAY_ID("OuterContainer"), {
-        .layout = {
-            .layoutDirection = CLAY_TOP_TO_BOTTOM,
-            .sizing = layoutExpand,
-            .padding = CLAY_PADDING_ALL(16),
-            .childGap = 16
-        },
+        ParentWindow,
         .backgroundColor = COLOR_BLUE
     }) {/* Center container start */
         CLAY(CLAY_ID("CenterContainer"), {
-            .layout = {
-            .layoutDirection = CLAY_TOP_TO_BOTTOM,
-            .sizing = layoutExpand,
-            .padding = CLAY_PADDING_ALL(16),
-            .childGap = 16
-        },
+        ParentWindow,
         .cornerRadius = CLAY_CORNER_RADIUS(25),
         .backgroundColor = { 100, 100, 100, 255 }
         }) {/* Build button start */
