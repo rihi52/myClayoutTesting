@@ -17,14 +17,39 @@
  *========================================================================* 
  */
 const Clay_LayoutConfig ParentWindow = (Clay_LayoutConfig) {
-    .sizing = { CLAY_SIZING_GROW(0), CLAY_SIZING_GROW(0)},
+    .sizing = { .height{.size{.minMax{.min{ 1000 }}}}, CLAY_SIZING_GROW(0)},
     .padding = { 16, 16, 16, 16},
+    .childGap = 40,
+    .childAlignment =  {  CLAY_ALIGN_X_CENTER, CLAY_ALIGN_Y_CENTER },
+    .layoutDirection = CLAY_TOP_TO_BOTTOM
+};
+
+const Clay_LayoutConfig HeadLabelWindow = (Clay_LayoutConfig) {
+    .sizing = { CLAY_SIZING_FIXED(400), CLAY_SIZING_FIXED(100) },
+    .padding = { 8, 8, 8, 8 },
     .childGap = 16,
     .childAlignment =  { CLAY_ALIGN_X_CENTER, CLAY_ALIGN_Y_CENTER },
-    .layoutDirection = CLAY_LEFT_TO_RIGHT
+    .layoutDirection = CLAY_TOP_TO_BOTTOM
+};
+
+const Clay_LayoutConfig MainButton = (Clay_LayoutConfig) {
+    .sizing = { CLAY_SIZING_FIXED(200), CLAY_SIZING_FIXED(50) },
+    .padding = { 8, 8, 8, 8 },
+    .childGap = 16,
+    .childAlignment =  { CLAY_ALIGN_X_CENTER, CLAY_ALIGN_Y_CENTER },
+    .layoutDirection = CLAY_TOP_TO_BOTTOM
+};
+
+const Clay_TextElementConfig WindowLabel = (Clay_TextElementConfig) {
+    .textColor = { 0, 0, 0, 255},
+    .fontId = 0,
+    .fontSize = 64,
+    .textAlignment = CLAY_TEXT_ALIGN_CENTER,
+    .wrapMode = CLAY_TEXT_WRAP_NONE
 };
 
 const int FONT_ID_BODY_16 = 0;
+const int FONT_ID_BODY_32 = 0;
 Clay_Color COLOR_WHITE = { 255, 255, 255, 255};
 
 static const Uint32 FONT_ID = 0;
@@ -68,25 +93,28 @@ Clay_RenderCommandArray ClayRedBackgroundLayout(void)
     // Define one element that covers the whole screen
     CLAY(CLAY_ID("OuterContainer"), {
         ParentWindow,
-        .backgroundColor = COLOR_BLUE
+        .backgroundColor = COLOR_WHITE
     }) {/* Center container start */
-        CLAY(CLAY_ID("CenterContainer"), {
-        ParentWindow,
-        .cornerRadius = CLAY_CORNER_RADIUS(25),
-        .backgroundColor = { 100, 100, 100, 255 }
-        }) {/* Build button start */
-            CLAY(CLAY_ID("BuildButton"), {
-            .layout = { .padding = { 16, 16, 8, 8 }},
-            .backgroundColor = {85, 255, 85, 255 },
-            .cornerRadius = CLAY_CORNER_RADIUS(15)
-            }) {
-                CLAY_TEXT(CLAY_STRING("Build Encounter"), CLAY_TEXT_CONFIG({
-                    .fontId = FONT_ID_BODY_16,
-                    .fontSize = 16,
-                    .textColor = { 0, 0, 0, 255}
-                }));
-            }/* Build button end */ 
-        };        
+        CLAY(CLAY_ID("HeadLabelContainer"), { HeadLabelWindow,.cornerRadius = CLAY_CORNER_RADIUS(10), .backgroundColor = COLOR_WHITE}) {
+            CLAY_TEXT(CLAY_STRING("GUIDNBATTER"), CLAY_TEXT_CONFIG(WindowLabel));
+        };
+        /* Build button start */
+        CLAY(CLAY_ID("StartButton"), { MainButton, .backgroundColor = COLOR_BLUE, .cornerRadius = CLAY_CORNER_RADIUS(10)}) {
+            CLAY_TEXT(CLAY_STRING("Start Encounter"), CLAY_TEXT_CONFIG({ .fontId = FONT_ID_BODY_16, .fontSize = 16, .textColor = { 0, 0, 0, 255}}));
+        /* Build button end */ 
+        };
+        CLAY(CLAY_ID("BuildButton"), { MainButton, .backgroundColor = COLOR_BLUE, .cornerRadius = CLAY_CORNER_RADIUS(10)}) {
+            CLAY_TEXT(CLAY_STRING("Build Encounter"), CLAY_TEXT_CONFIG({ .fontId = FONT_ID_BODY_16, .fontSize = 16, .textColor = { 0, 0, 0, 255}}));
+        /* Build button end */ 
+        };
+        CLAY(CLAY_ID("CreatureButton"), { MainButton, .backgroundColor = COLOR_BLUE, .cornerRadius = CLAY_CORNER_RADIUS(10)}) {
+            CLAY_TEXT(CLAY_STRING("Creature Database"), CLAY_TEXT_CONFIG({ .fontId = FONT_ID_BODY_16, .fontSize = 16, .textColor = { 0, 0, 0, 255}}));
+        /* Build button end */ 
+        };
+        CLAY(CLAY_ID("PlayerButton"), { MainButton, .backgroundColor = COLOR_BLUE, .cornerRadius = CLAY_CORNER_RADIUS(10)}) {
+            CLAY_TEXT(CLAY_STRING("Player Database"), CLAY_TEXT_CONFIG({ .fontId = FONT_ID_BODY_16, .fontSize = 16, .textColor = { 0, 0, 0, 255}}));
+        /* Build button end */ 
+        };
     };
 
     return Clay_EndLayout();
