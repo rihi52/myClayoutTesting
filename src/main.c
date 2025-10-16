@@ -17,7 +17,7 @@
  *========================================================================* 
  */
 const Clay_LayoutConfig ParentWindow = (Clay_LayoutConfig) {
-    .sizing = { .height{.size{.minMax{.min{ 1000 }}}}, CLAY_SIZING_GROW(0)},
+    .sizing = { CLAY_SIZING_GROW(0), CLAY_SIZING_GROW(0)},
     .padding = { 16, 16, 16, 16},
     .childGap = 40,
     .childAlignment =  {  CLAY_ALIGN_X_CENTER, CLAY_ALIGN_Y_CENTER },
