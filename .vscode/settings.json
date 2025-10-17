@@ -3,6 +3,8 @@
         "sdl.h": "c",
         "sdl_main.h": "c",
         "sdl_image.h": "c",
-        "clay.h": "c"
+        "clay.h": "c",
+        "locale": "c",
+        "*.inc": "c"
     }
 }

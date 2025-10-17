@@ -1,0 +1,5 @@
+#define MAIN_SCREEN 0
+#define START_ENCOUNTER_SCREEN  1
+#define BUILD_ENCOUNTER_SCREEN  2
+#define CREATURE_DB_SCREEN      3
+#define PLAYER_DB_SCREEN        4
