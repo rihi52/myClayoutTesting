@@ -50,13 +50,12 @@ void HandleClayErrors(Clay_ErrorData errorData) {
 
 void SwitchScreenCallback(Clay_ElementId elementId, Clay_PointerData pointerData, intptr_t userData) {
     int check = (int) userData;
-    const char *cmp = "BuildButton";
+    /* TODO: how should this work? changes only on mouse movement after clicking */
+    if (pointerData.state == CLAY_POINTER_DATA_PRESSED_THIS_FRAME) {
+        const char *cmp = "BuildButton";
         const char *id = elementId.stringId.chars;
         printf("%s\n", id);
-    
-    if (pointerData.state == CLAY_POINTER_DATA_PRESSED_THIS_FRAME && strcmp(id, cmp) == 0) {
-        
-        if (check == 0) {
+        if (strcmp(id, cmp) == 0) {
             state = 1;
         } else {
             state = 0;
