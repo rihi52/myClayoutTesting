@@ -5,6 +5,19 @@
         "sdl_image.h": "c",
         "clay.h": "c",
         "locale": "c",
-        "*.inc": "c"
+        "*.inc": "c",
+        "sdl_ttf.h": "c",
+        "stdio.h": "c",
+        "string.h": "c",
+        "global.h": "c",
+        "sdl_keyboard.h": "c",
+        "numbers": "c",
+        "text_input.h": "c",
+        "ios": "c",
+        "main_window.h": "c",
+        "string": "c",
+        "format": "c",
+        "cstdint": "c",
+        "compare": "c"
     }
 }

@@ -1,48 +1,76 @@
-#include "../clay.h"
+#ifndef STYLES_H
+#define STYLES_H
+
+#include "clay.h"
 #include <stdio.h>
 
-const Clay_LayoutConfig ParentWindow = (Clay_LayoutConfig) {
-    .sizing = { CLAY_SIZING_GROW(0), CLAY_SIZING_GROW(0)},
-    .padding = { 16, 16, 16, 16},
-    .childGap = 40,
-    .childAlignment =  {  CLAY_ALIGN_X_CENTER, CLAY_ALIGN_Y_CENTER },
-    .layoutDirection = CLAY_TOP_TO_BOTTOM
-};
+#define GLOBAL_RADIUS_LG_PX     12
+#define GLOBAL_RADIUS_SM_PX     8
+#define MAIN_WINDOW_PADDING     8
+#define INPUT_BORDER_WIDTH_PX   2
+#define SIDEBAR_WIDTH_PX        300
+#define DB_LIST_WIDTH_PX        400
+#define DB_LIST_HEIGHT_PX       100
+#define MAIN_BTN_WIDTH_PX       200
+#define MAIN_BTN_HEIGHT_PX      50
+#define CREATURE_BTN_WIDTH_PX   300
+#define CREATURE_BTN_HEIGHT_PX  80
 
-const Clay_LayoutConfig HeadLabelWindow = (Clay_LayoutConfig) {
-    .sizing = { CLAY_SIZING_FIXED(400), CLAY_SIZING_FIXED(100) },
-    .padding = { 8, 8, 8, 8 },
-    .childGap = 16,
-    .childAlignment =  { CLAY_ALIGN_X_CENTER, CLAY_ALIGN_Y_CENTER },
-    .layoutDirection = CLAY_TOP_TO_BOTTOM
-};
+extern Clay_LayoutConfig SidebarTopLayoutConfig;
+extern Clay_LayoutConfig SidebarBottomLayoutConfig;
+extern Clay_LayoutConfig MainScreenLayoutConfig;
+extern Clay_LayoutConfig LTRParentWindowLayoutConfig;
+extern Clay_LayoutConfig SidebarLayoutConfig;
+extern Clay_LayoutConfig MainScreenButtonLayoutConfig;
+extern Clay_LayoutConfig CreatureButtonLayoutConfig;
+extern Clay_LayoutConfig CreatureButtonContainerLayoutConfig;
+extern Clay_TextElementConfig ButtonTextConfig;
+extern Clay_TextElementConfig InputTextConfig;
+extern Clay_TextElementConfig MainLabelTextConfig;
+extern Clay_LayoutConfig SingleLineInputLayoutConfig;
+extern Clay_LayoutConfig TTBParentWindowLayoutConfig;
 
-const Clay_LayoutConfig MainButton = (Clay_LayoutConfig) {
-    .sizing = { CLAY_SIZING_FIXED(200), CLAY_SIZING_FIXED(50) },
-    .padding = { 8, 8, 8, 8 },
-    .childGap = 16,
-    .childAlignment =  { CLAY_ALIGN_X_CENTER, CLAY_ALIGN_Y_CENTER },
-    .layoutDirection = CLAY_TOP_TO_BOTTOM
-};
+extern Clay_LayoutConfig Floater;
 
-const Clay_TextElementConfig WindowLabel = (Clay_TextElementConfig) {
-    .textColor = { 0, 0, 0, 255},
-    .fontId = 0,
-    .fontSize = 64,
-    .textAlignment = CLAY_TEXT_ALIGN_CENTER,
-    .wrapMode = CLAY_TEXT_WRAP_NONE
-};
+/* Container for creature buttons */
+extern Clay_LayoutConfig CreatureButtonLayoutConfig;
 
-const Clay_TextElementConfig ButtonLabel = (Clay_TextElementConfig) {
-    .textColor = { 0, 0, 0, 255},
-    .fontId = 0,
-    .fontSize = 16,
-    .textAlignment = CLAY_TEXT_ALIGN_CENTER,
-    .wrapMode = CLAY_TEXT_WRAP_NONE
-};
+/* Container for creature name container and cr container*/
+extern Clay_LayoutConfig NameContainerLayoutConfig;
 
-const Clay_ElementDeclaration ButtonStyle = (Clay_ElementDeclaration) {
-    MainButton,
-    .backgroundColor = {191, 191, 191, 255},
-    .cornerRadius = CLAY_CORNER_RADIUS(10)
-};
+/* Container for creature name */
+extern Clay_LayoutConfig SizeCRContainerLayoutConfig;
+
+/* Container for creature cr */
+extern Clay_LayoutConfig CRContainerLayoutConfig;
+
+/* Container for creature name */
+extern Clay_LayoutConfig SizeContainerLayoutConfig;
+
+/**/
+/* Container for creature name container and cr container*/
+extern Clay_LayoutConfig TypeSrcContainerLayoutConfig;
+
+/* Container for creature cr */
+extern Clay_LayoutConfig TypeContainerLayoutConfig;
+/**/
+extern Clay_LayoutConfig SourceContainerLayoutConfig;
+
+/* Colors */
+extern const Clay_Color COLOR_ORANGE;
+extern const Clay_Color COLOR_BLUE;
+extern const Clay_Color COLOR_LIGHT;
+extern const Clay_Color COLOR_BLACK;
+extern const Clay_Color COLOR_RED;
+extern const Clay_Color COLOR_GREEN;
+extern const Clay_Color COLOR_WHITE;
+extern const Clay_Color COLOR_GRAY_BG;
+extern const Clay_Color COLOR_BUTTON_GRAY;
+extern const Clay_Color COLOR_TRANSPARENT;
+
+/* Styles */
+
+// TEMP
+extern const Clay_LayoutConfig HeadLabelWindow;
+
+#endif /* STYLES_H */
