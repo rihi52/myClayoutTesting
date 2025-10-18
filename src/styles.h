@@ -1,48 +1,35 @@
-#include "../clay.h"
+#ifndef STYLES_H
+#define STYLES_H
+
+#include "clay.h"
 #include <stdio.h>
 
-const Clay_LayoutConfig ParentWindow = (Clay_LayoutConfig) {
-    .sizing = { CLAY_SIZING_GROW(0), CLAY_SIZING_GROW(0)},
-    .padding = { 16, 16, 16, 16},
-    .childGap = 40,
-    .childAlignment =  {  CLAY_ALIGN_X_CENTER, CLAY_ALIGN_Y_CENTER },
-    .layoutDirection = CLAY_TOP_TO_BOTTOM
-};
+#define SIDEBAR_WIDTH_PX    300
+#define DB_LIST_WIDTH_PX    400
 
-const Clay_LayoutConfig HeadLabelWindow = (Clay_LayoutConfig) {
-    .sizing = { CLAY_SIZING_FIXED(400), CLAY_SIZING_FIXED(100) },
-    .padding = { 8, 8, 8, 8 },
-    .childGap = 16,
-    .childAlignment =  { CLAY_ALIGN_X_CENTER, CLAY_ALIGN_Y_CENTER },
-    .layoutDirection = CLAY_TOP_TO_BOTTOM
-};
+Clay_ElementDeclaration MakeFixedWidthLimitHeightWindow(uint16_t width, uint16_t height, uint16_t padding, uint16_t childGap, uint16_t yChildAlign, uint16_t layoutDirection);
+Clay_ElementDeclaration MakeParentWindowStyle(uint16_t padding, uint16_t childGap, uint16_t xChildAlign, uint16_t yChildAlign, uint16_t layoutDirection, Clay_Color COLOR);
+Clay_ElementDeclaration MakeSidebarStyle(uint16_t width, uint16_t height, uint16_t padding, uint16_t childGap, uint16_t yChildAlign, uint16_t layoutDirection, Clay_Color COLOR);
+Clay_ElementDeclaration FixedContainerTTBStyle(uint16_t width, uint16_t height, uint16_t padding, uint16_t childGap, Clay_Color COLOR);
+Clay_TextElementConfig  TextConfig(Clay_Color COLOR, uint16_t fontId, uint16_t fontSize, uint16_t textAlignment, uint16_t wrapMode);
+Clay_ElementDeclaration SingleLineTextContainerStyle(uint16_t width, uint16_t height, uint16_t padding, uint16_t childGap, Clay_Color COLOR, uint16_t cornerRadius, uint16_t borderWidthAll, Clay_Color BORDER_COLOR);
+Clay_ElementDeclaration MakeStatblockHeaderStyle( uint16_t height, uint16_t padding, uint16_t childGap, uint16_t yChildAlign, uint16_t layoutDirection, Clay_Color COLOR);
+Clay_ElementDeclaration MakeFixedWidthGrowHeightWindow(uint16_t width, uint16_t padding, uint16_t childGap, uint16_t xChildAlign, uint16_t yChildAlign, uint16_t layoutDirection, Clay_Color COLOR);
 
-const Clay_LayoutConfig MainButton = (Clay_LayoutConfig) {
-    .sizing = { CLAY_SIZING_FIXED(200), CLAY_SIZING_FIXED(50) },
-    .padding = { 8, 8, 8, 8 },
-    .childGap = 16,
-    .childAlignment =  { CLAY_ALIGN_X_CENTER, CLAY_ALIGN_Y_CENTER },
-    .layoutDirection = CLAY_TOP_TO_BOTTOM
-};
+/* Colors */
+extern const Clay_Color COLOR_ORANGE;
+extern const Clay_Color COLOR_BLUE;
+extern const Clay_Color COLOR_LIGHT;
+extern const Clay_Color COLOR_BLACK;
+extern const Clay_Color COLOR_RED;
+extern const Clay_Color COLOR_GREEN;
+extern const Clay_Color COLOR_WHITE;
+extern const Clay_Color COLOR_GRAY_BG;
+extern const Clay_Color COLOR_BUTTON_GRAY;
 
-const Clay_TextElementConfig WindowLabel = (Clay_TextElementConfig) {
-    .textColor = { 0, 0, 0, 255},
-    .fontId = 0,
-    .fontSize = 64,
-    .textAlignment = CLAY_TEXT_ALIGN_CENTER,
-    .wrapMode = CLAY_TEXT_WRAP_NONE
-};
+/* Styles */
 
-const Clay_TextElementConfig ButtonLabel = (Clay_TextElementConfig) {
-    .textColor = { 0, 0, 0, 255},
-    .fontId = 0,
-    .fontSize = 16,
-    .textAlignment = CLAY_TEXT_ALIGN_CENTER,
-    .wrapMode = CLAY_TEXT_WRAP_NONE
-};
+// TEMP
+extern const Clay_LayoutConfig HeadLabelWindow;
 
-const Clay_ElementDeclaration ButtonStyle = (Clay_ElementDeclaration) {
-    MainButton,
-    .backgroundColor = {191, 191, 191, 255},
-    .cornerRadius = CLAY_CORNER_RADIUS(10)
-};
+#endif /* STYLES_H */

@@ -5,6 +5,9 @@ set(CMAKE_C_STANDARD 99)
 # Source files
 set(SRC_FILES
     src/main.c
+    src/main_window.c
+    src/styles.c
+    src/global.c
     SDL3/clay_renderer_SDL3.c
 )
 

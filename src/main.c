@@ -3,20 +3,25 @@
 #include <SDL3/SDL_main.h>
 #include <SDL3_ttf/SDL_ttf.h>
 #include <SDL3_image/SDL_image.h>
+#include <SDL3/SDL_keyboard.h>
+#include <SDL3/SDL_events.h>
 
 
 #define CLAY_IMPLEMENTATION
-#include "../clay.h"
+#include "clay.h"
 #include "../SDL3/clay_renderer_SDL3.c"
 
 #include <stdio.h>
-#include "styles.h"
 #include "global.h"
+#include "main_window.h"
+#include "text_input.h"
 
-typedef struct app_state {
-    SDL_Window *window;
-    Clay_SDL3RendererData rendererData;
-} AppState;
+
+
+const int MinimumWidth = 1280;
+const int MinimumHeight = 720;
+
+const Uint32 FONT_ID = 0;
 
 static inline Clay_Dimensions SDL_MeasureText(Clay_StringSlice text, Clay_TextElementConfig *config, void *userData)
 {
@@ -32,163 +37,9 @@ static inline Clay_Dimensions SDL_MeasureText(Clay_StringSlice text, Clay_TextEl
     return (Clay_Dimensions) { (float) width, (float) height };
 }
 
-/*-------------------------------------------------------------------------------------------*
-*                                 Function Prototypes                                        *
-*--------------------------------------------------------------------------------------------*/
-void ReturnToMainScreenCallback(Clay_ElementId elementId, Clay_PointerData pointerData, intptr_t userData);
-void StartEncounterButtonCallback(Clay_ElementId elementId, Clay_PointerData pointerData, intptr_t userData);
-void BuildEncounterButtonCallback(Clay_ElementId elementId, Clay_PointerData pointerData, intptr_t userData);
-void CreatureDatabaseButtonCallback(Clay_ElementId elementId, Clay_PointerData pointerData, intptr_t userData);
-void PlayerDatabaseButtonCallback(Clay_ElementId elementId, Clay_PointerData pointerData, intptr_t userData);
-
-/*-------------------------------------------------------------------------------------------*
-*                                     START COPY                                             *
-*--------------------------------------------------------------------------------------------*/
-
-int WindowState = 0;
-
-const int FONT_ID_BODY_16 = 0;
-const int FONT_ID_BODY_32 = 0;
-Clay_Color COLOR_WHITE = { 255, 255, 255, 255};
-
-static const Uint32 FONT_ID = 0;
-
-static const Clay_Color COLOR_ORANGE    = (Clay_Color) {225, 138, 50, 255};
-static const Clay_Color COLOR_BLUE      = (Clay_Color) {111, 173, 162, 255};
-static const Clay_Color COLOR_LIGHT     = (Clay_Color) {224, 215, 210, 255};
-static const Clay_Color COLOR_BLACK     = (Clay_Color) {0, 0, 0, 255};
-static const Clay_Color COLOR_RED       = (Clay_Color) {220, 0, 0, 255};
-static const Clay_Color COLOR_GREEN     = (Clay_Color) {0, 220, 0, 255};
-
 void HandleClayErrors(Clay_ErrorData errorData) {
     printf("%s", errorData.errorText.chars);
 }
-
-Clay_RenderCommandArray MainWindow(void)
-{
-    Clay_BeginLayout();
-
-    Clay_Sizing layoutExpand = {
-    .width = CLAY_SIZING_GROW(0),
-    .height = CLAY_SIZING_GROW(0)
-    };
-
-    // Define one element that covers the whole screen
-    CLAY(CLAY_ID("OuterContainer"), { ParentWindow, .backgroundColor = COLOR_WHITE}) {
-
-        switch (WindowState){
-            case 0:
-            /* Center container start */
-            CLAY(CLAY_ID("HeadLabelContainer"), { HeadLabelWindow,.cornerRadius = CLAY_CORNER_RADIUS(10), .backgroundColor = COLOR_WHITE}) {
-                CLAY_TEXT(CLAY_STRING("GUIDNBATTER"), CLAY_TEXT_CONFIG(WindowLabel));
-            };
-            /* Start button start */
-            CLAY(CLAY_ID("StartButton"), ButtonStyle) {
-                CLAY_TEXT(CLAY_STRING("Start Encounter"), CLAY_TEXT_CONFIG(ButtonLabel));
-                Clay_OnHover(StartEncounterButtonCallback, (intptr_t)WindowState);
-            };
-
-            /* Build button start */
-            CLAY(CLAY_ID("BuildButton"), ButtonStyle) {
-                CLAY_TEXT(CLAY_STRING("Build Encounter"), CLAY_TEXT_CONFIG(ButtonLabel)); 
-                Clay_OnHover(BuildEncounterButtonCallback, (intptr_t)WindowState);
-            };
-
-            /* Creature button start */
-            CLAY(CLAY_ID("CreatureDatabaseButton"), ButtonStyle) {
-                CLAY_TEXT(CLAY_STRING("Creature Database"), CLAY_TEXT_CONFIG(ButtonLabel));
-                Clay_OnHover(CreatureDatabaseButtonCallback, (intptr_t)WindowState);
-            };
-
-            /* Player button start */ 
-            CLAY(CLAY_ID("PlayerDatabaseButton"), ButtonStyle) {
-                CLAY_TEXT(CLAY_STRING("Player Database"), CLAY_TEXT_CONFIG(ButtonLabel));
-                Clay_OnHover(PlayerDatabaseButtonCallback, (intptr_t)WindowState);
-                
-            };
-            break;
-
-        case 1:
-            CLAY(CLAY_ID("StartEncounterHeader"), { HeadLabelWindow,.cornerRadius = CLAY_CORNER_RADIUS(10), .backgroundColor = COLOR_BLUE}) {
-                CLAY_TEXT(CLAY_STRING("Start Encounter"), CLAY_TEXT_CONFIG(WindowLabel));
-                Clay_OnHover(ReturnToMainScreenCallback, (intptr_t)WindowState);
-            };
-            break;
-        
-        case 2:
-            CLAY(CLAY_ID("BuildEncounterHeader"), { HeadLabelWindow,.cornerRadius = CLAY_CORNER_RADIUS(10), .backgroundColor = COLOR_ORANGE}) {
-                CLAY_TEXT(CLAY_STRING("Build Encounter"), CLAY_TEXT_CONFIG(WindowLabel));
-                Clay_OnHover(ReturnToMainScreenCallback, (intptr_t)WindowState);
-            };
-            break;
-        
-        case 3:
-            CLAY(CLAY_ID("CreatureDBHeader"), { HeadLabelWindow,.cornerRadius = CLAY_CORNER_RADIUS(10), .backgroundColor = COLOR_RED}) {
-                CLAY_TEXT(CLAY_STRING("Creature DB"), CLAY_TEXT_CONFIG(WindowLabel));
-                Clay_OnHover(ReturnToMainScreenCallback, (intptr_t)WindowState);
-            };
-            break;
-
-        case 4:
-            CLAY(CLAY_ID("PlayerDBHeader"), { HeadLabelWindow,.cornerRadius = CLAY_CORNER_RADIUS(10), .backgroundColor = COLOR_GREEN}) {
-                CLAY_TEXT(CLAY_STRING("Player DB"), CLAY_TEXT_CONFIG(WindowLabel));
-                Clay_OnHover(ReturnToMainScreenCallback, (intptr_t)WindowState);
-            };
-            break;
-
-        default:
-            break;
-        }
-    };
-
-    return Clay_EndLayout();
-}
-
-/*-------------------------------------------------------------------------------------------*
-*                                    Button Callbacks                                        *
-*--------------------------------------------------------------------------------------------*/
-
-void ReturnToMainScreenCallback(Clay_ElementId elementId, Clay_PointerData pointerData, intptr_t userData) {
-    int check = (int) userData;
-    if (pointerData.state == CLAY_POINTER_DATA_PRESSED_THIS_FRAME) {
-        WindowState = MAIN_SCREEN;
-    }
-}
-
-void StartEncounterButtonCallback(Clay_ElementId elementId, Clay_PointerData pointerData, intptr_t userData) {
-    int check = (int) userData;
-    if (pointerData.state == CLAY_POINTER_DATA_PRESSED_THIS_FRAME) {
-        WindowState = START_ENCOUNTER_SCREEN;
-    }
-}
-
-void BuildEncounterButtonCallback(Clay_ElementId elementId, Clay_PointerData pointerData, intptr_t userData) {
-    int check = (int) userData;
-    if (pointerData.state == CLAY_POINTER_DATA_PRESSED_THIS_FRAME) {
-        WindowState = BUILD_ENCOUNTER_SCREEN;
-    }
-}
-
-void CreatureDatabaseButtonCallback(Clay_ElementId elementId, Clay_PointerData pointerData, intptr_t userData) {
-    int check = (int) userData;
-    /* TODO: how should this work? changes only on mouse movement after clicking */
-    if (pointerData.state == CLAY_POINTER_DATA_PRESSED_THIS_FRAME) {
-        WindowState = CREATURE_DB_SCREEN;
-    }
-}
-
-void PlayerDatabaseButtonCallback(Clay_ElementId elementId, Clay_PointerData pointerData, intptr_t userData) {
-    int check = (int) userData;
-    /* TODO: how should this work? changes only on mouse movement after clicking */
-    if (pointerData.state == CLAY_POINTER_DATA_PRESSED_THIS_FRAME) {
-        WindowState = PLAYER_DB_SCREEN;
-    }
-}
-
-/*-------------------------------------------------------------------------------------------*
-*                                       END COPY                                             *
-                                        SDL Stuff                                            *
-*--------------------------------------------------------------------------------------------*/
 
 SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
 {
@@ -205,11 +56,13 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
     }
     *appstate = state;
 
-    if (!SDL_CreateWindowAndRenderer("Clay Demo", 640, 480, 0, &state->window, &state->rendererData.renderer)) {
+    if (!SDL_CreateWindowAndRenderer("GUIDNBATTER", 1280, 720, 0, &state->window, &state->rendererData.renderer)) {
         SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Failed to create window and renderer: %s", SDL_GetError());
         return SDL_APP_FAILURE;
     }
     SDL_SetWindowResizable(state->window, true);
+    SDL_SetWindowMinimumSize(state->window, MinimumWidth, MinimumHeight);
+    SDL_StartTextInput(state->window);
 
     state->rendererData.textEngine = TTF_CreateRendererTextEngine(state->rendererData.renderer);
     if (!state->rendererData.textEngine) {
@@ -242,7 +95,7 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
     SDL_GetWindowSize(state->window, &width, &height);
     Clay_Initialize(clayMemory, (Clay_Dimensions) { (float) width, (float) height }, (Clay_ErrorHandler) { HandleClayErrors });
     Clay_SetMeasureTextFunction(SDL_MeasureText, state->rendererData.fonts);
-
+    Clay_SetDebugModeEnabled(true);
     *appstate = state;
     return SDL_APP_CONTINUE;
 }
@@ -250,6 +103,14 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
 SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
 {
     SDL_AppResult ret_val = SDL_APP_CONTINUE;
+    AppState *state = appstate;
+
+    if (!SDL_GetWindowSizeInPixels(state->window, &WindowWidth, &WindowHeight)) {
+        SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Failed to get window size: %s", SDL_GetError());
+        return SDL_APP_FAILURE;
+    }
+
+    const bool * KeyState = SDL_GetKeyboardState(NULL);
 
     switch (event->type) {
         case SDL_EVENT_QUIT:
@@ -259,6 +120,15 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
             if (event->key.scancode == SDL_SCANCODE_SPACE) {
                 
             }
+            break;
+        case SDL_EVENT_TEXT_INPUT:
+            SDL_Log("%s",event->text.text);
+            SDL_strlcat(TextBuffer,event->text.text, MAX_TEXT);
+            SDL_Log("%s", TextBuffer);
+            break;
+        case SDL_EVENT_KEY_DOWN:
+            // SDL_Log("key pressed");
+            // SDL_Log("%d",event->key.key);
             break;
         case SDL_EVENT_WINDOW_RESIZED:
             Clay_SetLayoutDimensions((Clay_Dimensions) { (float) event->window.data1, (float) event->window.data2 });
@@ -291,7 +161,7 @@ SDL_AppResult SDL_AppIterate(void *appstate)
 {
     AppState *state = appstate;
 
-    Clay_RenderCommandArray render_commands = MainWindow();
+    Clay_RenderCommandArray render_commands = MainWindow(state);
 
     SDL_SetRenderDrawColor(state->rendererData.renderer, 0, 0, 0, 255);
     SDL_RenderClear(state->rendererData.renderer);
@@ -312,6 +182,7 @@ void SDL_AppQuit(void *appstate, SDL_AppResult result)
     }
 
     AppState *state = appstate;
+    SDL_StopTextInput(state->window);
 
     if (state) {
         if (state->rendererData.renderer)
