@@ -28,16 +28,16 @@ void PlayerDatabaseWindow(AppState * state);
  *  SECTION - Style declarations
  *========================================================================* 
  */
-static Clay_ElementDeclaration SidebarTopPartWindowStyle;
-static Clay_ElementDeclaration SidebarBottomPartWindowStyle;
-static Clay_ElementDeclaration MainScreenStyle;
-static Clay_ElementDeclaration LTRParentWindowStyle;
+static Clay_LayoutConfig SidebarTopPartWindowStyle;
+static Clay_LayoutConfig SidebarBottomPartWindowStyle;
+static Clay_LayoutConfig MainScreenStyle;
+static Clay_LayoutConfig LTRParentWindowStyle;
 static Clay_ElementDeclaration ContentWindowStyle;
 static Clay_ElementDeclaration SidebarWindowStyle;
 static Clay_ElementDeclaration MainButtonStyle;
 static Clay_ElementDeclaration SingleLineInputTextStyle;
 static Clay_ElementDeclaration StatBlockContainerStyle;
-static Clay_ElementDeclaration DBContentWindowStyle;
+static Clay_LayoutConfig DBContentWindowStyle;
 static Clay_ElementDeclaration CreatureNameHeader;
 
 static Clay_TextElementConfig ButtonLabelTextConfig;
@@ -45,7 +45,7 @@ static Clay_TextElementConfig InputTextTextConfig;
 static Clay_TextElementConfig WindowLabelTextConfig;
 static Clay_TextElementConfig MainLabelTextConfig;
 
-char * CreatureNames[7] = {"Aboleth", "Acolyte", "AdultBlackDragon", "AdultBlueDragon", "AirElemental", "Ape", "Azer"};
+char * CreatureNames[7] = {"Aboleth", "Acolyte", "Adult Black Dragon", "Adult Blue Dragon", "Air Elemental", "Ape", "Azer"};
 
 /*========================================================================* 
  *  SECTION - Global Functions 
@@ -62,7 +62,7 @@ Clay_RenderCommandArray MainWindow(AppState * state)
     // };
 
     // Define one element that covers the whole screen
-    CLAY(CLAY_ID("OuterContainer"), MainScreenStyle) {
+    CLAY(CLAY_ID("OuterContainer"), {MainScreenStyle, .backgroundColor = COLOR_BLACK, .cornerRadius = CLAY_CORNER_RADIUS(10)}) {
 
         switch (WindowState){
             case 0:
@@ -130,12 +130,12 @@ Clay_RenderCommandArray MainWindow(AppState * state)
  */
 
  void StylesInit(void) {    
-    MainScreenStyle                 = MakeParentWindowStyle(8, 40, CLAY_ALIGN_X_CENTER, CLAY_ALIGN_Y_CENTER, CLAY_TOP_TO_BOTTOM, COLOR_BLACK);
-    DBContentWindowStyle            = MakeParentWindowStyle(8, 8, CLAY_ALIGN_X_CENTER, CLAY_ALIGN_Y_CENTER, CLAY_LEFT_TO_RIGHT, COLOR_BLACK);
-    LTRParentWindowStyle            = MakeParentWindowStyle(0, 8, CLAY_ALIGN_X_LEFT, CLAY_ALIGN_Y_CENTER, CLAY_LEFT_TO_RIGHT, COLOR_BLACK);
+    MainScreenStyle                 = MakeParentWindowStyle(8, 40, CLAY_ALIGN_X_CENTER, CLAY_ALIGN_Y_CENTER, CLAY_TOP_TO_BOTTOM);
+    DBContentWindowStyle            = MakeParentWindowStyle(0, 8, CLAY_ALIGN_X_LEFT, CLAY_ALIGN_Y_CENTER, CLAY_LEFT_TO_RIGHT);
+    LTRParentWindowStyle            = MakeParentWindowStyle(0, 8, CLAY_ALIGN_X_LEFT, CLAY_ALIGN_Y_CENTER, CLAY_LEFT_TO_RIGHT);
     SidebarTopPartWindowStyle       = MakeFixedWidthLimitHeightWindow(SIDEBAR_WIDTH_PX, WindowHeight/2, 8, 16, CLAY_ALIGN_Y_TOP, CLAY_TOP_TO_BOTTOM);
     SidebarBottomPartWindowStyle    = MakeFixedWidthLimitHeightWindow(SIDEBAR_WIDTH_PX, WindowHeight/2, 8, 16, CLAY_ALIGN_Y_BOTTOM, CLAY_TOP_TO_BOTTOM);
-    ContentWindowStyle              = MakeFixedWidthGrowHeightWindow(DB_LIST_WIDTH_PX, 0, 8, CLAY_ALIGN_X_LEFT, CLAY_ALIGN_Y_CENTER, CLAY_LEFT_TO_RIGHT, COLOR_BLACK);
+    ContentWindowStyle              = MakeFixedWidthGrowHeightWindow(DB_LIST_WIDTH_PX, 0, 8, CLAY_ALIGN_X_LEFT, CLAY_ALIGN_Y_CENTER, CLAY_LEFT_TO_RIGHT, COLOR_BLACK, false, Clay_GetScrollOffset());
     SidebarWindowStyle              = MakeSidebarStyle(SIDEBAR_WIDTH_PX, WindowHeight, 0, 0, CLAY_ALIGN_Y_CENTER, CLAY_TOP_TO_BOTTOM, COLOR_GRAY_BG);
     MainButtonStyle                 = FixedContainerTTBStyle(200, 50, 8, 16, COLOR_BUTTON_GRAY);
     ButtonLabelTextConfig           = TextConfig(COLOR_WHITE, 0, 16, CLAY_TEXT_ALIGN_CENTER, CLAY_TEXT_WRAP_WORDS);
@@ -143,7 +143,7 @@ Clay_RenderCommandArray MainWindow(AppState * state)
     WindowLabelTextConfig           = TextConfig(COLOR_WHITE, 0, 16, CLAY_TEXT_ALIGN_CENTER, CLAY_TEXT_WRAP_NONE);
     MainLabelTextConfig             = TextConfig(COLOR_WHITE, 0, 64, CLAY_TEXT_ALIGN_CENTER, CLAY_TEXT_WRAP_NONE);
     SingleLineInputTextStyle        = SingleLineTextContainerStyle(214, 32, 8, 16, COLOR_GRAY_BG, 5, 2, COLOR_WHITE);
-    StatBlockContainerStyle         = MakeFixedWidthGrowHeightWindow(DB_LIST_WIDTH_PX, 8, 8, CLAY_ALIGN_X_CENTER, CLAY_ALIGN_Y_TOP, CLAY_TOP_TO_BOTTOM, COLOR_GRAY_BG);
+    StatBlockContainerStyle         = MakeFixedWidthGrowHeightWindow(DB_LIST_WIDTH_PX, 8, 8, CLAY_ALIGN_X_CENTER, CLAY_ALIGN_Y_TOP, CLAY_TOP_TO_BOTTOM, COLOR_GRAY_BG, true, Clay_GetScrollOffset());
     CreatureNameHeader              = FixedContainerTTBStyle(300, 150, 8, 8, COLOR_BUTTON_GRAY);
 }
 
@@ -154,12 +154,12 @@ void BuildEncounterWindow(AppState * state) {
 void CreatureDatabaseWindow(AppState * state) {
     /* Creature database window*/
     
-    CLAY(CLAY_ID("CreatureDBOuterContainer"), LTRParentWindowStyle) {
+    CLAY(CLAY_ID("CreatureDBOuterContainer"), {LTRParentWindowStyle, .backgroundColor = COLOR_BLACK, .cornerRadius = CLAY_CORNER_RADIUS(10)}) {
 
         /* Sidebar for option buttons */
         CLAY(CLAY_ID("CreatureDBSidebar"), SidebarWindowStyle) {
             
-            CLAY(CLAY_ID("SidebarTop"), SidebarTopPartWindowStyle) {
+            CLAY(CLAY_ID("SidebarTop"), {SidebarTopPartWindowStyle, .backgroundColor = COLOR_TRANSPARENT, .cornerRadius = CLAY_CORNER_RADIUS(10) }) {
 
                 CLAY(CLAY_ID("CreatureDBHomeButton"), MainButtonStyle) {
                     Clay_OnHover(ReturnToMainScreenCallback, (intptr_t)WindowState);
@@ -195,18 +195,31 @@ void CreatureDatabaseWindow(AppState * state) {
         };
 
         /* Main content containing monster lists and stats*/
-        CLAY(CLAY_ID("CreatureDBContentWindow"), ContentWindowStyle) {
+        CLAY(CLAY_ID("CreatureDBContentWindow"), {DBContentWindowStyle, .backgroundColor = COLOR_GRAY_BG, .cornerRadius = CLAY_CORNER_RADIUS(10)}) {
             // TODO: Fill with statblocks with info pulled from sqlite db
             // 1. Design a stat block
             // 2. Find a way to collapse and expand it
 
             /* Container for Creature Header Information */
             // TODO: Make scrollable
-            CLAY(CLAY_ID("StatBlock"), StatBlockContainerStyle) {
+            CLAY(CLAY_ID("StatBlock"),
+                                    {   .layout = {
+                                            .sizing = { CLAY_SIZING_PERCENT(0.3), CLAY_SIZING_GROW(0) },
+                                            .padding = { 8, 8, 8, 8},
+                                            .childGap = 8,
+                                            .childAlignment =  { CLAY_ALIGN_X_CENTER, CLAY_ALIGN_Y_CENTER },
+                                            .layoutDirection = CLAY_TOP_TO_BOTTOM
+                                        },
+                                        .backgroundColor = COLOR_GRAY_BG,
+                                        .cornerRadius = CLAY_CORNER_RADIUS(10),
+                                        .clip = {true, true, Clay_GetScrollOffset()}
+                                    }
+                                ) {
                 int number = 7;
                 for (int i = 0; i < number; i++) {
+                    Clay_String CreatureNameText = {.isStaticallyAllocated = true, .length = SDL_strlen(CreatureNames[i]), .chars = CreatureNames[i]};
                     CLAY(CLAY_IDI("CreatureHeader", i), CreatureNameHeader) {
-                        CLAY_TEXT(CLAY_STRING("Add"), CLAY_TEXT_CONFIG(ButtonLabelTextConfig));
+                        CLAY_TEXT(CreatureNameText, CLAY_TEXT_CONFIG(ButtonLabelTextConfig));
                     };
                 }
 
@@ -217,12 +230,12 @@ void CreatureDatabaseWindow(AppState * state) {
 
 void PlayerDatabaseWindow(AppState * state) {
     /* Player database window*/
-    CLAY(CLAY_ID("PlayerDBOuterContainer"), LTRParentWindowStyle ) {
+    CLAY(CLAY_ID("PlayerDBOuterContainer"), {LTRParentWindowStyle, .backgroundColor = COLOR_BLACK, .cornerRadius = CLAY_CORNER_RADIUS(10)} ) {
         
         /* Sidebar for option buttons */
         CLAY(CLAY_ID("PlayerDBSidebar"), SidebarWindowStyle) {
             
-            CLAY(CLAY_ID("SidebarTop"), SidebarTopPartWindowStyle) {
+            CLAY(CLAY_ID("SidebarTop"), {SidebarTopPartWindowStyle, .backgroundColor = COLOR_TRANSPARENT, .cornerRadius = CLAY_CORNER_RADIUS(10) }) {
 
                 CLAY(CLAY_ID("PlayerDBHomeButton"), MainButtonStyle) {
                     Clay_OnHover(ReturnToMainScreenCallback, (intptr_t)WindowState);
@@ -258,7 +271,7 @@ void PlayerDatabaseWindow(AppState * state) {
         };
 
         /* Main content containing monster lists and stats*/
-        CLAY(CLAY_ID("PlayerDBContentWindow"), ContentWindowStyle){
+        CLAY(CLAY_ID("PlayerDBContentWindow"), {DBContentWindowStyle, .backgroundColor = COLOR_GRAY_BG, .cornerRadius = CLAY_CORNER_RADIUS(10)}){
             CLAY(CLAY_ID("PlayerDBHeader"), { HeadLabelWindow, .cornerRadius = CLAY_CORNER_RADIUS(10), .backgroundColor = COLOR_RED}) {
                 CLAY_TEXT(CLAY_STRING("Player DB"), CLAY_TEXT_CONFIG(WindowLabelTextConfig));
             };          

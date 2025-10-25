@@ -29,26 +29,20 @@ const Clay_Color COLOR_BUTTON_GRAY  = (Clay_Color) {70, 70, 70, 255};
 
 /* This function returns a Clay_ElementDeclaration struct used for styling a Sidebar
  * It assumes CLAY_SIZING_FIXED(width), CLAY_SIZING_GROW(0, height), and CLAY_ALING_X_CENTER */
-Clay_ElementDeclaration MakeFixedWidthLimitHeightWindow(uint16_t width, uint16_t height, uint16_t padding, uint16_t childGap, uint16_t yChildAlign, uint16_t layoutDirection) {
+Clay_LayoutConfig MakeFixedWidthLimitHeightWindow(uint16_t width, uint16_t height, uint16_t padding, uint16_t childGap, uint16_t yChildAlign, uint16_t layoutDirection) {
 
-    Clay_LayoutConfig SidebarWindowConfig = {
+    return (Clay_LayoutConfig) {
     .sizing = { CLAY_SIZING_FIXED(width), CLAY_SIZING_GROW(0, (height)) },
     .padding = { padding, padding, padding, padding},
     .childGap = childGap,
     .childAlignment =  { CLAY_ALIGN_X_CENTER, yChildAlign },
     .layoutDirection = layoutDirection
     };
-
-    return (Clay_ElementDeclaration) {
-        .layout = SidebarWindowConfig,
-        .backgroundColor = {0, 0, 0, 0},
-        .cornerRadius = CLAY_CORNER_RADIUS(10)
-    };
 }
 
 /* This function returns a Clay_ElementDeclaration struct used for styling a Sidebar
  * It assumes CLAY_SIZING_FIXED(width), CLAY_SIZING_GROW(0, height), and CLAY_ALING_X_CENTER */
-Clay_ElementDeclaration MakeFixedWidthGrowHeightWindow(uint16_t width, uint16_t padding, uint16_t childGap, uint16_t xChildAlign, uint16_t yChildAlign, uint16_t layoutDirection, Clay_Color COLOR) {
+Clay_ElementDeclaration MakeFixedWidthGrowHeightWindow(uint16_t width, uint16_t padding, uint16_t childGap, uint16_t xChildAlign, uint16_t yChildAlign, uint16_t layoutDirection, Clay_Color COLOR, bool isScroll, Clay_Vector2 scrollOffset) {
 
     Clay_LayoutConfig WindowConfig = {
     .sizing = { CLAY_SIZING_FIXED(width), CLAY_SIZING_GROW(0) },
@@ -58,10 +52,17 @@ Clay_ElementDeclaration MakeFixedWidthGrowHeightWindow(uint16_t width, uint16_t 
     .layoutDirection = layoutDirection
     };
 
+    Clay_ClipElementConfig ClipConfig = {
+        .horizontal = false,
+        .vertical = isScroll,
+        .childOffset = scrollOffset
+    };    
+
     return (Clay_ElementDeclaration) {
         .layout = WindowConfig,
         .backgroundColor = COLOR,
-        .cornerRadius = CLAY_CORNER_RADIUS(10)
+        .cornerRadius = CLAY_CORNER_RADIUS(10),
+        .clip = ClipConfig
     };
 }
 
@@ -86,9 +87,9 @@ Clay_ElementDeclaration MakeStatblockHeaderStyle( uint16_t height, uint16_t padd
 
 /* This function returns a Clay_ElementDeclaration struct used for styling a Parent Window
  * It assumes CLAY_SIZING_GROW(0) for width, and CLAY_SIZING_GROW(0) for height */
-Clay_ElementDeclaration MakeParentWindowStyle(uint16_t padding, uint16_t childGap, uint16_t xChildAlign, uint16_t yChildAlign, uint16_t layoutDirection, Clay_Color COLOR) {
+Clay_LayoutConfig MakeParentWindowStyle(uint16_t padding, uint16_t childGap, uint16_t xChildAlign, uint16_t yChildAlign, uint16_t layoutDirection) {
 
-    Clay_LayoutConfig ParentWindowConfig = {
+    return (Clay_LayoutConfig) {
     .sizing = { CLAY_SIZING_GROW(0), CLAY_SIZING_GROW(0) },
     .padding = { padding, padding, padding, padding},
     .childGap = childGap,
@@ -96,11 +97,11 @@ Clay_ElementDeclaration MakeParentWindowStyle(uint16_t padding, uint16_t childGa
     .layoutDirection = layoutDirection
     };
 
-    return (Clay_ElementDeclaration) {
-        .layout = ParentWindowConfig,
-        .backgroundColor = COLOR,
-        .cornerRadius = CLAY_CORNER_RADIUS(10)
-    };
+    // return (Clay_ElementDeclaration) {
+    //     .layout = ParentWindowConfig,
+    //     .backgroundColor = COLOR,
+    //     .cornerRadius = CLAY_CORNER_RADIUS(10)
+    // };
 }
 
 /* This function returns a Clay_ElementDeclaration struct used for styling a Sidebar
