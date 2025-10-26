@@ -27,161 +27,109 @@ const Clay_Color COLOR_BUTTON_GRAY  = (Clay_Color) {70, 70, 70, 255};
  *========================================================================* 
  */
 
-/* This function returns a Clay_ElementDeclaration struct used for styling a Sidebar
- * It assumes CLAY_SIZING_FIXED(width), CLAY_SIZING_GROW(0, height), and CLAY_ALING_X_CENTER */
-Clay_LayoutConfig MakeFixedWidthLimitHeightWindow(uint16_t width, uint16_t height, uint16_t padding, uint16_t childGap, uint16_t yChildAlign, uint16_t layoutDirection) {
+Clay_LayoutConfig SidebarTopLayoutConfig =  {
+    .sizing = { CLAY_SIZING_FIXED(SIDEBAR_WIDTH_PX), CLAY_SIZING_PERCENT(0.5)},
+    .padding = { 8, 8, 8, 8},
+    .childGap = 16,
+    .childAlignment =  { CLAY_ALIGN_X_CENTER, CLAY_ALIGN_Y_TOP },
+    .layoutDirection = CLAY_TOP_TO_BOTTOM
+};
 
-    return (Clay_LayoutConfig) {
-    .sizing = { CLAY_SIZING_FIXED(width), CLAY_SIZING_GROW(0, (height)) },
-    .padding = { padding, padding, padding, padding},
-    .childGap = childGap,
-    .childAlignment =  { CLAY_ALIGN_X_CENTER, yChildAlign },
-    .layoutDirection = layoutDirection
-    };
-}
+Clay_LayoutConfig SidebarBottomLayoutConfig =  {
+    .sizing = { CLAY_SIZING_FIXED(SIDEBAR_WIDTH_PX), CLAY_SIZING_PERCENT(0.5)},
+    .padding = { 8, 8, 8, 8},
+    .childGap = 16,
+    .childAlignment =  { CLAY_ALIGN_X_CENTER, CLAY_ALIGN_Y_BOTTOM },
+    .layoutDirection = CLAY_TOP_TO_BOTTOM
+};
 
-/* This function returns a Clay_ElementDeclaration struct used for styling a Sidebar
- * It assumes CLAY_SIZING_FIXED(width), CLAY_SIZING_GROW(0, height), and CLAY_ALING_X_CENTER */
-Clay_ElementDeclaration MakeFixedWidthGrowHeightWindow(uint16_t width, uint16_t padding, uint16_t childGap, uint16_t xChildAlign, uint16_t yChildAlign, uint16_t layoutDirection, Clay_Color COLOR, bool isScroll, Clay_Vector2 scrollOffset) {
+Clay_LayoutConfig CreatureButtonContainerLayoutConfig = {
+    .sizing = { CLAY_SIZING_PERCENT(0.3), CLAY_SIZING_GROW(0) },
+    .padding = { 8, 8, 8, 8},
+    .childGap = 8,
+    .childAlignment =  { CLAY_ALIGN_X_CENTER, CLAY_ALIGN_Y_TOP },
+    .layoutDirection = CLAY_TOP_TO_BOTTOM
+};
 
-    Clay_LayoutConfig WindowConfig = {
-    .sizing = { CLAY_SIZING_FIXED(width), CLAY_SIZING_GROW(0) },
-    .padding = { padding, padding, padding, padding},
-    .childGap = childGap,
-    .childAlignment =  { xChildAlign, yChildAlign },
-    .layoutDirection = layoutDirection
-    };
-
-    Clay_ClipElementConfig ClipConfig = {
-        .horizontal = false,
-        .vertical = isScroll,
-        .childOffset = scrollOffset
-    };    
-
-    return (Clay_ElementDeclaration) {
-        .layout = WindowConfig,
-        .backgroundColor = COLOR,
-        .cornerRadius = CLAY_CORNER_RADIUS(10),
-        .clip = ClipConfig
-    };
-}
-
-/* This function returns a Clay_ElementDeclaration struct used for styling a Statblock Header
- * It assumes CLAY_SIZING_FIXED(0) for width, CLAY_SIZING_FIXED(height), CLAY_ALIGN_X_CENTER, and CLAY_ALIGN_Y_CENTER */
-Clay_ElementDeclaration MakeStatblockHeaderStyle( uint16_t height, uint16_t padding, uint16_t childGap, uint16_t yChildAlign, uint16_t layoutDirection, Clay_Color COLOR) {
-
-    Clay_LayoutConfig StatblockHeaderConfig = {
-    .sizing = { CLAY_SIZING_GROW(0), CLAY_SIZING_FIXED(height) },
-    .padding = { padding, padding, padding, padding},
-    .childGap = childGap,
-    .childAlignment =  { CLAY_ALIGN_X_CENTER, yChildAlign },
-    .layoutDirection = layoutDirection
-    };
-
-    return (Clay_ElementDeclaration) {
-        .layout = StatblockHeaderConfig,
-        .backgroundColor = COLOR,
-        .cornerRadius = CLAY_CORNER_RADIUS(10)
-    };
-}
-
-/* This function returns a Clay_ElementDeclaration struct used for styling a Parent Window
- * It assumes CLAY_SIZING_GROW(0) for width, and CLAY_SIZING_GROW(0) for height */
-Clay_LayoutConfig MakeParentWindowStyle(uint16_t padding, uint16_t childGap, uint16_t xChildAlign, uint16_t yChildAlign, uint16_t layoutDirection) {
-
-    return (Clay_LayoutConfig) {
+Clay_LayoutConfig MainScreenLayoutConfig = {
     .sizing = { CLAY_SIZING_GROW(0), CLAY_SIZING_GROW(0) },
-    .padding = { padding, padding, padding, padding},
-    .childGap = childGap,
-    .childAlignment =  { xChildAlign, yChildAlign },
-    .layoutDirection = layoutDirection
-    };
-
-    // return (Clay_ElementDeclaration) {
-    //     .layout = ParentWindowConfig,
-    //     .backgroundColor = COLOR,
-    //     .cornerRadius = CLAY_CORNER_RADIUS(10)
-    // };
-}
-
-/* This function returns a Clay_ElementDeclaration struct used for styling a Sidebar
- * It assumes CLAY_SIZING_GROW(0), CLAY_SIZING_GROW(0), CLAY_ALING_X_CENTER, and CLAY_ALIGN_Y_CENTER */
-Clay_ElementDeclaration MakeSidebarStyle(uint16_t width, uint16_t height, uint16_t padding, uint16_t childGap, uint16_t yChildAlign, uint16_t layoutDirection, Clay_Color COLOR) {
-
-    Clay_LayoutConfig ContentWindowConfig = {
-    .sizing = { CLAY_SIZING_FIXED(width), CLAY_SIZING_GROW(0, height) },
-    .padding = { padding, padding, padding, padding},
-    .childGap = childGap,
-    .childAlignment =  { CLAY_ALIGN_X_CENTER, CLAY_ALIGN_Y_CENTER },
-    .layoutDirection = layoutDirection
-    };
-
-    return (Clay_ElementDeclaration) {
-        .layout = ContentWindowConfig,
-        .backgroundColor = COLOR,
-        .cornerRadius = CLAY_CORNER_RADIUS(10)
-    };
-}
-
-/* This function returns a Clay_ElementDeclaration struct used for styling a Button
- * It assumes CLAY_SIZING_FIXED(width), CLAY_SIZING_FIXED(height), CLAY_ALING_X_CENTER, CLAY_ALIGN_Y_CENTER, and CLAY_TOP_TO_BOTTOM */
-Clay_ElementDeclaration FixedContainerTTBStyle(uint16_t width, uint16_t height, uint16_t padding, uint16_t childGap, Clay_Color COLOR) {
-
-    Clay_LayoutConfig ContentWindowConfig = {
-    .sizing = { CLAY_SIZING_FIXED(width), CLAY_SIZING_FIXED(height) },
-    .padding = { padding, padding, padding, padding},
-    .childGap = childGap,
+    .padding = { 8, 8, 8, 8},
+    .childGap = 40,
     .childAlignment =  { CLAY_ALIGN_X_CENTER, CLAY_ALIGN_Y_CENTER },
     .layoutDirection = CLAY_TOP_TO_BOTTOM
-    };
+};
 
-    return (Clay_ElementDeclaration) {
-        .layout = ContentWindowConfig,
-        .backgroundColor = COLOR,
-        .cornerRadius = CLAY_CORNER_RADIUS(10)
-    };
-}
+Clay_LayoutConfig TTBParentWindowLayoutConfig = {
+    .sizing = { CLAY_SIZING_GROW(0), CLAY_SIZING_GROW(0) },
+    .padding = { 0, 0, 0, 0},
+    .childGap = 8,
+    .childAlignment =  { CLAY_ALIGN_X_CENTER, CLAY_ALIGN_Y_CENTER },
+    .layoutDirection = CLAY_TOP_TO_BOTTOM
+};
 
-/* This function returns a Clay_ElementDeclaration struct used for styling a Sidebar
- * It assumes CLAY_SIZING_FIXED(width), CLAY_SIZING_FIXED(height), CLAY_ALING_X_CENTER, CLAY_ALIGN_Y_CENTER, and CLAY_TOP_TO_BOTTOM */
-Clay_TextElementConfig TextConfig(Clay_Color COLOR, uint16_t fontId, uint16_t fontSize, uint16_t textAlignment, uint16_t wrapMode) {
+Clay_LayoutConfig LTRParentWindowLayoutConfig = {
+    .sizing = { CLAY_SIZING_GROW(0), CLAY_SIZING_GROW(0) },
+    .padding = { 0, 0, 0, 0},
+    .childGap = 8,
+    .childAlignment =  { CLAY_ALIGN_X_LEFT, CLAY_ALIGN_Y_CENTER },
+    .layoutDirection = CLAY_LEFT_TO_RIGHT
+};
 
-    return (Clay_TextElementConfig) {
-        .textColor = COLOR_WHITE,
-        .fontId = fontId,
-        .fontSize = fontSize,
-        .textAlignment = textAlignment,
-        .wrapMode = wrapMode
-    };
-}
-
-/* This function returns a Clay_ElementDeclaration struct used for styling a single line text container
- * It assumes CLAY_SIZING_FIXED(width), CLAY_SIZING_FIXED(height), CLAY_ALIGN_X_LEFT, CLAY_ALIGN_Y_CENTER, and CLAY_TOP_TO_BOTTOM */
-Clay_ElementDeclaration SingleLineTextContainerStyle(uint16_t width, uint16_t height, uint16_t padding, uint16_t childGap, Clay_Color COLOR, uint16_t cornerRadius, uint16_t borderWidthAll, Clay_Color BORDER_COLOR) {
-
-    Clay_LayoutConfig SingleLineTextContainerLayout = {
-    .sizing = { CLAY_SIZING_FIXED(width), CLAY_SIZING_FIXED(height) },
-    .padding = { padding, padding, padding, padding},
-    .childGap = childGap,
+Clay_LayoutConfig SidebarLayoutConfig = {
+    .sizing = { CLAY_SIZING_FIXED(0), CLAY_SIZING_GROW(0) },
+    .padding = { 0, 0, 0, 0},
+    .childGap = 0,
     .childAlignment =  { CLAY_ALIGN_X_LEFT, CLAY_ALIGN_Y_CENTER },
     .layoutDirection = CLAY_TOP_TO_BOTTOM
-    };
+};
 
-    return (Clay_ElementDeclaration) {
-        .layout = SingleLineTextContainerLayout,
-        .backgroundColor = COLOR,
-        .cornerRadius = CLAY_CORNER_RADIUS(cornerRadius),
-        .border = {
-            .width = {
-                .left   = borderWidthAll,
-                .right  = borderWidthAll,
-                .top    = borderWidthAll,
-                .bottom = borderWidthAll
-            },
-            .color = BORDER_COLOR
-        }
-    };
-}
+Clay_LayoutConfig MainScreenButtonLayoutConfig = {
+    .sizing = { CLAY_SIZING_FIXED(MAIN_BTN_WIDTH_PX), CLAY_SIZING_FIXED(MAIN_BTN_HEIGHT_PX) },
+    .padding = { 8, 8, 8, 8},
+    .childGap = 16,
+    .childAlignment =  { CLAY_ALIGN_X_CENTER, CLAY_ALIGN_Y_CENTER },
+    .layoutDirection = CLAY_TOP_TO_BOTTOM
+};
+
+Clay_LayoutConfig CreatureButtonLayoutConfig = {
+    .sizing = { CLAY_SIZING_GROW(0), CLAY_SIZING_FIXED(CREATURE_BTN_HEIGHT_PX) },
+    .padding = { 8, 8, 8, 8},
+    .childGap = 16,
+    .childAlignment =  { CLAY_ALIGN_X_CENTER, CLAY_ALIGN_Y_CENTER },
+    .layoutDirection = CLAY_TOP_TO_BOTTOM
+};
+
+Clay_LayoutConfig SingleLineInputLayoutConfig = {
+    .sizing = { CLAY_SIZING_FIXED(214), CLAY_SIZING_FIXED(32) },
+    .padding = { 8, 8, 8, 8},
+    .childGap = 16,
+    .childAlignment =  { CLAY_ALIGN_X_LEFT, CLAY_ALIGN_Y_CENTER },
+    .layoutDirection = CLAY_TOP_TO_BOTTOM
+};
+
+Clay_TextElementConfig MainLabelTextConfig = {
+    .textColor = COLOR_WHITE,
+    .fontId = 0,
+    .fontSize = 64,
+    .textAlignment = CLAY_TEXT_ALIGN_CENTER,
+    .wrapMode = CLAY_TEXT_WRAP_NONE
+};
+
+Clay_TextElementConfig ButtonTextConfig = {
+    .textColor = COLOR_WHITE,
+    .fontId = 0,
+    .fontSize = 16,
+    .textAlignment = CLAY_TEXT_ALIGN_CENTER,
+    .wrapMode = CLAY_TEXT_WRAP_WORDS
+};
+
+Clay_TextElementConfig InputTextConfig = {
+    .textColor = COLOR_WHITE,
+    .fontId = 0,
+    .fontSize = 16,
+    .textAlignment = CLAY_TEXT_ALIGN_LEFT,
+    .wrapMode = CLAY_TEXT_WRAP_WORDS
+};
 
 /*========================================================================* 
  *  SECTION - Constant Styles

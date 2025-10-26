@@ -18,8 +18,8 @@
 
 
 
-const int MinimumWidth = 1280;
-const int MinimumHeight = 720;
+const int MinimumWidth = 1360;
+const int MinimumHeight = 800;
 
 const Uint32 FONT_ID = 0;
 
