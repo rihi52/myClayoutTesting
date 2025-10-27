@@ -45,7 +45,7 @@ Clay_LayoutConfig SidebarBottomLayoutConfig =  {
 
 Clay_LayoutConfig CreatureButtonContainerLayoutConfig = {
     .sizing = { CLAY_SIZING_PERCENT(0.3), CLAY_SIZING_GROW(0) },
-    .padding = { 8, 8, 8, 8},
+    .padding = { 0, 0, 0, 0},
     .childGap = 8,
     .childAlignment =  { CLAY_ALIGN_X_CENTER, CLAY_ALIGN_Y_TOP },
     .layoutDirection = CLAY_TOP_TO_BOTTOM
@@ -91,12 +91,76 @@ Clay_LayoutConfig MainScreenButtonLayoutConfig = {
     .layoutDirection = CLAY_TOP_TO_BOTTOM
 };
 
+/* Container for creature buttons */
 Clay_LayoutConfig CreatureButtonLayoutConfig = {
     .sizing = { CLAY_SIZING_GROW(0), CLAY_SIZING_FIXED(CREATURE_BTN_HEIGHT_PX) },
-    .padding = { 8, 8, 8, 8},
-    .childGap = 16,
-    .childAlignment =  { CLAY_ALIGN_X_CENTER, CLAY_ALIGN_Y_CENTER },
+    .padding = { 0, 0, 0, 0},
+    .childGap = 0,
+    .childAlignment =  { CLAY_ALIGN_X_CENTER, CLAY_ALIGN_Y_TOP },
     .layoutDirection = CLAY_TOP_TO_BOTTOM
+};
+
+/* Container for creature name container and cr container*/
+Clay_LayoutConfig NameCRContainerLayoutConfig = {
+    .sizing = { CLAY_SIZING_GROW(0), CLAY_SIZING_PERCENT(0.3) },
+    .padding = { 0, 0, 0, 0},
+    .childGap = 0,
+    .childAlignment =  { CLAY_ALIGN_X_CENTER, CLAY_ALIGN_Y_CENTER },
+    .layoutDirection = CLAY_LEFT_TO_RIGHT
+};
+
+/* Container for creature name */
+Clay_LayoutConfig NameContainerLayoutConfig = {
+    .sizing = { CLAY_SIZING_PERCENT(0.6), CLAY_SIZING_GROW(0) },
+    .padding = { 4, 4, 4, 4},
+    .childGap = 8,
+    .childAlignment =  { CLAY_ALIGN_X_LEFT, CLAY_ALIGN_Y_CENTER },
+    .layoutDirection = CLAY_LEFT_TO_RIGHT
+};
+
+/* Container for creature cr */
+Clay_LayoutConfig CRContainerLayoutConfig = {
+    .sizing = { CLAY_SIZING_GROW(0), CLAY_SIZING_GROW(0) },
+    .padding = { 4, 4, 4, 4},
+    .childGap = 8,
+    .childAlignment =  { CLAY_ALIGN_X_RIGHT, CLAY_ALIGN_Y_CENTER },
+    .layoutDirection = CLAY_LEFT_TO_RIGHT
+};
+
+/**/
+/* Container for creature name container and cr container*/
+Clay_LayoutConfig SizeTypeContainerLayoutConfig = {
+    .sizing = { CLAY_SIZING_GROW(0), CLAY_SIZING_PERCENT(0.3) },
+    .padding = { 0, 0, 0, 0},
+    .childGap = 0,
+    .childAlignment =  { CLAY_ALIGN_X_CENTER, CLAY_ALIGN_Y_CENTER },
+    .layoutDirection = CLAY_LEFT_TO_RIGHT
+};
+
+/* Container for creature name */
+Clay_LayoutConfig SizeContainerLayoutConfig = {
+    .sizing = { CLAY_SIZING_PERCENT(0.5), CLAY_SIZING_GROW(0) },
+    .padding = { 4, 4, 4, 4},
+    .childGap = 8,
+    .childAlignment =  { CLAY_ALIGN_X_LEFT, CLAY_ALIGN_Y_CENTER },
+    .layoutDirection = CLAY_LEFT_TO_RIGHT
+};
+
+/* Container for creature cr */
+Clay_LayoutConfig TypeContainerLayoutConfig = {
+    .sizing = { CLAY_SIZING_GROW(0), CLAY_SIZING_GROW(0) },
+    .padding = { 4, 4, 4, 4},
+    .childGap = 8,
+    .childAlignment =  { CLAY_ALIGN_X_RIGHT, CLAY_ALIGN_Y_CENTER },
+    .layoutDirection = CLAY_LEFT_TO_RIGHT
+};
+/**/
+Clay_LayoutConfig SourceContainerLayoutConfig = {
+    .sizing = { CLAY_SIZING_GROW(0), CLAY_SIZING_PERCENT(0.3) },
+    .padding = { 4, 4, 4, 4},
+    .childGap = 8,
+    .childAlignment =  { CLAY_ALIGN_X_CENTER, CLAY_ALIGN_Y_CENTER },
+    .layoutDirection = CLAY_LEFT_TO_RIGHT
 };
 
 Clay_LayoutConfig SingleLineInputLayoutConfig = {

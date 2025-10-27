@@ -29,6 +29,30 @@ extern Clay_TextElementConfig MainLabelTextConfig;
 extern Clay_LayoutConfig SingleLineInputLayoutConfig;
 extern Clay_LayoutConfig TTBParentWindowLayoutConfig;
 
+/* Container for creature buttons */
+extern Clay_LayoutConfig CreatureButtonLayoutConfig;
+
+/* Container for creature name container and cr container*/
+extern Clay_LayoutConfig NameCRContainerLayoutConfig;
+
+/* Container for creature name */
+extern Clay_LayoutConfig NameContainerLayoutConfig;
+
+/* Container for creature cr */
+extern Clay_LayoutConfig CRContainerLayoutConfig;
+
+/**/
+/* Container for creature name container and cr container*/
+extern Clay_LayoutConfig SizeTypeContainerLayoutConfig;
+
+/* Container for creature name */
+extern Clay_LayoutConfig SizeContainerLayoutConfig;
+
+/* Container for creature cr */
+extern Clay_LayoutConfig TypeContainerLayoutConfig;
+/**/
+extern Clay_LayoutConfig SourceContainerLayoutConfig;
+
 /* Colors */
 extern const Clay_Color COLOR_ORANGE;
 extern const Clay_Color COLOR_BLUE;
