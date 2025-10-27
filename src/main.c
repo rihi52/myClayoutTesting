@@ -56,11 +56,12 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
     }
     *appstate = state;
 
-    if (!SDL_CreateWindowAndRenderer("GUIDNBATTER", 1280, 720, 0, &state->window, &state->rendererData.renderer)) {
+    if (!SDL_CreateWindowAndRenderer("GUIDNBATTER", 1280, 720, SDL_WINDOW_RESIZABLE, &state->window, &state->rendererData.renderer)) {
         SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Failed to create window and renderer: %s", SDL_GetError());
         return SDL_APP_FAILURE;
     }
-    SDL_SetWindowResizable(state->window, true);
+    //SDL_SetWindowResizable(state->window, true);
+    SDL_ShowWindow(state->window);
     SDL_SetWindowMinimumSize(state->window, MinimumWidth, MinimumHeight);
     SDL_StartTextInput(state->window);
 

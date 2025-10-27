@@ -184,24 +184,33 @@ void CreatureDatabaseWindow(AppState * state) {
                     Clay_String CreatureTypeText = {.isStaticallyAllocated = true, .length = SDL_strlen(CreatureType[i]), .chars = CreatureType[i]};
                     Clay_String CreatureSourceText = {.isStaticallyAllocated = true, .length = SDL_strlen(CreatureSource[i]), .chars = CreatureSource[i]};
                     CLAY(CLAY_IDI("CreatureHeader", i), {CreatureButtonLayoutConfig, .backgroundColor = COLOR_BUTTON_GRAY, .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_SM_PX)}) {
-                        CLAY_AUTO_ID({NameCRContainerLayoutConfig}) {
+                        Clay_ElementId id = CLAY_IDI("CreatureHeader", 0);
+                        Clay_ElementData HeaderData = Clay_GetElementData(id);
                             CLAY_AUTO_ID({NameContainerLayoutConfig}){
                                 CLAY_TEXT(CreatureNameText, CLAY_TEXT_CONFIG(ButtonTextConfig));
                             };
-                            CLAY_AUTO_ID({CRContainerLayoutConfig}){
-                                CLAY_TEXT(CreatureInfoText, CLAY_TEXT_CONFIG(ButtonTextConfig));
+
+                        if (146 <= HeaderData.boundingBox.width ) {
+                            CLAY_AUTO_ID({SizeCRContainerLayoutConfig}) {
+                                /* change to be just size and type */
+                                CLAY_AUTO_ID({CRContainerLayoutConfig}){
+                                    CLAY_TEXT(CreatureInfoText, CLAY_TEXT_CONFIG(ButtonTextConfig));
+                                };
+                                CLAY_AUTO_ID({SizeContainerLayoutConfig}){
+                                    CLAY_TEXT(CreatureSizeText, CLAY_TEXT_CONFIG(ButtonTextConfig));
+                                };
                             };
-                        };
-                        CLAY_AUTO_ID({SizeTypeContainerLayoutConfig}) {
-                            /* change to be just size and type */
-                            CLAY_AUTO_ID({NameContainerLayoutConfig}){
-                                CLAY_TEXT(CreatureSizeText, CLAY_TEXT_CONFIG(ButtonTextConfig));
+                            CLAY_AUTO_ID({TypeSrcContainerLayoutConfig}) {
+                                CLAY_AUTO_ID({TypeContainerLayoutConfig}) {
+                                    CLAY_TEXT(CreatureTypeText, CLAY_TEXT_CONFIG(ButtonTextConfig));
+                                };
+                                CLAY_AUTO_ID({SourceContainerLayoutConfig}) {
+                                    CLAY_TEXT(CreatureSourceText, CLAY_TEXT_CONFIG(ButtonTextConfig));
+                                };
                             };
-                            CLAY_AUTO_ID({CRContainerLayoutConfig}){
-                                CLAY_TEXT(CreatureTypeText, CLAY_TEXT_CONFIG(ButtonTextConfig));
-                            };
-                        };
-                        CLAY_TEXT(CreatureSourceText, CLAY_TEXT_CONFIG(ButtonTextConfig));
+                        }
+                                
+                        
                         /* TODO: I think this flickers in and out so fast you can't see it because nothing is holding it on screen */
                         Clay_OnHover(CallStatBlockCallback, (intptr_t)WindowState);
                     };

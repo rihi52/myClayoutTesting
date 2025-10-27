@@ -33,20 +33,20 @@ extern Clay_LayoutConfig TTBParentWindowLayoutConfig;
 extern Clay_LayoutConfig CreatureButtonLayoutConfig;
 
 /* Container for creature name container and cr container*/
-extern Clay_LayoutConfig NameCRContainerLayoutConfig;
+extern Clay_LayoutConfig NameContainerLayoutConfig;
 
 /* Container for creature name */
-extern Clay_LayoutConfig NameContainerLayoutConfig;
+extern Clay_LayoutConfig SizeCRContainerLayoutConfig;
 
 /* Container for creature cr */
 extern Clay_LayoutConfig CRContainerLayoutConfig;
 
-/**/
-/* Container for creature name container and cr container*/
-extern Clay_LayoutConfig SizeTypeContainerLayoutConfig;
-
 /* Container for creature name */
 extern Clay_LayoutConfig SizeContainerLayoutConfig;
+
+/**/
+/* Container for creature name container and cr container*/
+extern Clay_LayoutConfig TypeSrcContainerLayoutConfig;
 
 /* Container for creature cr */
 extern Clay_LayoutConfig TypeContainerLayoutConfig;
