@@ -15,8 +15,7 @@
 #include "global.h"
 #include "main_window.h"
 #include "text_input.h"
-
-
+#include "db_query.h"
 
 const int MinimumWidth = 1360;
 const int MinimumHeight = 800;
@@ -49,6 +48,8 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
     if (!TTF_Init()) {
         return SDL_APP_FAILURE;
     }
+
+    DatabaseOpen();
 
     AppState *state = SDL_calloc(1, sizeof(AppState));
     if (!state) {
@@ -181,6 +182,8 @@ void SDL_AppQuit(void *appstate, SDL_AppResult result)
     if (result != SDL_APP_SUCCESS) {
         SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Application failed to run");
     }
+
+    DatabaseClose();
 
     AppState *state = appstate;
     SDL_StopTextInput(state->window);

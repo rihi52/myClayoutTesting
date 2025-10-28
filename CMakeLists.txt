@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.27)
-project(clay_sdl3_demo C)
+project(guidnbatter)
 set(CMAKE_C_STANDARD 99)
 
-# Output directories (recommended by SDL vendoring docs)
+# === OUTPUT DIRECTORIES ===
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/$<CONFIGURATION>")
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/$<CONFIGURATION>")
 
@@ -13,14 +13,14 @@ set(SRC_FILES
     src/styles.c
     src/global.c
     SDL3/clay_renderer_SDL3.c
+    src/db_query.c
+    src/sql/sqlite3.c       # ✅ Add the SQLite amalgamation source
 )
 
 # === SDL3 (vendored) ===
-# Make sure the SDL repo exists under vendored/SDL
 add_subdirectory(vendored/SDL EXCLUDE_FROM_ALL)
 
 # === SDL3_ttf (vendored) ===
-# SDL_ttf expects SDL to already be available via SDL3::SDL3
 add_subdirectory(vendored/SDL_ttf EXCLUDE_FROM_ALL)
 
 # === SDL3_image (vendored) ===
@@ -28,13 +28,21 @@ add_subdirectory(vendored/SDL_image EXCLUDE_FROM_ALL)
 
 # === BUILD TARGET ===
 add_executable(${PROJECT_NAME} ${SRC_FILES})
-target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+
+# === INCLUDE DIRECTORIES ===
+target_include_directories(${PROJECT_NAME} PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_SOURCE_DIR}/src/sql   # ✅ SQLite headers
+)
 
 # === LINK LIBRARIES ===
 target_link_libraries(${PROJECT_NAME} PRIVATE
     SDL3::SDL3
     SDL3_ttf::SDL3_ttf
     SDL3_image::SDL3_image
+    m            # ✅ math library (needed by SQLite on some systems)
+    pthread      # ✅ threading library (needed by SQLite)
+    dl           # ✅ dynamic loading (needed by SQLite)
 )
 
 # === RESOURCE COPY ===
@@ -45,8 +53,9 @@ add_custom_command(
         ${CMAKE_CURRENT_BINARY_DIR}/resources
 )
 
-# Optional: group in IDEs
+# === IDE GROUPING (optional) ===
 set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "Apps")
+
 
 
 # cmake_minimum_required(VERSION 3.27)
