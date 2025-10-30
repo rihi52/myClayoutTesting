@@ -24,6 +24,7 @@ static void CallStatBlockCallback(Clay_ElementId elementId, Clay_PointerData poi
 void BuildEncounterWindow(AppState * state);
 void CreatureDatabaseWindow(AppState * state);
 void PlayerDatabaseWindow(AppState * state);
+void MakeCreatureHeader(int i);
 
 /*========================================================================* 
  *  SECTION - Style declarations
@@ -182,43 +183,41 @@ void CreatureDatabaseWindow(AppState * state) {
                 // Maybe separate function using an array of structs the query writes to?
                 // Then loop through that array with MakeClayString and fill text that way
                 for (int i = 0; i < number; i++) {
-                    CreatureHeader * LookUpHeader = LoadCreatureHeaderAlphabetical(i + 1);
-                    Clay_String CreatureNameText = MakeClayString(LookUpHeader->CreatureName);
-                    Clay_String CreatureInfoText = MakeClayString(LookUpHeader->CreatureCR);
-                    Clay_String CreatureSizeText = MakeClayString(LookUpHeader->CreatureSize);
-                    Clay_String CreatureTypeText = MakeClayString(LookUpHeader->CreatureType);
-                    //Clay_String CreatureSourceText = {.isStaticallyAllocated = true, .length = SDL_strlen(LookUpHeader->CreatureSource), .chars = LookUpHeader->CreatureSource};
-                    CLAY(CLAY_IDI("CreatureHeader", i), {CreatureButtonLayoutConfig, .backgroundColor = COLOR_BUTTON_GRAY, .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_SM_PX)}) {
-                        Clay_ElementId id = CLAY_IDI("CreatureHeader", 0);
-                        Clay_ElementData HeaderData = Clay_GetElementData(id);
-                            CLAY_AUTO_ID({NameContainerLayoutConfig}){
-                                CLAY_TEXT(CreatureNameText, CLAY_TEXT_CONFIG(ButtonTextConfig));
-                            };
+                    MakeCreatureHeader(i);
+                    // LoadCreatureHeaderAlphabetical(i + 1);
 
-                        if (146 <= HeaderData.boundingBox.width ) {
-                            CLAY_AUTO_ID({SizeCRContainerLayoutConfig}) {
-                                /* change to be just size and type */
-                                CLAY_AUTO_ID({CRContainerLayoutConfig}){
-                                    CLAY_TEXT(CreatureInfoText, CLAY_TEXT_CONFIG(ButtonTextConfig));
-                                };
-                                CLAY_AUTO_ID({SizeContainerLayoutConfig}){
-                                    CLAY_TEXT(CreatureSizeText, CLAY_TEXT_CONFIG(ButtonTextConfig));
-                                };
-                            };
-                            CLAY_AUTO_ID({TypeSrcContainerLayoutConfig}) {
-                                CLAY_AUTO_ID({TypeContainerLayoutConfig}) {
-                                    CLAY_TEXT(CreatureTypeText, CLAY_TEXT_CONFIG(ButtonTextConfig));
-                                };
-                                CLAY_AUTO_ID({SourceContainerLayoutConfig}) {
-                                    //CLAY_TEXT(CreatureSourceText, CLAY_TEXT_CONFIG(ButtonTextConfig));
-                                };
-                            };
-                        }
+                    // //Clay_String CreatureSourceText = {.isStaticallyAllocated = true, .length = SDL_strlen(LookUpHeader->CreatureSource), .chars = LookUpHeader->CreatureSource};
+                    // CLAY(CLAY_IDI("CreatureHeader", i), {CreatureButtonLayoutConfig, .backgroundColor = COLOR_BUTTON_GRAY, .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_SM_PX)}) {
+                    //     Clay_ElementId id = CLAY_IDI("CreatureHeader", 0);
+                    //     Clay_ElementData HeaderData = Clay_GetElementData(id);
+                    //         CLAY_AUTO_ID({NameContainerLayoutConfig}){
+                    //             CLAY_TEXT(DBPageHeaders[i].CreatureName, CLAY_TEXT_CONFIG(ButtonTextConfig));
+                    //         };
+
+                    //     if (146 <= HeaderData.boundingBox.width ) {
+                    //         CLAY_AUTO_ID({SizeCRContainerLayoutConfig}) {
+                    //             /* change to be just size and type */
+                    //             CLAY_AUTO_ID({CRContainerLayoutConfig}){
+                    //                 CLAY_TEXT(DBPageHeaders[i].CreatureCR, CLAY_TEXT_CONFIG(ButtonTextConfig));
+                    //             };
+                    //             CLAY_AUTO_ID({SizeContainerLayoutConfig}){
+                    //                 CLAY_TEXT(DBPageHeaders[i].CreatureSize, CLAY_TEXT_CONFIG(ButtonTextConfig));
+                    //             };
+                    //         };
+                    //         CLAY_AUTO_ID({TypeSrcContainerLayoutConfig}) {
+                    //             CLAY_AUTO_ID({TypeContainerLayoutConfig}) {
+                    //                 CLAY_TEXT(DBPageHeaders[i].CreatureType, CLAY_TEXT_CONFIG(ButtonTextConfig));
+                    //             };
+                    //             CLAY_AUTO_ID({SourceContainerLayoutConfig}) {
+                    //                 //CLAY_TEXT(CreatureSourceText, CLAY_TEXT_CONFIG(ButtonTextConfig));
+                    //             };
+                    //         };
+                    //     }
                                 
                         
-                        /* TODO: I think this flickers in and out so fast you can't see it because nothing is holding it on screen */
-                        Clay_OnHover(CallStatBlockCallback, (intptr_t)WindowState);
-                    };
+                    //     /* TODO: I think this flickers in and out so fast you can't see it because nothing is holding it on screen */
+                    //     Clay_OnHover(CallStatBlockCallback, (intptr_t)WindowState);
+                    // };
                 }
 
             }
@@ -281,6 +280,43 @@ void PlayerDatabaseWindow(AppState * state) {
             CLAY(CLAY_ID("PlayerDBHeader"), { HeadLabelWindow, .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_LG_PX), .backgroundColor = COLOR_RED}) {
             };          
         };
+    };
+}
+
+void MakeCreatureHeader(int i) {
+    
+
+    //Clay_String CreatureSourceText = {.isStaticallyAllocated = true, .length = SDL_strlen(LookUpHeader->CreatureSource), .chars = LookUpHeader->CreatureSource};
+    CLAY(CLAY_IDI("CreatureHeader", i), {CreatureButtonLayoutConfig, .backgroundColor = COLOR_BUTTON_GRAY, .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_SM_PX)}) {
+        Clay_ElementId id = CLAY_IDI("CreatureHeader", 0);
+        Clay_ElementData HeaderData = Clay_GetElementData(id);
+            CLAY_AUTO_ID({NameContainerLayoutConfig}){
+                CLAY_TEXT(DBPageHeaders[i].CreatureName, CLAY_TEXT_CONFIG(ButtonTextConfig));
+            };
+
+        if (146 <= HeaderData.boundingBox.width ) {
+            CLAY_AUTO_ID({SizeCRContainerLayoutConfig}) {
+                /* change to be just size and type */
+                CLAY_AUTO_ID({CRContainerLayoutConfig}){
+                    CLAY_TEXT(DBPageHeaders[i].CreatureCR, CLAY_TEXT_CONFIG(ButtonTextConfig));
+                };
+                CLAY_AUTO_ID({SizeContainerLayoutConfig}){
+                    CLAY_TEXT(DBPageHeaders[i].CreatureSize, CLAY_TEXT_CONFIG(ButtonTextConfig));
+                };
+            };
+            CLAY_AUTO_ID({TypeSrcContainerLayoutConfig}) {
+                CLAY_AUTO_ID({TypeContainerLayoutConfig}) {
+                    CLAY_TEXT(DBPageHeaders[i].CreatureType, CLAY_TEXT_CONFIG(ButtonTextConfig));
+                };
+                CLAY_AUTO_ID({SourceContainerLayoutConfig}) {
+                    //CLAY_TEXT(CreatureSourceText, CLAY_TEXT_CONFIG(ButtonTextConfig));
+                };
+            };
+        }
+                
+        
+        /* TODO: I think this flickers in and out so fast you can't see it because nothing is holding it on screen */
+        Clay_OnHover(CallStatBlockCallback, (intptr_t)WindowState);
     };
 }
 

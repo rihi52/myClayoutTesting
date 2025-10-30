@@ -6,9 +6,7 @@
  */
 sqlite3 * pGuidnbatterDB;
 
-
-CreatureHeader DBPageHeaders[333];
-static CreatureHeader LookUp;
+CreatureHeader DBPageHeaders[MAX_DB_COUNT] = {0};
 
 /*========================================================================*
  *  SECTION - Global function definitions                                 *
@@ -27,6 +25,10 @@ void DatabaseOpen(void) {
     {
         SDL_Log("Opened database successfully");
     }
+
+    // for (int i = 0; i < MAX_DB_COUNT; i++) {
+    //     DBPageHeaders[i] = {0};
+    // }
     return;
 }
 
@@ -35,22 +37,22 @@ void DatabaseClose(void) {
 }
 
 Clay_String MakeClayString(const char * string) {
-    Clay_String str = {
+    char * copy = SDL_malloc(sizeof(string));
+
+    SDL_strlcpy(copy, string, sizeof(string));
+
+    Clay_String str= {
         .isStaticallyAllocated = true,
         .length = sizeof(string),
-        .chars = string
+        .chars = copy
     };
+    // str.isStaticallyAllocated = true;
+    // str.length = sizeof(string);     
 
     return str;
 }
 
-CreatureHeader * LoadCreatureHeaderAlphabetical(int MonsterId) {
-    
-    
-    memset(&LookUp, 0, sizeof(LookUp));
-
-    static char name_buffer[128]; // Persistent buffer for returned name
-    name_buffer[0] = '\0'; // Clear it
+void LoadCreatureHeaderAlphabetical(int MonsterId) {
 
     sqlite3_stmt *stmt = NULL;
     const char *sql = "SELECT name, cr, size, type FROM monsters WHERE id = ?";
@@ -59,7 +61,7 @@ CreatureHeader * LoadCreatureHeaderAlphabetical(int MonsterId) {
     if (rc != SQLITE_OK)
     {
         SDL_Log("Failed to prepare statement: %s", sqlite3_errmsg(pGuidnbatterDB));
-        return NULL;
+        return;
     }
 
     sqlite3_bind_int(stmt, 1, MonsterId);
@@ -73,11 +75,10 @@ CreatureHeader * LoadCreatureHeaderAlphabetical(int MonsterId) {
         const char *Type    = sqlite3_column_text(stmt, 3);
         //const char *Source  = sqlite3_column_text(stmt, 4);
 
-        SDL_strlcpy(LookUp.CreatureName, Name, sizeof(LookUp.CreatureName));
-        SDL_strlcpy(LookUp.CreatureCR, Cr, sizeof(LookUp.CreatureCR));
-        SDL_strlcpy(LookUp.CreatureSize, Size, sizeof(LookUp.CreatureSize));
-        SDL_strlcpy(LookUp.CreatureType, Type, sizeof(LookUp.CreatureType));
-        //SDL_strlcpy(Source, LookUp.CreatureSource, sizeof(LookUp.CreatureSource));
+        DBPageHeaders[MonsterId].CreatureName = MakeClayString(Name);
+        DBPageHeaders[MonsterId].CreatureCR = MakeClayString(Cr);
+        DBPageHeaders[MonsterId].CreatureSize = MakeClayString(Size);
+        DBPageHeaders[MonsterId].CreatureType = MakeClayString(Type);
     }
     else if (rc != SQLITE_DONE)
     {
@@ -85,5 +86,5 @@ CreatureHeader * LoadCreatureHeaderAlphabetical(int MonsterId) {
     }
 
     sqlite3_finalize(stmt);
-    return &LookUp; // Safe static buffer
+    return;
 }

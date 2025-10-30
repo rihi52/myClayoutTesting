@@ -50,6 +50,10 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
     }
 
     DatabaseOpen();
+    for (int i = 0; i < MAX_DB_COUNT; i++) {
+        LoadCreatureHeaderAlphabetical(i);
+    };
+    SDL_Log("%s", DBPageHeaders[2].CreatureName.chars);
 
     AppState *state = SDL_calloc(1, sizeof(AppState));
     if (!state) {
@@ -209,4 +213,5 @@ void SDL_AppQuit(void *appstate, SDL_AppResult result)
         SDL_free(state);
     }
     TTF_Quit();
+    SDL_Quit();
 }

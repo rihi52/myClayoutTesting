@@ -4,19 +4,23 @@
 #include <SDL3/SDL.h>
 #include "clay.h"
 
+#define MAX_DB_COUNT 1000
+
 extern sqlite3 * pGuidnbatterDB;
 
 typedef struct CreatureHeader {
-char CreatureName[128];
-char CreatureCR[4];
-char CreatureSize[32];
-char CreatureType[64];
-char CreatureSource[64];
+Clay_String CreatureName;
+Clay_String CreatureCR;
+Clay_String CreatureSize;
+Clay_String CreatureType;
+Clay_String CreatureSource;
 }CreatureHeader;
+
+extern CreatureHeader DBPageHeaders[MAX_DB_COUNT];
 
 void DatabaseOpen(void);
 void DatabaseClose(void);
-CreatureHeader * LoadCreatureHeaderAlphabetical(int MonsterId);
+void LoadCreatureHeaderAlphabetical(int MonsterId);
 Clay_String MakeClayString(const char * string);
 
 #endif /* DB_QUERY */
