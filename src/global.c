@@ -10,3 +10,5 @@ const int FONT_ID_BODY_32 = 0;
 
 int WindowWidth = 0;
 int WindowHeight = 0;
+
+float ScrollOffset = 0;

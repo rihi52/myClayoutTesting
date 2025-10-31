@@ -16,6 +16,8 @@
         "ios": "c",
         "main_window.h": "c",
         "string": "c",
-        "format": "c"
+        "format": "c",
+        "cstdint": "c",
+        "compare": "c"
     }
 }

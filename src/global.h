@@ -26,6 +26,7 @@ extern int WindowState;
 
 extern int WindowWidth;
 extern int WindowHeight;
+extern float ScrollOffset;
 
 extern const int FONT_ID_BODY_16;
 extern const int FONT_ID_BODY_32;

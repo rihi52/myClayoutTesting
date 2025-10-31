@@ -37,17 +37,15 @@ void DatabaseClose(void) {
 }
 
 Clay_String MakeClayString(const char * string) {
-    char * copy = SDL_malloc(sizeof(string));
+    char * copy = SDL_malloc(SDL_strlen(string)+1);
 
-    SDL_strlcpy(copy, string, sizeof(string));
+    SDL_strlcpy(copy, string, SDL_strlen(string)+1);
 
     Clay_String str= {
-        .isStaticallyAllocated = true,
-        .length = sizeof(string),
+        .isStaticallyAllocated = false,
+        .length = SDL_strlen(copy),
         .chars = copy
     };
-    // str.isStaticallyAllocated = true;
-    // str.length = sizeof(string);     
 
     return str;
 }
@@ -64,7 +62,7 @@ void LoadCreatureHeaderAlphabetical(int MonsterId) {
         return;
     }
 
-    sqlite3_bind_int(stmt, 1, MonsterId);
+    sqlite3_bind_int(stmt, 1, MonsterId + 1);
 
     rc = sqlite3_step(stmt);
     if (rc == SQLITE_ROW)
@@ -83,6 +81,12 @@ void LoadCreatureHeaderAlphabetical(int MonsterId) {
     else if (rc != SQLITE_DONE)
     {
         SDL_Log("Failed to execute statement: %s", sqlite3_errmsg(pGuidnbatterDB));
+    }
+
+    if (MonsterId < 3) {
+        SDL_Log("LoadCreatureHeaderAlphabetical(%d)", MonsterId);
+
+        SDL_Log("%s", DBPageHeaders[MonsterId].CreatureName.chars);
     }
 
     sqlite3_finalize(stmt);

@@ -53,7 +53,6 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
     for (int i = 0; i < MAX_DB_COUNT; i++) {
         LoadCreatureHeaderAlphabetical(i);
     };
-    SDL_Log("%s", DBPageHeaders[2].CreatureName.chars);
 
     AppState *state = SDL_calloc(1, sizeof(AppState));
     if (!state) {
@@ -147,14 +146,14 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
             Clay_SetPointerState((Clay_Vector2) { event->button.x, event->button.y },
                                  event->button.button == SDL_BUTTON_LEFT);
             break;
-
         case SDL_EVENT_MOUSE_BUTTON_UP:
             Clay_SetPointerState((Clay_Vector2) { event->button.x, event->button.y },
                                  event->button.button == SDL_BUTTON_LEFT);
             break;
-
         case SDL_EVENT_MOUSE_WHEEL:
             Clay_UpdateScrollContainers(true, (Clay_Vector2) { event->wheel.x, event->wheel.y }, 0.01f);
+            ScrollOffset = ScrollOffset + event->wheel.y;
+            // SDL_Log("%f", ScrollOffset);
             break;
         default:
             break;
@@ -188,6 +187,11 @@ void SDL_AppQuit(void *appstate, SDL_AppResult result)
     }
 
     DatabaseClose();
+    for (int i = 1; i < MAX_DB_COUNT; i++) {
+        if (DBPageHeaders[i].CreatureName.isStaticallyAllocated == false && DBPageHeaders[i].CreatureName.chars != NULL) {
+            free((void *)DBPageHeaders[i].CreatureName.chars);
+        }
+    }
 
     AppState *state = appstate;
     SDL_StopTextInput(state->window);
