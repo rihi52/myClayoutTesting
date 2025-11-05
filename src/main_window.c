@@ -20,7 +20,6 @@ static void BuildEncounterButtonCallback(Clay_ElementId elementId, Clay_PointerD
 static void CreatureDatabaseButtonCallback(Clay_ElementId elementId, Clay_PointerData pointerData, intptr_t userData);
 static void PlayerDatabaseButtonCallback(Clay_ElementId elementId, Clay_PointerData pointerData, intptr_t userData);
 static void CallStatBlockCallback(Clay_ElementId elementId, Clay_PointerData pointerData, intptr_t userData);
-void MakeFloater(void);
 
 void BuildEncounterWindow(AppState * state);
 void CreatureDatabaseWindow(AppState * state);
@@ -181,12 +180,41 @@ void CreatureDatabaseWindow(AppState * state) {
                     MakeCreatureHeader(i);
                 }
             }
-            CLAY(CLAY_ID("StatPage"), {TTBParentWindowLayoutConfig, .backgroundColor = COLOR_GREEN}) {
+            CLAY(CLAY_ID("StatPage"), {StatPageContainer, .backgroundColor = COLOR_GREEN, .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_LG_PX)}) {
                 // TODO: need a bunch of elements to format the stat page and fill them with a bunch of CLAY_STRINGS
                 // Need a function to do this maybe and also make the CLAY_STRINGS variable
                 // Need to design layout of stat page first probable
                 // Is there a better way to do this than adding a boatload more elements?????
-                CLAY_TEXT(CLAY_STRING("Fill stats here"), CLAY_TEXT_CONFIG(ButtonTextConfig));
+                CLAY(CLAY_ID("NameContainer"), {StatePageDivider, .backgroundColor = COLOR_TRANSPARENT, .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_SM_PX)}) {
+                    CLAY_TEXT(CLAY_STRING("Fill stats here"), CLAY_TEXT_CONFIG(ButtonTextConfig));
+                };
+                CLAY(CLAY_ID("ACHPContainer"), {StatePageDivider, .backgroundColor = COLOR_TRANSPARENT, .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_SM_PX)}) {
+                    CLAY_TEXT(CLAY_STRING("Fill stats here"), CLAY_TEXT_CONFIG(ButtonTextConfig));
+                };
+                CLAY(CLAY_ID("AbilityScoresContainer"), {StatePageDivider, .backgroundColor = COLOR_TRANSPARENT, .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_SM_PX)}) {
+                    CLAY_TEXT(CLAY_STRING("Fill stats here"), CLAY_TEXT_CONFIG(ButtonTextConfig));
+                };
+                CLAY(CLAY_ID("SensesContainer"), {StatePageDivider, .backgroundColor = COLOR_TRANSPARENT, .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_SM_PX)}) {
+                    CLAY_TEXT(CLAY_STRING("Fill stats here"), CLAY_TEXT_CONFIG(ButtonTextConfig));
+                };
+                CLAY(CLAY_ID("RacialContainer"), {StatePageDivider, .backgroundColor = COLOR_TRANSPARENT, .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_SM_PX)}) {
+                    CLAY_TEXT(CLAY_STRING("Fill stats here"), CLAY_TEXT_CONFIG(ButtonTextConfig));
+                };
+                CLAY(CLAY_ID("ActionsContainer"), {StatePageDivider, .backgroundColor = COLOR_TRANSPARENT, .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_SM_PX)}) {
+                    CLAY_TEXT(CLAY_STRING("Fill stats here"), CLAY_TEXT_CONFIG(ButtonTextConfig));
+                };
+                CLAY(CLAY_ID("LegendaryBonusContainer"), {StatePageDivider, .backgroundColor = COLOR_TRANSPARENT, .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_SM_PX)}) {
+                    CLAY_TEXT(CLAY_STRING("Fill stats here"), CLAY_TEXT_CONFIG(ButtonTextConfig));
+                };
+                CLAY(CLAY_ID("LairReactionContainer"), {StatePageDivider, .backgroundColor = COLOR_TRANSPARENT, .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_SM_PX)}) {
+                    CLAY_TEXT(CLAY_STRING("Fill stats here"), CLAY_TEXT_CONFIG(ButtonTextConfig));
+                };
+                CLAY(CLAY_ID("BonusVillainContainer"), {StatePageDivider, .backgroundColor = COLOR_TRANSPARENT, .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_SM_PX)}) {
+                    CLAY_TEXT(CLAY_STRING("Fill stats here"), CLAY_TEXT_CONFIG(ButtonTextConfig));
+                };
+                CLAY(CLAY_ID("VillainContainer"), {StatePageDivider, .backgroundColor = COLOR_TRANSPARENT, .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_SM_PX)}) {
+                    CLAY_TEXT(CLAY_STRING("Fill stats here"), CLAY_TEXT_CONFIG(ButtonTextConfig));
+                };
             };
         };
     };
@@ -275,23 +303,6 @@ void MakeCreatureHeader(int i) {
             };
         };
         Clay_OnHover(CallStatBlockCallback, (intptr_t)WindowState);
-    };
-}
-
-void MakeFloater(void) {
-
-    CLAY(CLAY_ID("Floater"), { 
-        Floater,
-        .floating = {
-            .attachTo = CLAY_ATTACH_TO_PARENT, 
-            .attachPoints = {
-                .parent = CLAY_ATTACH_POINT_RIGHT_CENTER
-            },
-            .parentId = CLAY_ID("PlayerDBOuterContainer").id 
-        },
-        .backgroundColor = COLOR_GREEN
-    }) {
-
     };
 }
 
