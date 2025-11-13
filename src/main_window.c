@@ -25,6 +25,7 @@ void BuildEncounterWindow(AppState * state);
 void CreatureDatabaseWindow(AppState * state);
 void PlayerDatabaseWindow(AppState * state);
 void MakeCreatureHeader(int i);
+void FillStats(void);
 
 /*========================================================================* 
  *  SECTION - Local variables
@@ -99,6 +100,10 @@ Clay_RenderCommandArray MainWindow(AppState * state)
 
         case PLAYER_DB_SCREEN:
             PlayerDatabaseWindow(state);            
+            break;
+
+        case ADD_STAT_SCREEN:
+            CreatureDatabaseWindow(state);
             break;
 
         default:
@@ -180,42 +185,7 @@ void CreatureDatabaseWindow(AppState * state) {
                     MakeCreatureHeader(i);
                 }
             }
-            CLAY(CLAY_ID("StatPage"), {StatPageContainer, .backgroundColor = COLOR_GREEN, .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_LG_PX)}) {
-                // TODO: need a bunch of elements to format the stat page and fill them with a bunch of CLAY_STRINGS
-                // Need a function to do this maybe and also make the CLAY_STRINGS variable
-                // Need to design layout of stat page first probable
-                // Is there a better way to do this than adding a boatload more elements?????
-                CLAY(CLAY_ID("NameContainer"), {StatePageDivider, .backgroundColor = COLOR_TRANSPARENT, .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_SM_PX)}) {
-                    CLAY_TEXT(CLAY_STRING("Fill stats here"), CLAY_TEXT_CONFIG(ButtonTextConfig));
-                };
-                CLAY(CLAY_ID("ACHPContainer"), {StatePageDivider, .backgroundColor = COLOR_TRANSPARENT, .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_SM_PX)}) {
-                    CLAY_TEXT(CLAY_STRING("Fill stats here"), CLAY_TEXT_CONFIG(ButtonTextConfig));
-                };
-                CLAY(CLAY_ID("AbilityScoresContainer"), {StatePageDivider, .backgroundColor = COLOR_TRANSPARENT, .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_SM_PX)}) {
-                    CLAY_TEXT(CLAY_STRING("Fill stats here"), CLAY_TEXT_CONFIG(ButtonTextConfig));
-                };
-                CLAY(CLAY_ID("SensesContainer"), {StatePageDivider, .backgroundColor = COLOR_TRANSPARENT, .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_SM_PX)}) {
-                    CLAY_TEXT(CLAY_STRING("Fill stats here"), CLAY_TEXT_CONFIG(ButtonTextConfig));
-                };
-                CLAY(CLAY_ID("RacialContainer"), {StatePageDivider, .backgroundColor = COLOR_TRANSPARENT, .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_SM_PX)}) {
-                    CLAY_TEXT(CLAY_STRING("Fill stats here"), CLAY_TEXT_CONFIG(ButtonTextConfig));
-                };
-                CLAY(CLAY_ID("ActionsContainer"), {StatePageDivider, .backgroundColor = COLOR_TRANSPARENT, .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_SM_PX)}) {
-                    CLAY_TEXT(CLAY_STRING("Fill stats here"), CLAY_TEXT_CONFIG(ButtonTextConfig));
-                };
-                CLAY(CLAY_ID("LegendaryBonusContainer"), {StatePageDivider, .backgroundColor = COLOR_TRANSPARENT, .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_SM_PX)}) {
-                    CLAY_TEXT(CLAY_STRING("Fill stats here"), CLAY_TEXT_CONFIG(ButtonTextConfig));
-                };
-                CLAY(CLAY_ID("LairReactionContainer"), {StatePageDivider, .backgroundColor = COLOR_TRANSPARENT, .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_SM_PX)}) {
-                    CLAY_TEXT(CLAY_STRING("Fill stats here"), CLAY_TEXT_CONFIG(ButtonTextConfig));
-                };
-                CLAY(CLAY_ID("BonusVillainContainer"), {StatePageDivider, .backgroundColor = COLOR_TRANSPARENT, .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_SM_PX)}) {
-                    CLAY_TEXT(CLAY_STRING("Fill stats here"), CLAY_TEXT_CONFIG(ButtonTextConfig));
-                };
-                CLAY(CLAY_ID("VillainContainer"), {StatePageDivider, .backgroundColor = COLOR_TRANSPARENT, .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_SM_PX)}) {
-                    CLAY_TEXT(CLAY_STRING("Fill stats here"), CLAY_TEXT_CONFIG(ButtonTextConfig));
-                };
-            };
+            FillStats();
         };
     };
 }
@@ -306,6 +276,125 @@ void MakeCreatureHeader(int i) {
     };
 }
 
+void FillStats(void) {
+    CLAY(CLAY_ID("StatPage"), {StatPageContainer, .backgroundColor = (WindowState == CREATURE_DB_SCREEN) ? COLOR_TRANSPARENT : COLOR_BUTTON_GRAY, .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_LG_PX), .clip = {false, true, Clay_GetScrollOffset()}}) {
+        // TODO: need a bunch of elements to format the stat page and fill them with a bunch of CLAY_STRINGS
+
+        CLAY(CLAY_ID("NameContainer"), {
+            StatPageDivider,
+            .backgroundColor = COLOR_TRANSPARENT,
+            .border = { .width = { .bottom = 5 }, .color = COLOR_BLACK }
+        }) {
+            CLAY_TEXT(StatName, CLAY_TEXT_CONFIG(StatPageTextConfig));
+        };
+        CLAY(CLAY_ID("ACHPContainer"), {StatPageDivider, .backgroundColor = COLOR_TRANSPARENT, .border = { .width = { .bottom = 5 }, .color = COLOR_BLACK }}) {
+            CLAY(CLAY_ID("ACContainer"), {StatPageSubDivider, .backgroundColor = COLOR_TRANSPARENT}) {
+                CLAY_TEXT(StatAC, CLAY_TEXT_CONFIG(StatPageTextConfig));
+            }
+            CLAY(CLAY_ID("HPContainer"), {StatPageSubDivider, .backgroundColor = COLOR_TRANSPARENT}) {
+                CLAY_TEXT(StatHP, CLAY_TEXT_CONFIG(StatPageTextConfig));
+            }
+        }; /* Start Ability Scores container*/
+        CLAY(CLAY_ID("AbilityScoresContainer"), {StatPageDivider, .backgroundColor = COLOR_TRANSPARENT}) {
+            /* Ability score labels*/
+            CLAY_AUTO_ID({StatPageSubDivider, .backgroundColor = COLOR_TRANSPARENT}) {
+                CLAY_AUTO_ID({StatPageAbilityDivider, .backgroundColor = COLOR_TRANSPARENT}) {
+                    CLAY_TEXT(CLAY_STRING("STR"), CLAY_TEXT_CONFIG(StatPageAbilityScoreTextConfig));
+                }
+                CLAY_AUTO_ID({StatPageAbilityDivider, .backgroundColor = COLOR_TRANSPARENT}) {
+                    CLAY_TEXT(CLAY_STRING("DEX"), CLAY_TEXT_CONFIG(StatPageAbilityScoreTextConfig));
+                }
+                CLAY_AUTO_ID({StatPageAbilityDivider, .backgroundColor = COLOR_TRANSPARENT}) {
+                    CLAY_TEXT(CLAY_STRING("CON"), CLAY_TEXT_CONFIG(StatPageAbilityScoreTextConfig));
+                }
+                CLAY_AUTO_ID({StatPageAbilityDivider, .backgroundColor = COLOR_TRANSPARENT}) {
+                    CLAY_TEXT(CLAY_STRING("INT"), CLAY_TEXT_CONFIG(StatPageAbilityScoreTextConfig));
+                }
+                CLAY_AUTO_ID({StatPageAbilityDivider, .backgroundColor = COLOR_TRANSPARENT}) {
+                    CLAY_TEXT(CLAY_STRING("WIS"), CLAY_TEXT_CONFIG(StatPageAbilityScoreTextConfig));
+                }
+                CLAY_AUTO_ID({StatPageAbilityDivider, .backgroundColor = COLOR_TRANSPARENT}) {
+                    CLAY_TEXT(CLAY_STRING("CHA"), CLAY_TEXT_CONFIG(StatPageAbilityScoreTextConfig));
+                }
+            } /* Ability score values*/
+            CLAY_AUTO_ID({StatPageSubDivider, .backgroundColor = COLOR_TRANSPARENT, .border = { .width = { .bottom = 5 }, .color = COLOR_BLACK }}) {
+                CLAY_AUTO_ID({StatPageAbilityDivider, .backgroundColor = COLOR_TRANSPARENT}) {
+                    CLAY_TEXT(StatStr, CLAY_TEXT_CONFIG(StatPageAbilityScoreTextConfig));
+                }
+                CLAY_AUTO_ID({StatPageAbilityDivider, .backgroundColor = COLOR_TRANSPARENT}) {
+                    CLAY_TEXT(StatDex, CLAY_TEXT_CONFIG(StatPageAbilityScoreTextConfig));
+                }
+                CLAY_AUTO_ID({StatPageAbilityDivider, .backgroundColor = COLOR_TRANSPARENT}) {
+                    CLAY_TEXT(StatCon, CLAY_TEXT_CONFIG(StatPageAbilityScoreTextConfig));
+                }
+                CLAY_AUTO_ID({StatPageAbilityDivider, .backgroundColor = COLOR_TRANSPARENT}) {
+                    CLAY_TEXT(StatInt, CLAY_TEXT_CONFIG(StatPageAbilityScoreTextConfig));
+                }
+                CLAY_AUTO_ID({StatPageAbilityDivider, .backgroundColor = COLOR_TRANSPARENT}) {
+                    CLAY_TEXT(StatWis, CLAY_TEXT_CONFIG(StatPageAbilityScoreTextConfig));
+                }
+                CLAY_AUTO_ID({StatPageAbilityDivider, .backgroundColor = COLOR_TRANSPARENT}) {
+                    CLAY_TEXT(StatCha, CLAY_TEXT_CONFIG(StatPageAbilityScoreTextConfig));
+                }
+            }
+        }; /* Write senses  */
+        CLAY(CLAY_ID("SensesContainer"), {StatPageDivider, .backgroundColor = COLOR_TRANSPARENT, .border = { .width = { .bottom = 5 }, .color = COLOR_BLACK }}) {
+            CLAY_AUTO_ID({StatPageSubDivider, .backgroundColor = COLOR_TRANSPARENT}) {
+                CLAY_TEXT(StatSaves, CLAY_TEXT_CONFIG(StatPageTextConfig));
+            }
+            CLAY_AUTO_ID({StatPageSubDivider, .backgroundColor = COLOR_TRANSPARENT}) {
+                CLAY_TEXT(StatSkills, CLAY_TEXT_CONFIG(StatPageTextConfig));
+            }
+            CLAY_AUTO_ID({StatPageSubDivider, .backgroundColor = COLOR_TRANSPARENT}) {
+                CLAY_TEXT(StatSenses, CLAY_TEXT_CONFIG(StatPageTextConfig));
+            }
+            CLAY_AUTO_ID({StatPageSubDivider, .backgroundColor = COLOR_TRANSPARENT}) {
+                CLAY_TEXT(StatLanguages, CLAY_TEXT_CONFIG(StatPageTextConfig));
+            }
+            CLAY_AUTO_ID({StatPageSubDivider, .backgroundColor = COLOR_TRANSPARENT}) {
+                CLAY_TEXT(StatCR, CLAY_TEXT_CONFIG(StatPageTextConfig));
+            }
+        }; /* Write racial traits/features */
+        CLAY(CLAY_ID("RacialContainer"), {StatPageDivider, .backgroundColor = COLOR_TRANSPARENT, .border = { .width = { .bottom = 5 }, .color = COLOR_BLACK }}) {
+            CLAY_AUTO_ID({StatPageSubDivider, .backgroundColor = COLOR_TRANSPARENT}) {
+                CLAY_TEXT(StatRacial1, CLAY_TEXT_CONFIG(StatPageTextConfig));
+            }
+            CLAY_AUTO_ID({StatPageSubDivider, .backgroundColor = COLOR_TRANSPARENT}) {
+                CLAY_TEXT(StatRacial2, CLAY_TEXT_CONFIG(StatPageTextConfig));
+            }
+            CLAY_AUTO_ID({StatPageSubDivider, .backgroundColor = COLOR_TRANSPARENT}) {
+                CLAY_TEXT(StatRacial3, CLAY_TEXT_CONFIG(StatPageTextConfig));
+            }
+        }; /* Write creature actions */
+        CLAY(CLAY_ID("ActionsContainer"), {StatPageDivider, .backgroundColor = COLOR_TRANSPARENT, .border = { .width = { .bottom = 5 }, .color = COLOR_BLACK }}) {
+            CLAY_AUTO_ID({StatPageSubDivider, .backgroundColor = COLOR_TRANSPARENT}) {
+                CLAY_TEXT(StatAction1, CLAY_TEXT_CONFIG(StatPageTextConfig));
+            }
+            CLAY_AUTO_ID({StatPageSubDivider, .backgroundColor = COLOR_TRANSPARENT}) {
+                CLAY_TEXT(StatAction2, CLAY_TEXT_CONFIG(StatPageTextConfig));
+            }
+            CLAY_AUTO_ID({StatPageSubDivider, .backgroundColor = COLOR_TRANSPARENT}) {
+                CLAY_TEXT(StatAction3, CLAY_TEXT_CONFIG(StatPageTextConfig));
+            }
+            CLAY_AUTO_ID({StatPageSubDivider, .backgroundColor = COLOR_TRANSPARENT}) {
+                CLAY_TEXT(StatAction4, CLAY_TEXT_CONFIG(StatPageTextConfig));
+            }
+        };
+        CLAY(CLAY_ID("LegendaryBonusContainer"), {StatPageDivider, .backgroundColor = COLOR_TRANSPARENT, .border = { .width = { .bottom = 5 }, .color = COLOR_BLACK }}) {
+            CLAY_TEXT(CLAY_STRING("Fill stats here"), CLAY_TEXT_CONFIG(StatPageTextConfig));
+        };
+        CLAY(CLAY_ID("LairReactionContainer"), {StatPageDivider, .backgroundColor = COLOR_TRANSPARENT, .border = { .width = { .bottom = 5 }, .color = COLOR_BLACK }}) {
+            CLAY_TEXT(CLAY_STRING("Fill stats here"), CLAY_TEXT_CONFIG(StatPageTextConfig));
+        };
+        CLAY(CLAY_ID("BonusVillainContainer"), {StatPageDivider, .backgroundColor = COLOR_TRANSPARENT, .border = { .width = { .bottom = 5 }, .color = COLOR_BLACK }}) {
+            CLAY_TEXT(CLAY_STRING("Fill stats here"), CLAY_TEXT_CONFIG(StatPageTextConfig));
+        };
+        CLAY(CLAY_ID("VillainContainer"), {StatPageDivider, .backgroundColor = COLOR_TRANSPARENT, .border = { .width = { .bottom = 5 }, .color = COLOR_BLACK }}) {
+            CLAY_TEXT(CLAY_STRING("Fill stats here"), CLAY_TEXT_CONFIG(StatPageTextConfig));
+        };
+    };
+}
+
 /*-------------------------------------------------------------------------------------------*
 *                                    Button Callbacks                                        *
 *--------------------------------------------------------------------------------------------*/
@@ -315,7 +404,8 @@ static void ReturnToMainScreenCallback(Clay_ElementId elementId, Clay_PointerDat
     if (pointerData.state == CLAY_POINTER_DATA_PRESSED_THIS_FRAME) {
         SDL_memset(TextBuffer, 0, sizeof(TextBuffer));
         ScrollOffset = 0;
-        WindowState = MAIN_SCREEN;        
+        //WindowState = MAIN_SCREEN;
+        WindowState = ADD_STAT_SCREEN;      
     }
 }
 
