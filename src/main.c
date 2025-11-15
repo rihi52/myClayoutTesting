@@ -59,33 +59,33 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
         }        
     };
 
-    StatName = MakeClayString("Aboleth");
-    StatSize = MakeClayString("Large");
-    StatType = MakeClayString("Aberration");
-    StatAC = MakeClayString("Armor Class: 17 (natural armor)");
-    StatHP = MakeClayString("Hit Points: 135 (18d10 + 36)");
-    StatSpeed = MakeClayString("Speed: 10 ft., swim 40 ft.");
-    StatStr = MakeClayString("STR 21 (+5)");
-    StatDex = MakeClayString("DEX 9 (-1)");
-    StatCon = MakeClayString("CON 15 (+2)");
-    StatInt = MakeClayString("INT 18 (+4)");
-    StatWis = MakeClayString("WIS 15 (+2)");
-    StatCha = MakeClayString("CHA 18 (+4)");
+    // StatName = MakeClayString("Aboleth");
+    // StatSize = MakeClayString("Large");
+    // StatType = MakeClayString("Aberration");
+    // StatAC = MakeClayString("Armor Class: 17 (natural armor)");
+    // StatHP = MakeClayString("Hit Points: 135 (18d10 + 36)");
+    // StatSpeed = MakeClayString("Speed: 10 ft., swim 40 ft.");
+    // StatStr = MakeClayString("STR 21 (+5)");
+    // StatDex = MakeClayString("DEX 9 (-1)");
+    // StatCon = MakeClayString("CON 15 (+2)");
+    // StatInt = MakeClayString("INT 18 (+4)");
+    // StatWis = MakeClayString("WIS 15 (+2)");
+    // StatCha = MakeClayString("CHA 18 (+4)");
 
-    StatSaves = MakeClayString("Saving Throws Con +6, Int +8, Wis +6");
-    StatSkills = MakeClayString("Skills History +12, Perception +10");
-    StatSenses = MakeClayString("Senses darkvision 120 ft., passive Perception 20");
-    StatLanguages = MakeClayString("Languages Deep Speech, telepathy 120 ft.");
-    StatCR = MakeClayString("Challenge 10 (5,900 XP)");
+    // StatSaves = MakeClayString("Saving Throws Con +6, Int +8, Wis +6");
+    // StatSkills = MakeClayString("Skills History +12, Perception +10");
+    // StatSenses = MakeClayString("Senses darkvision 120 ft., passive Perception 20");
+    // StatLanguages = MakeClayString("Languages Deep Speech, telepathy 120 ft.");
+    // StatCR = MakeClayString("Challenge 10 (5,900 XP)");
 
-    StatRacial1 = MakeClayString("Amphibious. The aboleth can breathe air and water.");
-    StatRacial2 = MakeClayString("Mucous Cloud. While underwater, the aboleth is surrounded by transformative mucus. A creature that touches the aboleth or that hits it with a melee attack while within 5 feet of it must make a DC 14 Constitution saving throw. On a failure, the creature is diseased for 1d4 hours. The diseased creature can breathe only underwater.");
-    StatRacial3 = MakeClayString("Probing Telepathy. If a creature communicates telepathically with the aboleth, the aboleth learns the creature's greatest desires if the aboleth can see the creature.");
+    // StatRacial1 = MakeClayString("Amphibious. The aboleth can breathe air and water.");
+    // StatRacial2 = MakeClayString("Mucous Cloud. While underwater, the aboleth is surrounded by transformative mucus. A creature that touches the aboleth or that hits it with a melee attack while within 5 feet of it must make a DC 14 Constitution saving throw. On a failure, the creature is diseased for 1d4 hours. The diseased creature can breathe only underwater.");
+    // StatRacial3 = MakeClayString("Probing Telepathy. If a creature communicates telepathically with the aboleth, the aboleth learns the creature's greatest desires if the aboleth can see the creature.");
 
-    StatAction1 = MakeClayString("Multiattack. The aboleth makes three tentacle attacks.");
-    StatAction2 = MakeClayString("Tentacle. Melee Weapon Attack: +9 to hit, reach 10 ft., one target. Hit: 12 (2d6 + 5) bludgeoning damage. If the target is a creature, it must succeed on a DC 14 Constitution saving throw or become diseased. The disease has no effect for 1 minute and can be removed by any magic that cures disease. After 1 minute, the diseased creature's skin becomes translucent and slimy, the creature can't regain hit points unless it is underwater, and the disease can be removed only by heal or another disease-curing spell of 6th level or higher. When the creature is outside a body of water, it takes 6 (1d12) acid damage every 10 minutes unless moisture is applied to the skin before 10 minutes have passed.");
-    StatAction3 = MakeClayString("Tail. Melee Weapon Attack: +9 to hit, reach 10 ft., one target. Hit: 15 (3d6 + 5) bludgeoning damage.");
-    StatAction4 = MakeClayString("Enslave (3/Day). The aboleth targets one creature it can see within 30 feet of it. The target must succeed on a DC 14 Wisdom saving throw or be magically charmed by the aboleth until the aboleth dies or until it is on a different plane of existence from the target. The charmed target is under the aboleth's control and can't take reactions, and the aboleth and the target can communicate telepathically with each other over any distance. Whenever the charmed target takes damage, the target can repeat the saving throw. On a success, the effect ends. No more than once every 24 hours, the target can also repeat the saving throw when it is at least 1 mile away from the aboleth.");
+    // StatAction1 = MakeClayString("Multiattack. The aboleth makes three tentacle attacks.");
+    // StatAction2 = MakeClayString("Tentacle. Melee Weapon Attack: +9 to hit, reach 10 ft., one target. Hit: 12 (2d6 + 5) bludgeoning damage. If the target is a creature, it must succeed on a DC 14 Constitution saving throw or become diseased. The disease has no effect for 1 minute and can be removed by any magic that cures disease. After 1 minute, the diseased creature's skin becomes translucent and slimy, the creature can't regain hit points unless it is underwater, and the disease can be removed only by heal or another disease-curing spell of 6th level or higher. When the creature is outside a body of water, it takes 6 (1d12) acid damage every 10 minutes unless moisture is applied to the skin before 10 minutes have passed.");
+    // StatAction3 = MakeClayString("Tail. Melee Weapon Attack: +9 to hit, reach 10 ft., one target. Hit: 15 (3d6 + 5) bludgeoning damage.");
+    // StatAction4 = MakeClayString("Enslave (3/Day). The aboleth targets one creature it can see within 30 feet of it. The target must succeed on a DC 14 Wisdom saving throw or be magically charmed by the aboleth until the aboleth dies or until it is on a different plane of existence from the target. The charmed target is under the aboleth's control and can't take reactions, and the aboleth and the target can communicate telepathically with each other over any distance. Whenever the charmed target takes damage, the target can repeat the saving throw. On a success, the effect ends. No more than once every 24 hours, the target can also repeat the saving throw when it is at least 1 mile away from the aboleth.");
 
 
     AppState *state = SDL_calloc(1, sizeof(AppState));

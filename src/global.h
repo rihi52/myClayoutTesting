@@ -44,12 +44,55 @@ typedef struct app_state {
     Clay_SDL3RendererData rendererData;
 } AppState;
 
+// extern Clay_String StatName;
+// extern Clay_String StatSize;
+// extern Clay_String StatType;
+// extern Clay_String StatAC;
+// extern Clay_String StatHP;
+// extern Clay_String StatSpeed;
+// extern Clay_String StatStr;
+// extern Clay_String StatDex;
+// extern Clay_String StatCon;
+// extern Clay_String StatInt;
+// extern Clay_String StatWis;
+// extern Clay_String StatCha;
+
+// extern Clay_String StatSaves;
+// extern Clay_String StatSkills;
+// extern Clay_String StatSenses;
+// extern Clay_String StatLanguages;
+// extern Clay_String StatCR;
+
+// extern Clay_String StatRacial1;
+// extern Clay_String StatRacial2;
+// extern Clay_String StatRacial3;
+
+// extern Clay_String StatAction1;
+// extern Clay_String StatAction2;
+// extern Clay_String StatAction3;
+// extern Clay_String StatAction4;
+
+extern Clay_String StatId;
 extern Clay_String StatName;
-extern Clay_String StatSize;
+extern Clay_String StatCr;
 extern Clay_String StatType;
-extern Clay_String StatAC;
-extern Clay_String StatHP;
-extern Clay_String StatSpeed;
+extern Clay_String StatSize;
+
+extern Clay_String StatArmorClass;
+extern Clay_String StatHitpointsAvg;
+extern Clay_String StatHitDice;
+extern Clay_String StatHitpointsRoll;
+
+extern Clay_String StatSpeedType;
+extern Clay_String StatSpeedWalk;
+extern Clay_String StatSpeedFly;
+extern Clay_String StatSpeedSwim;
+extern Clay_String StatSpeedClimb;
+extern Clay_String StatSpeedBurrow;
+
+extern Clay_String StatAlignment;
+extern Clay_String StatLegendary;
+
 extern Clay_String StatStr;
 extern Clay_String StatDex;
 extern Clay_String StatCon;
@@ -57,19 +100,107 @@ extern Clay_String StatInt;
 extern Clay_String StatWis;
 extern Clay_String StatCha;
 
-extern Clay_String StatSaves;
+extern Clay_String StatProfBonus;
+
+extern Clay_String StatThrowStr;
+extern Clay_String StatThrowDex;
+extern Clay_String StatThrowCon;
+extern Clay_String StatThrowInt;
+extern Clay_String StatThrowWis;
+extern Clay_String StatThrowCha;
+
+extern Clay_String StatSavingThrows;
+
 extern Clay_String StatSkills;
-extern Clay_String StatSenses;
 extern Clay_String StatLanguages;
-extern Clay_String StatCR;
+extern Clay_String StatSenses;
 
-extern Clay_String StatRacial1;
-extern Clay_String StatRacial2;
-extern Clay_String StatRacial3;
+extern Clay_String StatRangeDarkvision;
+extern Clay_String StatRangeTremorsense;
+extern Clay_String StatRangeBlindsight;
+extern Clay_String StatRangeTruesight;
 
-extern Clay_String StatAction1;
-extern Clay_String StatAction2;
-extern Clay_String StatAction3;
-extern Clay_String StatAction4;
+extern Clay_String StatSpecialAbilityOne;
+extern Clay_String StatSpecialAbilityOneDesc;
+extern Clay_String StatSpecialAbilityTwo;
+extern Clay_String StatSpecialAbilityTwoDesc;
+extern Clay_String StatSpecialAbilityThree;
+extern Clay_String StatSpecialAbilityThreeDesc;
+extern Clay_String StatSpecialAbilityFour;
+extern Clay_String StatSpecialAbilityFourDesc;
+
+extern Clay_String StatAttack1;
+extern Clay_String StatAttack1Desc;
+extern Clay_String StatAttack2;
+extern Clay_String StatAttack2Desc;
+extern Clay_String StatAttack3;
+extern Clay_String StatAttack3Desc;
+extern Clay_String StatAttack4;
+extern Clay_String StatAttack4Desc;
+
+extern Clay_String StatAttack5Type;
+extern Clay_String StatAttack5Desc;
+
+extern Clay_String StatActionLeg;
+extern Clay_String StatActionLeg1;
+extern Clay_String StatActionLeg1Desc;
+extern Clay_String StatActionLeg2;
+extern Clay_String StatActionLeg2Desc;
+extern Clay_String StatActionLeg3;
+extern Clay_String StatActionLeg3Desc;
+
+extern Clay_String StatActionLair;
+extern Clay_String StatActionLair1;
+extern Clay_String StatActionLair1Desc;
+extern Clay_String StatActionLair2;
+extern Clay_String StatActionLair2Desc;
+extern Clay_String StatActionLair3;
+extern Clay_String StatActionLair3Desc;
+
+extern Clay_String StatRegionalEffect;
+extern Clay_String StatRegionalEffect1;
+extern Clay_String StatRegionalEffect2;
+extern Clay_String StatRegionalEffect3;
+extern Clay_String StatEndRegionalEffect;
+
+extern Clay_String StatEnvironment;
+
+extern Clay_String StatBa1;
+extern Clay_String StatBa1Desc;
+extern Clay_String StatBa2;
+extern Clay_String StatBa2Desc;
+extern Clay_String StatBa3;
+extern Clay_String StatBa3Desc;
+extern Clay_String StatBa4;
+extern Clay_String StatBa4Desc;
+
+extern Clay_String StatReaction1;
+extern Clay_String StatReaction1Desc;
+extern Clay_String StatReaction2;
+extern Clay_String StatReaction2Desc;
+extern Clay_String StatReaction3;
+extern Clay_String StatReaction3Desc;
+
+extern Clay_String StatVillAction;
+extern Clay_String StatVillAction1;
+extern Clay_String StatVillAction1Desc;
+extern Clay_String StatVillAction2;
+extern Clay_String StatVillAction2Desc;
+extern Clay_String StatVillAction3;
+extern Clay_String StatVillAction3Desc;
+
+extern Clay_String StatUtilitySpells;
+extern Clay_String StatUtilitySpellsList;
+
+extern Clay_String StatFeature1;
+extern Clay_String StatFeature1Desc;
+extern Clay_String StatFeature2;
+extern Clay_String StatFeature2Desc;
+extern Clay_String StatFeature3;
+extern Clay_String StatFeature3Desc;
+extern Clay_String StatFeature4;
+extern Clay_String StatFeature4Desc;
+extern Clay_String StatFeature5;
+extern Clay_String StatFeature5Desc;
 
 #endif /* GLOBAL_H */

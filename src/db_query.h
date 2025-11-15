@@ -22,5 +22,6 @@ void DatabaseOpen(void);
 void DatabaseClose(void);
 int LoadCreatureHeaderAlphabetical(int MonsterId);
 Clay_String MakeClayString(const char * string);
+void LookUpCreatureStats(int MonsterId);
 
 #endif /* DB_QUERY */

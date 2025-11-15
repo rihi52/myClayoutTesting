@@ -203,6 +203,14 @@ Clay_LayoutConfig StatPageAbilityDivider = {
     .layoutDirection = CLAY_LEFT_TO_RIGHT
 };
 
+Clay_LayoutConfig StatPageActionDivider = {
+    .sizing = { CLAY_SIZING_GROW(0), CLAY_SIZING_FIT(0) },
+    .padding = { 4, 4, 4, 4},
+    .childGap = 0,
+    .childAlignment =  { CLAY_ALIGN_X_LEFT, CLAY_ALIGN_Y_CENTER},
+    .layoutDirection = CLAY_TOP_TO_BOTTOM
+};
+
 Clay_TextElementConfig MainLabelTextConfig = {
     .textColor = COLOR_WHITE,
     .fontId = 0,

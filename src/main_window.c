@@ -185,7 +185,10 @@ void CreatureDatabaseWindow(AppState * state) {
                     MakeCreatureHeader(i);
                 }
             }
-            FillStats();
+            if (WindowState == ADD_STAT_SCREEN) {
+                FillStats();
+                
+            }
         };
     };
 }
@@ -272,7 +275,7 @@ void MakeCreatureHeader(int i) {
                 //CLAY_TEXT(CreatureSourceText, CLAY_TEXT_CONFIG(ButtonTextConfig));
             };
         };
-        Clay_OnHover(CallStatBlockCallback, (intptr_t)WindowState);
+        Clay_OnHover(CallStatBlockCallback, (intptr_t)i);
     };
 }
 
@@ -289,10 +292,13 @@ void FillStats(void) {
         };
         CLAY(CLAY_ID("ACHPContainer"), {StatPageDivider, .backgroundColor = COLOR_TRANSPARENT, .border = { .width = { .bottom = 5 }, .color = COLOR_BLACK }}) {
             CLAY(CLAY_ID("ACContainer"), {StatPageSubDivider, .backgroundColor = COLOR_TRANSPARENT}) {
-                CLAY_TEXT(StatAC, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                CLAY_TEXT(CLAY_STRING("Armor Class"), CLAY_TEXT_CONFIG(StatPageTextConfig));
+                CLAY_TEXT(StatArmorClass, CLAY_TEXT_CONFIG(StatPageTextConfig));
             }
             CLAY(CLAY_ID("HPContainer"), {StatPageSubDivider, .backgroundColor = COLOR_TRANSPARENT}) {
-                CLAY_TEXT(StatHP, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                CLAY_TEXT(CLAY_STRING("Hit Points"), CLAY_TEXT_CONFIG(StatPageTextConfig));
+                CLAY_TEXT(StatHitpointsAvg, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                CLAY_TEXT(StatHitpointsRoll, CLAY_TEXT_CONFIG(StatPageTextConfig));
             }
         }; /* Start Ability Scores container*/
         CLAY(CLAY_ID("AbilityScoresContainer"), {StatPageDivider, .backgroundColor = COLOR_TRANSPARENT}) {
@@ -339,8 +345,10 @@ void FillStats(void) {
             }
         }; /* Write senses  */
         CLAY(CLAY_ID("SensesContainer"), {StatPageDivider, .backgroundColor = COLOR_TRANSPARENT, .border = { .width = { .bottom = 5 }, .color = COLOR_BLACK }}) {
-            CLAY_AUTO_ID({StatPageSubDivider, .backgroundColor = COLOR_TRANSPARENT}) {
-                CLAY_TEXT(StatSaves, CLAY_TEXT_CONFIG(StatPageTextConfig));
+            if (0 != SDL_strcmp("0", StatSavingThrows.chars)){
+                CLAY_AUTO_ID({StatPageSubDivider, .backgroundColor = COLOR_TRANSPARENT}) {
+                    CLAY_TEXT(StatSavingThrows, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                }
             }
             CLAY_AUTO_ID({StatPageSubDivider, .backgroundColor = COLOR_TRANSPARENT}) {
                 CLAY_TEXT(StatSkills, CLAY_TEXT_CONFIG(StatPageTextConfig));
@@ -352,45 +360,136 @@ void FillStats(void) {
                 CLAY_TEXT(StatLanguages, CLAY_TEXT_CONFIG(StatPageTextConfig));
             }
             CLAY_AUTO_ID({StatPageSubDivider, .backgroundColor = COLOR_TRANSPARENT}) {
-                CLAY_TEXT(StatCR, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                CLAY_TEXT(CLAY_STRING("Challenge Rating"), CLAY_TEXT_CONFIG(StatPageTextConfig));
+                CLAY_TEXT(StatCr, CLAY_TEXT_CONFIG(StatPageTextConfig));
             }
         }; /* Write racial traits/features */
         CLAY(CLAY_ID("RacialContainer"), {StatPageDivider, .backgroundColor = COLOR_TRANSPARENT, .border = { .width = { .bottom = 5 }, .color = COLOR_BLACK }}) {
-            CLAY_AUTO_ID({StatPageSubDivider, .backgroundColor = COLOR_TRANSPARENT}) {
-                CLAY_TEXT(StatRacial1, CLAY_TEXT_CONFIG(StatPageTextConfig));
+            CLAY_AUTO_ID({StatPageActionDivider, .backgroundColor = COLOR_TRANSPARENT}) {
+                CLAY_TEXT(StatSpecialAbilityOne, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                CLAY_TEXT(StatSpecialAbilityOneDesc, CLAY_TEXT_CONFIG(StatPageTextConfig));
             }
-            CLAY_AUTO_ID({StatPageSubDivider, .backgroundColor = COLOR_TRANSPARENT}) {
-                CLAY_TEXT(StatRacial2, CLAY_TEXT_CONFIG(StatPageTextConfig));
+            if (0 != SDL_strcmp("0", StatSpecialAbilityTwo.chars)){
+                CLAY_AUTO_ID({StatPageActionDivider, .backgroundColor = COLOR_TRANSPARENT}) {
+                    CLAY_TEXT(StatSpecialAbilityTwo, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                    CLAY_TEXT(StatSpecialAbilityTwoDesc, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                }
             }
-            CLAY_AUTO_ID({StatPageSubDivider, .backgroundColor = COLOR_TRANSPARENT}) {
-                CLAY_TEXT(StatRacial3, CLAY_TEXT_CONFIG(StatPageTextConfig));
+            if (0 != SDL_strcmp("0", StatSpecialAbilityThree.chars)){
+                CLAY_AUTO_ID({StatPageActionDivider, .backgroundColor = COLOR_TRANSPARENT}) {
+                    CLAY_TEXT(StatSpecialAbilityThree, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                    CLAY_TEXT(StatSpecialAbilityThreeDesc, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                }
             }
         }; /* Write creature actions */
         CLAY(CLAY_ID("ActionsContainer"), {StatPageDivider, .backgroundColor = COLOR_TRANSPARENT, .border = { .width = { .bottom = 5 }, .color = COLOR_BLACK }}) {
-            CLAY_AUTO_ID({StatPageSubDivider, .backgroundColor = COLOR_TRANSPARENT}) {
-                CLAY_TEXT(StatAction1, CLAY_TEXT_CONFIG(StatPageTextConfig));
+            CLAY_AUTO_ID({StatPageActionDivider, .backgroundColor = COLOR_TRANSPARENT}) {
+                CLAY_TEXT(StatAttack1, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                CLAY_TEXT(StatAttack1Desc, CLAY_TEXT_CONFIG(StatPageTextConfig));
             }
-            CLAY_AUTO_ID({StatPageSubDivider, .backgroundColor = COLOR_TRANSPARENT}) {
-                CLAY_TEXT(StatAction2, CLAY_TEXT_CONFIG(StatPageTextConfig));
+            if (0 != SDL_strcmp("0", StatAttack2.chars)){
+                CLAY_AUTO_ID({StatPageActionDivider, .backgroundColor = COLOR_TRANSPARENT}) {
+                    CLAY_TEXT(StatAttack2, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                    CLAY_TEXT(StatAttack2Desc, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                }
             }
-            CLAY_AUTO_ID({StatPageSubDivider, .backgroundColor = COLOR_TRANSPARENT}) {
-                CLAY_TEXT(StatAction3, CLAY_TEXT_CONFIG(StatPageTextConfig));
+            if (0 != SDL_strcmp("0", StatAttack3.chars)){
+                CLAY_AUTO_ID({StatPageActionDivider, .backgroundColor = COLOR_TRANSPARENT}) {
+                    CLAY_TEXT(StatAttack3, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                    CLAY_TEXT(StatAttack3Desc, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                }
             }
-            CLAY_AUTO_ID({StatPageSubDivider, .backgroundColor = COLOR_TRANSPARENT}) {
-                CLAY_TEXT(StatAction4, CLAY_TEXT_CONFIG(StatPageTextConfig));
+            if (0 != SDL_strcmp("0", StatAttack4.chars)){
+                CLAY_AUTO_ID({StatPageActionDivider, .backgroundColor = COLOR_TRANSPARENT}) {
+                    CLAY_TEXT(StatAttack4, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                    CLAY_TEXT(StatAttack4Desc, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                }
+            }
+            if (0 != SDL_strcmp("0", StatAttack5Type.chars)){
+                CLAY_AUTO_ID({StatPageActionDivider, .backgroundColor = COLOR_TRANSPARENT}) {
+                    CLAY_TEXT(StatAttack5Type, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                    CLAY_TEXT(StatAttack5Desc, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                }
             }
         };
         CLAY(CLAY_ID("LegendaryBonusContainer"), {StatPageDivider, .backgroundColor = COLOR_TRANSPARENT, .border = { .width = { .bottom = 5 }, .color = COLOR_BLACK }}) {
-            CLAY_TEXT(CLAY_STRING("Fill stats here"), CLAY_TEXT_CONFIG(StatPageTextConfig));
+            if (0 != SDL_strcmp("0", StatActionLeg.chars)){
+                CLAY_AUTO_ID({StatPageActionDivider, .backgroundColor = COLOR_TRANSPARENT}) {
+                    CLAY_TEXT(StatActionLeg, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                    CLAY_TEXT(StatActionLeg1, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                    CLAY_TEXT(StatActionLeg1Desc, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                }
+            }
+            if (0 != SDL_strcmp("0", StatActionLeg2.chars)){
+                CLAY_AUTO_ID({StatPageActionDivider, .backgroundColor = COLOR_TRANSPARENT}) {
+                    CLAY_TEXT(StatActionLeg2, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                    CLAY_TEXT(StatActionLeg2, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                    CLAY_TEXT(StatActionLeg2Desc, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                }
+            }
+            if (0 != SDL_strcmp("0", StatActionLeg3.chars)){
+                CLAY_AUTO_ID({StatPageActionDivider, .backgroundColor = COLOR_TRANSPARENT}) {
+                    CLAY_TEXT(StatActionLeg3, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                    CLAY_TEXT(StatActionLeg3, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                    CLAY_TEXT(StatActionLeg3Desc, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                }
+            }
         };
         CLAY(CLAY_ID("LairReactionContainer"), {StatPageDivider, .backgroundColor = COLOR_TRANSPARENT, .border = { .width = { .bottom = 5 }, .color = COLOR_BLACK }}) {
-            CLAY_TEXT(CLAY_STRING("Fill stats here"), CLAY_TEXT_CONFIG(StatPageTextConfig));
+            if (0 != SDL_strcmp("0", StatActionLair.chars)){
+                CLAY_AUTO_ID({StatPageActionDivider, .backgroundColor = COLOR_TRANSPARENT}) {
+                    CLAY_TEXT(StatActionLair, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                    CLAY_TEXT(StatActionLair1, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                    CLAY_TEXT(StatActionLair1Desc, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                }
+            }
+            if (0 != SDL_strcmp("0", StatActionLair2.chars)){
+                CLAY_AUTO_ID({StatPageActionDivider, .backgroundColor = COLOR_TRANSPARENT}) {
+                    CLAY_TEXT(StatActionLair2, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                    CLAY_TEXT(StatActionLair2, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                    CLAY_TEXT(StatActionLair2Desc, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                }
+            }
+            if (0 != SDL_strcmp("0", StatActionLair3.chars)){
+                CLAY_AUTO_ID({StatPageActionDivider, .backgroundColor = COLOR_TRANSPARENT}) {
+                    CLAY_TEXT(StatActionLair3, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                    CLAY_TEXT(StatActionLair3, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                    CLAY_TEXT(StatActionLair3Desc, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                }
+            }
         };
         CLAY(CLAY_ID("BonusVillainContainer"), {StatPageDivider, .backgroundColor = COLOR_TRANSPARENT, .border = { .width = { .bottom = 5 }, .color = COLOR_BLACK }}) {
-            CLAY_TEXT(CLAY_STRING("Fill stats here"), CLAY_TEXT_CONFIG(StatPageTextConfig));
+            // CLAY_TEXT(CLAY_STRING("Fill stats here"), CLAY_TEXT_CONFIG(StatPageTextConfig));
         };
         CLAY(CLAY_ID("VillainContainer"), {StatPageDivider, .backgroundColor = COLOR_TRANSPARENT, .border = { .width = { .bottom = 5 }, .color = COLOR_BLACK }}) {
-            CLAY_TEXT(CLAY_STRING("Fill stats here"), CLAY_TEXT_CONFIG(StatPageTextConfig));
+            // CLAY_TEXT(CLAY_STRING("Fill stats here"), CLAY_TEXT_CONFIG(StatPageTextConfig));
+        };
+        CLAY(CLAY_ID("RegionalEffectContainer"), {StatPageDivider, .backgroundColor = COLOR_TRANSPARENT, .border = { .width = { .bottom = 5 }, .color = COLOR_BLACK }}) {
+            if (0 != SDL_strcmp("0", StatRegionalEffect.chars)){
+                CLAY_AUTO_ID({StatPageActionDivider, .backgroundColor = COLOR_TRANSPARENT}) {
+                    CLAY_TEXT(StatRegionalEffect, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                }
+            }
+            if (0 != SDL_strcmp("0", StatRegionalEffect1.chars)){
+                CLAY_AUTO_ID({StatPageActionDivider, .backgroundColor = COLOR_TRANSPARENT}) {
+                    CLAY_TEXT(StatRegionalEffect1, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                }
+            }
+            if (0 != SDL_strcmp("0", StatRegionalEffect2.chars)){
+                CLAY_AUTO_ID({StatPageActionDivider, .backgroundColor = COLOR_TRANSPARENT}) {
+                    CLAY_TEXT(StatRegionalEffect2, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                }
+            }
+            if (0 != SDL_strcmp("0", StatRegionalEffect3.chars)){
+                CLAY_AUTO_ID({StatPageActionDivider, .backgroundColor = COLOR_TRANSPARENT}) {
+                    CLAY_TEXT(StatRegionalEffect3, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                }
+            }
+            if (0 != SDL_strcmp("0", StatEndRegionalEffect.chars)){
+                CLAY_AUTO_ID({StatPageActionDivider, .backgroundColor = COLOR_TRANSPARENT}) {
+                    CLAY_TEXT(StatEndRegionalEffect, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                }
+            }
         };
     };
 }
@@ -404,8 +503,8 @@ static void ReturnToMainScreenCallback(Clay_ElementId elementId, Clay_PointerDat
     if (pointerData.state == CLAY_POINTER_DATA_PRESSED_THIS_FRAME) {
         SDL_memset(TextBuffer, 0, sizeof(TextBuffer));
         ScrollOffset = 0;
-        //WindowState = MAIN_SCREEN;
-        WindowState = ADD_STAT_SCREEN;      
+        WindowState = MAIN_SCREEN;
+        // WindowState = ADD_STAT_SCREEN;      
     }
 }
 
@@ -442,9 +541,9 @@ static void PlayerDatabaseButtonCallback(Clay_ElementId elementId, Clay_PointerD
 }
 
 static void CallStatBlockCallback(Clay_ElementId elementId, Clay_PointerData pointerData, intptr_t userData) {
-    int check = (int) userData;
+    int ArrayPosition = (int) userData;
     if (pointerData.state == CLAY_POINTER_DATA_PRESSED_THIS_FRAME) {
-        
-        CLAY_AUTO_ID({TTBParentWindowLayoutConfig, .backgroundColor = COLOR_GREEN});
+        LookUpCreatureStats(ArrayPosition);
+        WindowState = ADD_STAT_SCREEN;
     }
 }
