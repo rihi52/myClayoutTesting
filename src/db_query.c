@@ -9,6 +9,10 @@ sqlite3 * pGuidnbatterDB;
 
 CreatureHeader DBPageHeaders[MAX_DB_COUNT] = {0};
 
+int HeadersToShow[MAX_DB_COUNT];
+
+static const char * BoundedStrStr(const char * haystack, const char * needle, size_t haystackLen, size_t NeedleLen);
+
 /*========================================================================*
  *  SECTION - Global function definitions                                 *
  *========================================================================*
@@ -26,10 +30,6 @@ void DatabaseOpen(void) {
     {
         SDL_Log("Opened database successfully");
     }
-
-    // for (int i = 0; i < MAX_DB_COUNT; i++) {
-    //     DBPageHeaders[i] = {0};
-    // }
     return;
 }
 
@@ -254,267 +254,6 @@ void LookUpCreatureStats(int MonsterId) {
     rc = sqlite3_step(stmt);
     if (rc == SQLITE_ROW)
     {
-        // int Id                           = sqlite3_column_int(stmt, 0);
-        // const char *Name                 = (const char *)sqlite3_column_text(stmt, 1);
-        // const char *Cr                   = (const char *)sqlite3_column_text(stmt, 2);
-        // const char *Type                 = (const char *)sqlite3_column_text(stmt, 3);
-        // const char *Size                 = (const char *)sqlite3_column_text(stmt, 4);
-
-        // int Armor_Class                  = sqlite3_column_int(stmt, 5);
-        // int Hitpoints_Avg                = sqlite3_column_int(stmt, 6);
-        // const char *Hit_Dice             = (const char *)sqlite3_column_text(stmt, 7);
-        // const char *Hitpoints_Roll       = (const char *)sqlite3_column_text(stmt, 8);
-
-        // const char *Speed_Type           = (const char *)sqlite3_column_text(stmt, 9);
-        // int Speed_Walk                   = sqlite3_column_int(stmt, 10);
-        // int Speed_Fly                    = sqlite3_column_int(stmt, 11);
-        // int Speed_Swim                   = sqlite3_column_int(stmt, 12);
-        // int Speed_Climb                  = sqlite3_column_int(stmt, 13);
-        // int Speed_Burrow                 = sqlite3_column_int(stmt, 14);
-
-        // const char *Alignment            = (const char *)sqlite3_column_text(stmt, 15);
-        // const char *Legendary            = (const char *)sqlite3_column_text(stmt, 16);
-
-        // int Str                          = sqlite3_column_int(stmt, 17);
-        // int Dex                          = sqlite3_column_int(stmt, 18);
-        // int Con                          = sqlite3_column_int(stmt, 19);
-        // int Int                          = sqlite3_column_int(stmt, 20);
-        // int Wis                          = sqlite3_column_int(stmt, 21);
-        // int Cha                          = sqlite3_column_int(stmt, 22);
-
-        // int Prof_Bonus                   = sqlite3_column_int(stmt, 23);
-
-        // int Throw_Str                    = sqlite3_column_int(stmt, 24);
-        // int Throw_Dex                    = sqlite3_column_int(stmt, 25);
-        // int Throw_Con                    = sqlite3_column_int(stmt, 26);
-        // int Throw_Int                    = sqlite3_column_int(stmt, 27);
-        // int Throw_Wis                    = sqlite3_column_int(stmt, 28);
-        // int Throw_Cha                    = sqlite3_column_int(stmt, 29);
-
-        // const char *Skills               = (const char *)sqlite3_column_text(stmt, 30);
-        // const char *Languages            = (const char *)sqlite3_column_text(stmt, 31);
-        // const char *Senses               = (const char *)sqlite3_column_text(stmt, 32);
-
-        // int Range_Darkvision             = sqlite3_column_int(stmt, 33);
-        // int Range_Tremorsense            = sqlite3_column_int(stmt, 34);
-        // int Range_Blindsight             = sqlite3_column_int(stmt, 35);
-        // int Range_Truesight             = sqlite3_column_int(stmt, 36);
-
-        // const char *Special_Ability_One        = (const char *)sqlite3_column_text(stmt, 37);
-        // const char *Special_Ability_One_Desc   = (const char *)sqlite3_column_text(stmt, 38);
-        // const char *Special_Ability_Two        = (const char *)sqlite3_column_text(stmt, 39);
-        // const char *Special_Ability_Two_Desc   = (const char *)sqlite3_column_text(stmt, 40);
-        // const char *Special_Ability_Three      = (const char *)sqlite3_column_text(stmt, 41);
-        // const char *Special_Ability_Three_Desc = (const char *)sqlite3_column_text(stmt, 42);
-        // const char *Special_Ability_Four       = (const char *)sqlite3_column_text(stmt, 43);
-        // const char *Special_Ability_Four_Desc  = (const char *)sqlite3_column_text(stmt, 44);
-
-        // const char *Attack_1         = (const char *)sqlite3_column_text(stmt, 45);
-        // const char *Attack_1_Desc    = (const char *)sqlite3_column_text(stmt, 46);
-        // const char *Attack_2         = (const char *)sqlite3_column_text(stmt, 47);
-        // const char *Attack_2_Desc    = (const char *)sqlite3_column_text(stmt, 48);
-        // const char *Attack_3         = (const char *)sqlite3_column_text(stmt, 49);
-        // const char *Attack_3_Desc    = (const char *)sqlite3_column_text(stmt, 50);
-        // const char *Attack_4         = (const char *)sqlite3_column_text(stmt, 51);
-        // const char *Attack_4_Desc    = (const char *)sqlite3_column_text(stmt, 52);
-
-        // const char *Attack_5_Type    = (const char *)sqlite3_column_text(stmt, 53);
-        // const char *Attack_5_Desc    = (const char *)sqlite3_column_text(stmt, 54);
-
-        // const char *Action_Leg             = (const char *)sqlite3_column_text(stmt, 55);
-        // const char *Action_Leg1            = (const char *)sqlite3_column_text(stmt, 56);
-        // const char *Action_Leg1_Desc       = (const char *)sqlite3_column_text(stmt, 57);
-        // const char *Action_Leg2            = (const char *)sqlite3_column_text(stmt, 58);
-        // const char *Action_Leg2_Desc       = (const char *)sqlite3_column_text(stmt, 59);
-        // const char *Action_Leg3            = (const char *)sqlite3_column_text(stmt, 60);
-        // const char *Action_Leg3_Desc       = (const char *)sqlite3_column_text(stmt, 61);
-
-        // const char *Action_Lair            = (const char *)sqlite3_column_text(stmt, 62);
-        // const char *Action_Lair1           = (const char *)sqlite3_column_text(stmt, 63);
-        // const char *Action_Lair1_Desc      = (const char *)sqlite3_column_text(stmt, 64);
-        // const char *Action_Lair2           = (const char *)sqlite3_column_text(stmt, 65);
-        // const char *Action_Lair2_Desc      = (const char *)sqlite3_column_text(stmt, 66);
-        // const char *Action_Lair3           = (const char *)sqlite3_column_text(stmt, 67);
-        // const char *Action_Lair3_Desc      = (const char *)sqlite3_column_text(stmt, 68);
-
-        // const char *RegionalEffect         = (const char *)sqlite3_column_text(stmt, 69);
-        // const char *RegionalEffect1        = (const char *)sqlite3_column_text(stmt, 70);
-        // const char *RegionalEffect2        = (const char *)sqlite3_column_text(stmt, 71);
-        // const char *RegionalEffect3        = (const char *)sqlite3_column_text(stmt, 72);
-        // const char *EndRegionalEffect      = (const char *)sqlite3_column_text(stmt, 73);
-
-        // const char *Environment            = (const char *)sqlite3_column_text(stmt, 74);
-
-        // const char *BA1                    = (const char *)sqlite3_column_text(stmt, 75);
-        // const char *BA1_Desc               = (const char *)sqlite3_column_text(stmt, 76);
-        // const char *BA2                    = (const char *)sqlite3_column_text(stmt, 77);
-        // const char *BA2_Desc               = (const char *)sqlite3_column_text(stmt, 78);
-        // const char *BA3                    = (const char *)sqlite3_column_text(stmt, 79);
-        // const char *BA3_Desc               = (const char *)sqlite3_column_text(stmt, 80);
-        // const char *BA4                    = (const char *)sqlite3_column_text(stmt, 81);
-        // const char *BA4_Desc               = (const char *)sqlite3_column_text(stmt, 82);
-
-        // const char *Reaction1              = (const char *)sqlite3_column_text(stmt, 83);
-        // const char *Reaction1_Desc         = (const char *)sqlite3_column_text(stmt, 84);
-        // const char *Reaction2              = (const char *)sqlite3_column_text(stmt, 85);
-        // const char *Reaction2_Desc         = (const char *)sqlite3_column_text(stmt, 86);
-        // const char *Reaction3              = (const char *)sqlite3_column_text(stmt, 87);
-        // const char *Reaction3_Desc         = (const char *)sqlite3_column_text(stmt, 88);
-
-        // const char *Vill_Action            = (const char *)sqlite3_column_text(stmt, 89);
-        // const char *Vill_Action1           = (const char *)sqlite3_column_text(stmt, 90);
-        // const char *Vill_Action1_Desc      = (const char *)sqlite3_column_text(stmt, 91);
-        // const char *Vill_Action2           = (const char *)sqlite3_column_text(stmt, 92);
-        // const char *Vill_Action2_Desc      = (const char *)sqlite3_column_text(stmt, 93);
-        // const char *Vill_Action3           = (const char *)sqlite3_column_text(stmt, 94);
-        // const char *Vill_Action3_Desc      = (const char *)sqlite3_column_text(stmt, 95);
-
-        // const char *Utility_Spells         = (const char *)sqlite3_column_text(stmt, 96);
-        // const char *Utility_Spells_List    = (const char *)sqlite3_column_text(stmt, 97);
-
-        // const char *Feature1               = (const char *)sqlite3_column_text(stmt, 98);
-        // const char *Feature1_Desc          = (const char *)sqlite3_column_text(stmt, 99);
-        // const char *Feature2               = (const char *)sqlite3_column_text(stmt, 100);
-        // const char *Feature2_Desc          = (const char *)sqlite3_column_text(stmt, 101);
-        // const char *Feature3               = (const char *)sqlite3_column_text(stmt, 102);
-        // const char *Feature3_Desc          = (const char *)sqlite3_column_text(stmt, 103);
-        // const char *Feature4               = (const char *)sqlite3_column_text(stmt, 104);
-        // const char *Feature4_Desc          = (const char *)sqlite3_column_text(stmt, 105);
-        // const char *Feature5               = (const char *)sqlite3_column_text(stmt, 106);
-        // const char *Feature5_Desc          = (const char *)sqlite3_column_text(stmt, 107);
-
-
-        // // Process Stats as needed
-        // //SDL_Log("Creature Stats: %s", Stats);
-        // SDL_Log("Id: %d", Id);
-        // SDL_Log("Name: %s", Name);
-        // SDL_Log("Cr: %s", Cr);
-        // SDL_Log("Type: %s", Type);
-        // SDL_Log("Size: %s", Size);
-
-        // SDL_Log("Armor_Class: %d", Armor_Class);
-        // SDL_Log("Hitpoints_Avg: %d", Hitpoints_Avg);
-        // SDL_Log("Hit_Dice: %s", Hit_Dice);
-        // SDL_Log("Hitpoints_Roll: %s", Hitpoints_Roll);
-
-        // SDL_Log("Speed_Type: %s", Speed_Type);
-        // SDL_Log("Speed_Walk: %d", Speed_Walk);
-        // SDL_Log("Speed_Fly: %d", Speed_Fly);
-        // SDL_Log("Speed_Swim: %d", Speed_Swim);
-        // SDL_Log("Speed_Climb: %d", Speed_Climb);
-        // SDL_Log("Speed_Burrow: %d", Speed_Burrow);
-
-        // SDL_Log("Alignment: %s", Alignment);
-        // SDL_Log("Legendary: %s", Legendary);
-
-        // SDL_Log("Str: %d", Str);
-        // SDL_Log("Dex: %d", Dex);
-        // SDL_Log("Con: %d", Con);
-        // SDL_Log("Int: %d", Int);
-        // SDL_Log("Wis: %d", Wis);
-        // SDL_Log("Cha: %d", Cha);
-
-        // SDL_Log("Prof_Bonus: %d", Prof_Bonus);
-
-        // SDL_Log("Throw_Str: %d", Throw_Str);
-        // SDL_Log("Throw_Dex: %d", Throw_Dex);
-        // SDL_Log("Throw_Con: %d", Throw_Con);
-        // SDL_Log("Throw_Int: %d", Throw_Int);
-        // SDL_Log("Throw_Wis: %d", Throw_Wis);
-        // SDL_Log("Throw_Cha: %d", Throw_Cha);
-
-        // SDL_Log("Skills: %s", Skills);
-        // SDL_Log("Languages: %s", Languages);
-        // SDL_Log("Senses: %s", Senses);
-
-        // SDL_Log("Range_Darkvision: %d", Range_Darkvision);
-        // SDL_Log("Range_Tremorsense: %d", Range_Tremorsense);
-        // SDL_Log("Range_Blindsight: %d", Range_Blindsight);
-        // SDL_Log("Range_Truesight: %d", Range_Truesight);
-
-        // SDL_Log("Special_Ability_One: %s", Special_Ability_One);
-        // SDL_Log("Special_Ability_One_Desc: %s", Special_Ability_One_Desc);
-        // SDL_Log("Special_Ability_Two: %s", Special_Ability_Two);
-        // SDL_Log("Special_Ability_Two_Desc: %s", Special_Ability_Two_Desc);
-        // SDL_Log("Special_Ability_Three: %s", Special_Ability_Three);
-        // SDL_Log("Special_Ability_Three_Desc: %s", Special_Ability_Three_Desc);
-        // SDL_Log("Special_Ability_Four: %s", Special_Ability_Four);
-        // SDL_Log("Special_Ability_Four_Desc: %s", Special_Ability_Four_Desc);
-
-        // SDL_Log("Attack_1: %s", Attack_1);
-        // SDL_Log("Attack_1_Desc: %s", Attack_1_Desc);
-        // SDL_Log("Attack_2: %s", Attack_2);
-        // SDL_Log("Attack_2_Desc: %s", Attack_2_Desc);
-        // SDL_Log("Attack_3: %s", Attack_3);
-        // SDL_Log("Attack_3_Desc: %s", Attack_3_Desc);
-        // SDL_Log("Attack_4: %s", Attack_4);
-        // SDL_Log("Attack_4_Desc: %s", Attack_4_Desc);
-
-        // SDL_Log("Attack_5_Type: %s", Attack_5_Type);
-        // SDL_Log("Attack_5_Desc: %s", Attack_5_Desc);
-
-        // SDL_Log("Action_Leg: %s", Action_Leg);
-        // SDL_Log("Action_Leg1: %s", Action_Leg1);
-        // SDL_Log("Action_Leg1_Desc: %s", Action_Leg1_Desc);
-        // SDL_Log("Action_Leg2: %s", Action_Leg2);
-        // SDL_Log("Action_Leg2_Desc: %s", Action_Leg2_Desc);
-        // SDL_Log("Action_Leg3: %s", Action_Leg3);
-        // SDL_Log("Action_Leg3_Desc: %s", Action_Leg3_Desc);
-
-        // SDL_Log("Action_Lair: %s", Action_Lair);
-        // SDL_Log("Action_Lair1: %s", Action_Lair1);
-        // SDL_Log("Action_Lair1_Desc: %s", Action_Lair1_Desc);
-        // SDL_Log("Action_Lair2: %s", Action_Lair2);
-        // SDL_Log("Action_Lair2_Desc: %s", Action_Lair2_Desc);
-        // SDL_Log("Action_Lair3: %s", Action_Lair3);
-        // SDL_Log("Action_Lair3_Desc: %s", Action_Lair3_Desc);
-
-        // SDL_Log("RegionalEffect: %s", RegionalEffect);
-        // SDL_Log("RegionalEffect1: %s", RegionalEffect1);
-        // SDL_Log("RegionalEffect2: %s", RegionalEffect2);
-        // SDL_Log("RegionalEffect3: %s", RegionalEffect3);
-        // SDL_Log("EndRegionalEffect: %s", EndRegionalEffect);
-
-        // SDL_Log("Environment: %s", Environment);
-
-        // SDL_Log("BA1: %s", BA1);
-        // SDL_Log("BA1_Desc: %s", BA1_Desc);
-        // SDL_Log("BA2: %s", BA2);
-        // SDL_Log("BA2_Desc: %s", BA2_Desc);
-        // SDL_Log("BA3: %s", BA3);
-        // SDL_Log("BA3_Desc: %s", BA3_Desc);
-        // SDL_Log("BA4: %s", BA4);
-        // SDL_Log("BA4_Desc: %s", BA4_Desc);
-
-        // SDL_Log("Reaction1: %s", Reaction1);
-        // SDL_Log("Reaction1_Desc: %s", Reaction1_Desc);
-        // SDL_Log("Reaction2: %s", Reaction2);
-        // SDL_Log("Reaction2_Desc: %s", Reaction2_Desc);
-        // SDL_Log("Reaction3: %s", Reaction3);
-        // SDL_Log("Reaction3_Desc: %s", Reaction3_Desc);
-
-        // SDL_Log("Vill_Action: %s", Vill_Action);
-        // SDL_Log("Vill_Action1: %s", Vill_Action1);
-        // SDL_Log("Vill_Action1_Desc: %s", Vill_Action1_Desc);
-        // SDL_Log("Vill_Action2: %s", Vill_Action2);
-        // SDL_Log("Vill_Action2_Desc: %s", Vill_Action2_Desc);
-        // SDL_Log("Vill_Action3: %s", Vill_Action3);
-        // SDL_Log("Vill_Action3_Desc: %s", Vill_Action3_Desc);
-
-        // SDL_Log("Utility_Spells: %s", Utility_Spells);
-        // SDL_Log("Utility_Spells_List: %s", Utility_Spells_List);
-
-        // SDL_Log("Feature1: %s", Feature1);
-        // SDL_Log("Feature1_Desc: %s", Feature1_Desc);
-        // SDL_Log("Feature2: %s", Feature2);
-        // SDL_Log("Feature2_Desc: %s", Feature2_Desc);
-        // SDL_Log("Feature3: %s", Feature3);
-        // SDL_Log("Feature3_Desc: %s", Feature3_Desc);
-        // SDL_Log("Feature4: %s", Feature4);
-        // SDL_Log("Feature4_Desc: %s", Feature4_Desc);
-        // SDL_Log("Feature5: %s", Feature5);
-        // SDL_Log("Feature5_Desc: %s", Feature5_Desc);
-
         int col = 0;
 
         StatId                = MakeClayIntString(sqlite3_column_int(stmt, col++));
@@ -684,4 +423,63 @@ void LookUpCreatureStats(int MonsterId) {
     }
 
     sqlite3_finalize(stmt);
+}
+
+static const char * BoundedStrStr(const char * haystack, const char * needle, size_t haystackLen, size_t NeedleLen) {
+    if (NeedleLen == 0) {
+        return NULL;
+    }
+    if (NeedleLen > haystackLen) {
+        return NULL;
+    }
+    for (int i = 0; i <= haystackLen - NeedleLen; i++) {
+        if (SDL_strncasecmp(&haystack[i], needle, NeedleLen) == 0) {
+            return &haystack[i];
+        }
+    }
+    return NULL;
+
+}
+
+void SearchCreatureNames(const char * SearchTerm) {
+    size_t SearchTermLen = SDL_strlen(SearchTerm);
+    if (0 == SearchTermLen) {
+        for (int i = 0; i <TotalCreatures; i++) {
+            HeadersToShow[i] = i;
+        }
+        return;
+    }
+    for (int i = 0; i < MAX_DB_COUNT; i++) {
+        if (DBPageHeaders[i].CreatureName.chars != NULL) {
+            size_t SearchTermLen = SDL_strlen(SearchTerm);
+            size_t CreatureNameLen = DBPageHeaders[i].CreatureName.length;
+            if (NULL != BoundedStrStr(DBPageHeaders[i].CreatureName.chars, SearchTerm, CreatureNameLen, SearchTermLen)) {
+                SDL_Log("Found match: %s", DBPageHeaders[i].CreatureName.chars);
+                HeadersToShow[i] = i;
+            }
+            else {
+                HeadersToShow[i] = -1;
+            }
+        }
+    }
+}
+
+void ModifyTypedString(void) {
+
+    // Error check to ensure there is something to delete
+    if (TypedText.length == 0) {
+        return;
+    }
+
+    size_t i = TypedText.length - 1;
+
+    // Move backward to the start byte of the last UTF-8 character
+    while (i > 0 && (TextBuffer[i] & 0xC0) == 0x80) {
+        // Continuation byte (10xxxxxx), skip backwards
+        i--;
+    }
+
+    // i now points to the start of the last UTF-8 character
+    TypedText.length = i;
+    TextBuffer[i] = '\0';
 }

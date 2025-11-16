@@ -18,6 +18,8 @@
 #define PLAYER_DB_SCREEN        4
 #define ADD_STAT_SCREEN         5
 
+#define BACKSPACE_KEY           8
+
 #define MAX_TEXT 256
 extern char TextBuffer[MAX_TEXT];
 
@@ -44,33 +46,7 @@ typedef struct app_state {
     Clay_SDL3RendererData rendererData;
 } AppState;
 
-// extern Clay_String StatName;
-// extern Clay_String StatSize;
-// extern Clay_String StatType;
-// extern Clay_String StatAC;
-// extern Clay_String StatHP;
-// extern Clay_String StatSpeed;
-// extern Clay_String StatStr;
-// extern Clay_String StatDex;
-// extern Clay_String StatCon;
-// extern Clay_String StatInt;
-// extern Clay_String StatWis;
-// extern Clay_String StatCha;
-
-// extern Clay_String StatSaves;
-// extern Clay_String StatSkills;
-// extern Clay_String StatSenses;
-// extern Clay_String StatLanguages;
-// extern Clay_String StatCR;
-
-// extern Clay_String StatRacial1;
-// extern Clay_String StatRacial2;
-// extern Clay_String StatRacial3;
-
-// extern Clay_String StatAction1;
-// extern Clay_String StatAction2;
-// extern Clay_String StatAction3;
-// extern Clay_String StatAction4;
+extern Clay_String TypedText;
 
 extern Clay_String StatId;
 extern Clay_String StatName;

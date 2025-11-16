@@ -20,6 +20,7 @@ static void BuildEncounterButtonCallback(Clay_ElementId elementId, Clay_PointerD
 static void CreatureDatabaseButtonCallback(Clay_ElementId elementId, Clay_PointerData pointerData, intptr_t userData);
 static void PlayerDatabaseButtonCallback(Clay_ElementId elementId, Clay_PointerData pointerData, intptr_t userData);
 static void CallStatBlockCallback(Clay_ElementId elementId, Clay_PointerData pointerData, intptr_t userData);
+static void SearchButtonCallback(Clay_ElementId elementId, Clay_PointerData pointerData, intptr_t userData);
 
 void BuildEncounterWindow(AppState * state);
 void CreatureDatabaseWindow(AppState * state);
@@ -158,17 +159,15 @@ void CreatureDatabaseWindow(AppState * state) {
                                                                 .color = COLOR_WHITE
                                                             }
                                                 }){
-                    /* Create char* and set equal to the overall buffer that reads keyboard input */
-                    char * SearchText = &TextBuffer[0];
-                    /* Custom clay_string to allow for a dynamically changing char* */
-                    Clay_String SomeTextMaybe = {.isStaticallyAllocated = true, .length = SDL_strlen(SearchText), .chars = SearchText};
                     /* Using dynamically changing char * SearchText */
-                    CLAY_TEXT(SomeTextMaybe, CLAY_TEXT_CONFIG(InputTextConfig));
+                    CLAY_TEXT(TypedText, CLAY_TEXT_CONFIG(InputTextConfig));
+                    
                 };
 
                 CLAY(CLAY_ID("CreatureDBSearchButton"), {MainScreenButtonLayoutConfig, .backgroundColor = COLOR_BUTTON_GRAY, .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_LG_PX)}) {
                     // Clay_OnHover(ReturnToMainScreenCallback, (intptr_t)WindowState); TODO: Fill this in with a sql search function
                     CLAY_TEXT(CLAY_STRING("Search"), CLAY_TEXT_CONFIG(ButtonTextConfig));
+                    Clay_OnHover(SearchButtonCallback, (intptr_t)WindowState);
                 };                
             };
         };
@@ -182,7 +181,9 @@ void CreatureDatabaseWindow(AppState * state) {
                 .clip = {true, true, Clay_GetScrollOffset()}
             }) {
                 for (int i = 0; i < TotalCreatures; i++) {
-                    MakeCreatureHeader(i);
+                    if (HeadersToShow[i] != -1) {
+                        MakeCreatureHeader(i);
+                    }                    
                 }
             }
             if (WindowState == ADD_STAT_SCREEN) {
@@ -231,9 +232,9 @@ void PlayerDatabaseWindow(AppState * state) {
                     /* Create char* and set equal to the overall buffer that reads keyboard input */
                     char * SearchText = &TextBuffer[0];
                     /* Custom clay_string to allow for a dynamically changing char* */
-                    Clay_String SomeTextMaybe = {.isStaticallyAllocated = true, .length = SDL_strlen(SearchText), .chars = SearchText};
+                    Clay_String TypedText = {.isStaticallyAllocated = true, .length = SDL_strlen(SearchText), .chars = SearchText};
                     /* Using dynamically changing char * SearchText */
-                    CLAY_TEXT(SomeTextMaybe, CLAY_TEXT_CONFIG(InputTextConfig));       
+                    CLAY_TEXT(TypedText, CLAY_TEXT_CONFIG(InputTextConfig));       
                 };
 
                 CLAY(CLAY_ID("PlayerDBSearchButton"), {MainScreenButtonLayoutConfig, .backgroundColor = COLOR_BUTTON_GRAY, .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_LG_PX)}) {
@@ -504,7 +505,9 @@ static void ReturnToMainScreenCallback(Clay_ElementId elementId, Clay_PointerDat
         SDL_memset(TextBuffer, 0, sizeof(TextBuffer));
         ScrollOffset = 0;
         WindowState = MAIN_SCREEN;
-        // WindowState = ADD_STAT_SCREEN;      
+        for (int i =0; i < TotalCreatures; i++){
+            HeadersToShow[i] = i;
+        }
     }
 }
 
@@ -528,7 +531,7 @@ static void CreatureDatabaseButtonCallback(Clay_ElementId elementId, Clay_Pointe
     if (pointerData.state == CLAY_POINTER_DATA_PRESSED_THIS_FRAME) {
         FirstVisible == 0;
         ScrollOffset = 0;
-        WindowState = CREATURE_DB_SCREEN;        
+        WindowState = CREATURE_DB_SCREEN;
     }
 }
 
@@ -545,5 +548,12 @@ static void CallStatBlockCallback(Clay_ElementId elementId, Clay_PointerData poi
     if (pointerData.state == CLAY_POINTER_DATA_PRESSED_THIS_FRAME) {
         LookUpCreatureStats(ArrayPosition);
         WindowState = ADD_STAT_SCREEN;
+    }
+}
+
+static void SearchButtonCallback(Clay_ElementId elementId, Clay_PointerData pointerData, intptr_t userData) {
+    if (pointerData.state == CLAY_POINTER_DATA_PRESSED_THIS_FRAME) {
+        char * SearchText = &TextBuffer[0];
+        SearchCreatureNames(SearchText);
     }
 }
