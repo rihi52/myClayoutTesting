@@ -8,5 +8,6 @@
 
 
 Clay_RenderCommandArray MainWindow(AppState * state);
+void MakeCreatureHeader(int i, int CallingWindow);
 
 #endif /* MAIN_WINDOW_H */

@@ -4,6 +4,10 @@
 #include "clay.h"
 #include <stdio.h>
 
+/*========================================================================* 
+ *  SECTION - Defines
+ *========================================================================* 
+ */
 #define GLOBAL_RADIUS_LG_PX     12
 #define GLOBAL_RADIUS_SM_PX     8
 #define MAIN_WINDOW_PADDING     8
@@ -13,9 +17,13 @@
 #define DB_LIST_HEIGHT_PX       100
 #define MAIN_BTN_WIDTH_PX       200
 #define MAIN_BTN_HEIGHT_PX      50
-#define CREATURE_BTN_WIDTH_PX   300
 #define CREATURE_BTN_HEIGHT_PX  80
+#define PLAYER_BTN_HEIGHT_PX    50
 
+/*========================================================================* 
+ *  SECTION - External style struct declarations
+ *========================================================================* 
+ */
 extern Clay_LayoutConfig SidebarTopLayoutConfig;
 extern Clay_LayoutConfig SidebarBottomLayoutConfig;
 extern Clay_LayoutConfig MainScreenLayoutConfig;
@@ -23,12 +31,23 @@ extern Clay_LayoutConfig LTRParentWindowLayoutConfig;
 extern Clay_LayoutConfig SidebarLayoutConfig;
 extern Clay_LayoutConfig MainScreenButtonLayoutConfig;
 extern Clay_LayoutConfig CreatureButtonLayoutConfig;
+extern Clay_LayoutConfig PlayerButtonLayoutConfig;
 extern Clay_LayoutConfig CreatureButtonContainerLayoutConfig;
 extern Clay_TextElementConfig ButtonTextConfig;
 extern Clay_TextElementConfig InputTextConfig;
 extern Clay_TextElementConfig MainLabelTextConfig;
 extern Clay_LayoutConfig SingleLineInputLayoutConfig;
 extern Clay_LayoutConfig TTBParentWindowLayoutConfig;
+
+/* Build Window Styles */
+extern Clay_LayoutConfig BuildWindowRow;
+extern Clay_LayoutConfig BuildWindowInitiativeHeader;
+extern Clay_LayoutConfig BuildWindowDescriptionHeader;
+extern Clay_LayoutConfig BuildWindowQuantityHeader;
+extern Clay_LayoutConfig TTBBuildWindowLayoutConfig;
+extern Clay_LayoutConfig BuildListContainer;
+extern Clay_LayoutConfig BuildInitiativeQuantityLayoutConfig;
+extern Clay_LayoutConfig TTBBuildListBottom;
 
 extern Clay_LayoutConfig StatPageContainer;
 extern Clay_LayoutConfig StatPageDivider;
@@ -73,6 +92,7 @@ extern const Clay_Color COLOR_WHITE;
 extern const Clay_Color COLOR_GRAY_BG;
 extern const Clay_Color COLOR_BUTTON_GRAY;
 extern const Clay_Color COLOR_TRANSPARENT;
+extern const Clay_Color COLOR_GRAY_SELECT;
 
 /* Styles */
 

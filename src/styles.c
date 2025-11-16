@@ -18,12 +18,13 @@ const Clay_Color COLOR_BLACK        = (Clay_Color) {0, 0, 0, 255};
 const Clay_Color COLOR_RED          = (Clay_Color) {220, 0, 0, 255};
 const Clay_Color COLOR_GREEN        = (Clay_Color) {0, 220, 0, 255};
 const Clay_Color COLOR_WHITE        = (Clay_Color) { 255, 255, 255, 255};
-const Clay_Color COLOR_GRAY_BG      = (Clay_Color) {20, 20, 20, 255};
+const Clay_Color COLOR_GRAY_BG      = (Clay_Color) {30, 30, 30, 255};
+const Clay_Color COLOR_GRAY_SELECT  = (Clay_Color) {40, 40, 40, 255};
 const Clay_Color COLOR_TRANSPARENT  = (Clay_Color) {0, 0, 0, 0};
 const Clay_Color COLOR_BUTTON_GRAY  = (Clay_Color) {70, 70, 70, 255};
 
 /*========================================================================* 
- *  SECTION - Global Functions
+ *  SECTION - Global style structs
  *========================================================================*
  */
 
@@ -97,6 +98,15 @@ Clay_LayoutConfig CreatureButtonLayoutConfig = {
     .padding = { 0, 0, 0, 0},
     .childGap = 0,
     .childAlignment =  { CLAY_ALIGN_X_CENTER, CLAY_ALIGN_Y_TOP },
+    .layoutDirection = CLAY_TOP_TO_BOTTOM
+};
+
+/* Container for player buttons */
+Clay_LayoutConfig PlayerButtonLayoutConfig = {
+    .sizing = { CLAY_SIZING_GROW(0), CLAY_SIZING_FIXED(PLAYER_BTN_HEIGHT_PX) },
+    .padding = { 0, 0, 0, 0},
+    .childGap = 0,
+    .childAlignment =  { CLAY_ALIGN_X_CENTER, CLAY_ALIGN_Y_CENTER },
     .layoutDirection = CLAY_TOP_TO_BOTTOM
 };
 
@@ -211,6 +221,79 @@ Clay_LayoutConfig StatPageActionDivider = {
     .layoutDirection = CLAY_TOP_TO_BOTTOM
 };
 
+/*========================================================================* 
+ *  SECTION - Build encounter window styles
+ *========================================================================* 
+ */
+Clay_LayoutConfig TTBBuildWindowLayoutConfig = {
+    .sizing = { CLAY_SIZING_GROW(0), CLAY_SIZING_GROW(0) },
+    .padding = { 4, 4, 4, 4},
+    .childGap = 8,
+    .childAlignment =  { CLAY_ALIGN_X_CENTER, CLAY_ALIGN_Y_TOP },
+    .layoutDirection = CLAY_TOP_TO_BOTTOM
+};
+
+Clay_LayoutConfig BuildWindowInitiativeHeader = {
+    .sizing = { CLAY_SIZING_PERCENT(0.2), CLAY_SIZING_FIXED(100) },
+    .padding = { 4, 4, 4, 4},
+    .childGap = 0,
+    .childAlignment =  { CLAY_ALIGN_X_LEFT, CLAY_ALIGN_Y_CENTER},
+    .layoutDirection = CLAY_LEFT_TO_RIGHT
+};
+
+Clay_LayoutConfig BuildWindowDescriptionHeader = {
+    .sizing = { CLAY_SIZING_PERCENT(0.6), CLAY_SIZING_FIXED(100) },
+    .padding = { 4, 4, 4, 4},
+    .childGap = 0,
+    .childAlignment =  { CLAY_ALIGN_X_LEFT, CLAY_ALIGN_Y_CENTER},
+    .layoutDirection = CLAY_LEFT_TO_RIGHT
+};
+
+Clay_LayoutConfig BuildWindowQuantityHeader = {
+    .sizing = { CLAY_SIZING_PERCENT(0.2), CLAY_SIZING_FIXED(100) },
+    .padding = { 4, 4, 4, 4},
+    .childGap = 0,
+    .childAlignment =  { CLAY_ALIGN_X_LEFT, CLAY_ALIGN_Y_CENTER},
+    .layoutDirection = CLAY_LEFT_TO_RIGHT
+};
+
+Clay_LayoutConfig BuildWindowRow = {
+    .sizing = { CLAY_SIZING_GROW(0), CLAY_SIZING_FIXED(50) },
+    .padding = { 8, 8, 8, 8},
+    .childGap = 8,
+    .childAlignment =  { CLAY_ALIGN_X_LEFT, CLAY_ALIGN_Y_CENTER},
+    .layoutDirection = CLAY_LEFT_TO_RIGHT
+};
+
+Clay_LayoutConfig BuildInitiativeQuantityLayoutConfig = {
+    .sizing = { CLAY_SIZING_PERCENT(0.2), CLAY_SIZING_FIXED(32) },
+    .padding = { 8, 8, 0, 0},
+    .childGap = 16,
+    .childAlignment =  { CLAY_ALIGN_X_LEFT, CLAY_ALIGN_Y_CENTER },
+    .layoutDirection = CLAY_TOP_TO_BOTTOM
+};
+
+Clay_LayoutConfig BuildListContainer = {
+    .sizing = { CLAY_SIZING_GROW(0), CLAY_SIZING_FIXED(100) },
+    .padding = { MAIN_WINDOW_PADDING, MAIN_WINDOW_PADDING, MAIN_WINDOW_PADDING, MAIN_WINDOW_PADDING},
+    .childGap = 0,
+    .childAlignment =  { CLAY_ALIGN_X_LEFT, CLAY_ALIGN_Y_TOP },
+    .layoutDirection = CLAY_TOP_TO_BOTTOM
+};
+
+Clay_LayoutConfig TTBBuildListBottom = {
+    .sizing = { CLAY_SIZING_GROW(0), CLAY_SIZING_FIXED(50) },
+    .padding = { 8, 8, 8, 8},
+    .childGap = 8,
+    .childAlignment =  { CLAY_ALIGN_X_CENTER, CLAY_ALIGN_Y_BOTTOM },
+    .layoutDirection = CLAY_LEFT_TO_RIGHT
+};
+
+
+/*========================================================================* 
+ *  SECTION - Text configurations
+ *========================================================================* 
+ */
 Clay_TextElementConfig MainLabelTextConfig = {
     .textColor = COLOR_WHITE,
     .fontId = 0,

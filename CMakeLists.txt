@@ -14,7 +14,10 @@ set(SRC_FILES
     src/global.c
     SDL3/clay_renderer_SDL3.c
     src/db_query.c
-    src/sql/sqlite3.c       # ✅ Add the SQLite amalgamation source
+    src/sql/sqlite3.c
+    src/build_encounter.c
+    src/creature_db.c
+    src/start_encounter.c
 )
 
 # === SDL3 (vendored) ===
