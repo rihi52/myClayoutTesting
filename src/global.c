@@ -82,8 +82,11 @@ Clay_String StatAttack3Desc = {0};
 Clay_String StatAttack4 = {0};
 Clay_String StatAttack4Desc = {0};
 
-Clay_String StatAttack5Type = {0};
+Clay_String StatAttack5 = {0};
 Clay_String StatAttack5Desc = {0};
+
+Clay_String StatAttack6 = {0};
+Clay_String StatAttack6Desc = {0};
 
 Clay_String StatActionLeg = {0};
 Clay_String StatActionLeg1 = {0};

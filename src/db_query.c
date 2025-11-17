@@ -174,8 +174,11 @@ void LookUpCreatureStats(int MonsterId) {
     ClearClayString(&StatAttack4);
     ClearClayString(&StatAttack4Desc);
 
-    ClearClayString(&StatAttack5Type);
+    ClearClayString(&StatAttack5);
     ClearClayString(&StatAttack5Desc);
+
+    ClearClayString(&StatAttack6);
+    ClearClayString(&StatAttack6Desc);
 
     ClearClayString(&StatActionLeg);
     ClearClayString(&StatActionLeg1);
@@ -351,8 +354,10 @@ void LookUpCreatureStats(int MonsterId) {
         StatAttack4          = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
         StatAttack4Desc      = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
 
-        StatAttack5Type      = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        StatAttack5          = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
         StatAttack5Desc      = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        StatAttack6          = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        StatAttack6Desc      = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
 
         StatActionLeg        = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
         StatActionLeg1       = MakeClayString((const char*)sqlite3_column_text(stmt, col++));

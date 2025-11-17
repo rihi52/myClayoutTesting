@@ -114,8 +114,11 @@ extern Clay_String StatAttack3Desc;
 extern Clay_String StatAttack4;
 extern Clay_String StatAttack4Desc;
 
-extern Clay_String StatAttack5Type;
+extern Clay_String StatAttack5;
 extern Clay_String StatAttack5Desc;
+
+extern Clay_String StatAttack6;
+extern Clay_String StatAttack6Desc;
 
 extern Clay_String StatActionLeg;
 extern Clay_String StatActionLeg1;

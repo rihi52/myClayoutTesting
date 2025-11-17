@@ -73,6 +73,7 @@ extern const Clay_Color COLOR_WHITE;
 extern const Clay_Color COLOR_GRAY_BG;
 extern const Clay_Color COLOR_BUTTON_GRAY;
 extern const Clay_Color COLOR_TRANSPARENT;
+extern const Clay_Color COLOR_SELECTED;
 
 /* Styles */
 

@@ -21,6 +21,7 @@ const Clay_Color COLOR_WHITE        = (Clay_Color) { 255, 255, 255, 255};
 const Clay_Color COLOR_GRAY_BG      = (Clay_Color) {20, 20, 20, 255};
 const Clay_Color COLOR_TRANSPARENT  = (Clay_Color) {0, 0, 0, 0};
 const Clay_Color COLOR_BUTTON_GRAY  = (Clay_Color) {70, 70, 70, 255};
+const Clay_Color COLOR_SELECTED     = (Clay_Color) {100, 100, 100, 255};
 
 /*========================================================================* 
  *  SECTION - Global Functions
