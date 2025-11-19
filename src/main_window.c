@@ -5,6 +5,7 @@
 #include "stdio.h"
 #include "text_input.h"
 #include "db_query.h"
+#include "build_encounter.h"
 
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_keyboard.h>
@@ -14,7 +15,6 @@
  *========================================================================* 
  */
 
-static void ReturnToMainScreenCallback(Clay_ElementId elementId, Clay_PointerData pointerData, intptr_t userData);
 static void StartEncounterButtonCallback(Clay_ElementId elementId, Clay_PointerData pointerData, intptr_t userData);
 static void BuildEncounterButtonCallback(Clay_ElementId elementId, Clay_PointerData pointerData, intptr_t userData);
 static void CreatureDatabaseButtonCallback(Clay_ElementId elementId, Clay_PointerData pointerData, intptr_t userData);
@@ -22,7 +22,6 @@ static void PlayerDatabaseButtonCallback(Clay_ElementId elementId, Clay_PointerD
 static void CallStatBlockCallback(Clay_ElementId elementId, Clay_PointerData pointerData, intptr_t userData);
 static void SearchButtonCallback(Clay_ElementId elementId, Clay_PointerData pointerData, intptr_t userData);
 
-void BuildEncounterWindow(AppState * state);
 void CreatureDatabaseWindow(AppState * state);
 void PlayerDatabaseWindow(AppState * state);
 void MakeCreatureHeader(int i);
@@ -90,9 +89,7 @@ Clay_RenderCommandArray MainWindow(AppState * state)
             break;
         
         case BUILD_ENCOUNTER_SCREEN:
-            CLAY(CLAY_ID("BuildEncounterHeader"), { HeadLabelWindow,.cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_LG_PX), .backgroundColor = COLOR_ORANGE}) {
-                Clay_OnHover(ReturnToMainScreenCallback, (intptr_t)WindowState);
-            };
+            BuildEncounterWindow(state);
             break;
         
         case CREATURE_DB_SCREEN:
@@ -119,10 +116,6 @@ Clay_RenderCommandArray MainWindow(AppState * state)
  *  SECTION - Local Functions 
  *========================================================================*
  */
-
-void BuildEncounterWindow(AppState * state) {
-
-}
 
 void CreatureDatabaseWindow(AppState * state) {
     /* Creature database window*/
@@ -255,7 +248,7 @@ void PlayerDatabaseWindow(AppState * state) {
 void MakeCreatureHeader(int i) {
     CLAY(CLAY_IDI("CreatureHeader", i), {
         CreatureButtonLayoutConfig,
-        .backgroundColor = (state) ? COLOR_SELECTED : COLOR_BUTTON_GRAY,
+        .backgroundColor = (Clay_Hovered()) ? COLOR_SELECTED : COLOR_BUTTON_GRAY,
         .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_SM_PX)
     }) {
 
@@ -355,14 +348,20 @@ void FillStats(void) {
                     CLAY_TEXT(StatSavingThrows, CLAY_TEXT_CONFIG(StatPageTextConfig));
                 }
             }
-            CLAY_AUTO_ID({StatPageSubDivider, .backgroundColor = COLOR_TRANSPARENT}) {
-                CLAY_TEXT(StatSkills, CLAY_TEXT_CONFIG(StatPageTextConfig));
+            if (0 != SDL_strcmp("0", StatSkills.chars) && 0 != SDL_strcmp("NULL", StatSkills.chars)){
+                CLAY_AUTO_ID({StatPageSubDivider, .backgroundColor = COLOR_TRANSPARENT}) {
+                    CLAY_TEXT(StatSkills, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                }
             }
-            CLAY_AUTO_ID({StatPageSubDivider, .backgroundColor = COLOR_TRANSPARENT}) {
-                CLAY_TEXT(StatSenses, CLAY_TEXT_CONFIG(StatPageTextConfig));
+            if (0 != SDL_strcmp("0", StatSenses.chars) && 0 != SDL_strcmp("NULL", StatSenses.chars)){
+                CLAY_AUTO_ID({StatPageSubDivider, .backgroundColor = COLOR_TRANSPARENT}) {
+                    CLAY_TEXT(StatSenses, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                }
             }
-            CLAY_AUTO_ID({StatPageSubDivider, .backgroundColor = COLOR_TRANSPARENT}) {
-                CLAY_TEXT(StatLanguages, CLAY_TEXT_CONFIG(StatPageTextConfig));
+            if (0 != SDL_strcmp("0", StatLanguages.chars) && 0 != SDL_strcmp("NULL", StatLanguages.chars)){
+                CLAY_AUTO_ID({StatPageSubDivider, .backgroundColor = COLOR_TRANSPARENT}) {
+                    CLAY_TEXT(StatLanguages, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                }
             }
             CLAY_AUTO_ID({StatPageSubDivider, .backgroundColor = COLOR_TRANSPARENT}) {
                 CLAY_TEXT(CLAY_STRING("Challenge Rating"), CLAY_TEXT_CONFIG(StatPageTextConfig));
@@ -506,18 +505,6 @@ void FillStats(void) {
 /*-------------------------------------------------------------------------------------------*
 *                                    Button Callbacks                                        *
 *--------------------------------------------------------------------------------------------*/
-
-static void ReturnToMainScreenCallback(Clay_ElementId elementId, Clay_PointerData pointerData, intptr_t userData) {
-    int check = (int) userData;
-    if (pointerData.state == CLAY_POINTER_DATA_PRESSED_THIS_FRAME) {
-        SDL_memset(TextBuffer, 0, sizeof(TextBuffer));
-        ScrollOffset = 0;
-        WindowState = MAIN_SCREEN;
-        for (int i =0; i < TotalCreatures; i++){
-            HeadersToShow[i] = i;
-        }
-    }
-}
 
 static void StartEncounterButtonCallback(Clay_ElementId elementId, Clay_PointerData pointerData, intptr_t userData) {
     int check = (int) userData;

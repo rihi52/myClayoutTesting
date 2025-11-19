@@ -25,6 +25,8 @@ extern char TextBuffer[MAX_TEXT];
 
 //char textBuffer[MAX_TEXT] = {0};
 
+extern bool MouseDown;
+
 extern int WindowState;
 
 extern int WindowWidth;
@@ -181,5 +183,7 @@ extern Clay_String StatFeature4;
 extern Clay_String StatFeature4Desc;
 extern Clay_String StatFeature5;
 extern Clay_String StatFeature5Desc;
+
+void ReturnToMainScreenCallback(Clay_ElementId elementId, Clay_PointerData pointerData, intptr_t userData);
 
 #endif /* GLOBAL_H */

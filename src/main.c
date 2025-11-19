@@ -64,6 +64,7 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
     TypedText.isStaticallyAllocated = true;
     TypedText.chars = TextBuffer;
     TypedText.length = 0;
+    MouseDown = false;
 
     AppState *state = SDL_calloc(1, sizeof(AppState));
     if (!state) {
@@ -160,13 +161,14 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
         case SDL_EVENT_MOUSE_BUTTON_DOWN:
             Clay_SetPointerState((Clay_Vector2) { event->button.x, event->button.y },
                                  event->button.button == SDL_BUTTON_LEFT);
+            MouseDown = true;
             break;
         case SDL_EVENT_MOUSE_BUTTON_UP:
             Clay_SetPointerState((Clay_Vector2) { event->button.x, event->button.y },
                                  event->button.button == SDL_BUTTON_LEFT);
             break;
         case SDL_EVENT_MOUSE_WHEEL:
-            Clay_UpdateScrollContainers(true, (Clay_Vector2) { event->wheel.x, event->wheel.y }, 0.01f);
+            Clay_UpdateScrollContainers(true, (Clay_Vector2) { event->wheel.x, event->wheel.y }, 0.1f);
             break;
         default:
             break;

@@ -4107,11 +4107,11 @@ void Clay_UpdateScrollContainers(bool enableDragScrolling, Clay_Vector2 scrollDe
     Clay__ScrollContainerDataInternal *highestPriorityScrollData = CLAY__NULL;
     for (int32_t i = 0; i < context->scrollContainerDatas.length; i++) {
         Clay__ScrollContainerDataInternal *scrollData = Clay__ScrollContainerDataInternalArray_Get(&context->scrollContainerDatas, i);
-        if (!scrollData->openThisFrame) {
-            Clay__ScrollContainerDataInternalArray_RemoveSwapback(&context->scrollContainerDatas, i);
-            continue;
-        }
-        scrollData->openThisFrame = false;
+        // if (!scrollData->openThisFrame) {
+        //     Clay__ScrollContainerDataInternalArray_RemoveSwapback(&context->scrollContainerDatas, i);
+        //     continue;
+        // }
+        // scrollData->openThisFrame = false;
         Clay_LayoutElementHashMapItem *hashMapItem = Clay__GetHashMapItem(scrollData->elementId);
         // Element isn't rendered this frame but scroll offset has been retained
         if (!hashMapItem) {

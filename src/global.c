@@ -14,6 +14,8 @@ uint16_t TotalCreatures = 0;
 
 float ScrollOffset = 0;
 
+bool MouseDown;
+
 Clay_String TypedText = {0};
 
 Clay_String StatId = {0};
@@ -149,3 +151,13 @@ Clay_String StatFeature4 = {0};
 Clay_String StatFeature4Desc = {0};
 Clay_String StatFeature5 = {0};
 Clay_String StatFeature5Desc = {0};
+
+void ReturnToMainScreenCallback(Clay_ElementId elementId, Clay_PointerData pointerData, intptr_t userData) {
+    int check = (int) userData;
+    if (pointerData.state == CLAY_POINTER_DATA_PRESSED_THIS_FRAME) {
+        SDL_memset(TextBuffer, 0, sizeof(TextBuffer));
+        ScrollOffset = 0;
+        WindowState = MAIN_SCREEN;
+        // WindowState = ADD_STAT_SCREEN;
+    }
+}
