@@ -4,6 +4,7 @@
 #include <SDL3/SDL.h>
 #include "clay.h"
 #include "string.h"
+#include "global.h"
 
 /*========================================================================* 
  *  SECTION - Defines
@@ -37,5 +38,6 @@ void LookUpCreatureStats(int MonsterId);
 void SearchCreatureNames(const char * SearchTerm);
 void ModifyTypedString(void);
 Clay_String MakeClayIntString(int value);
+DisplayListMember * LookupCreatureForCombat(const char * CreatureName, int Initiative);
 
 #endif /* DB_QUERY */

@@ -144,17 +144,17 @@ static void FillStats(void) {
             .backgroundColor = COLOR_TRANSPARENT,
             .border = { .width = { .bottom = 5 }, .color = COLOR_BLACK }
         }) {
-            CLAY_TEXT(StatName, CLAY_TEXT_CONFIG(StatPageTextConfig));
+            CLAY_TEXT(gAppState->CurrentStatBlock.StatName, CLAY_TEXT_CONFIG(StatPageTextConfig));
         };
         CLAY(CLAY_ID("ACHPContainer"), {StatPageDivider, .backgroundColor = COLOR_TRANSPARENT, .border = { .width = { .bottom = 5 }, .color = COLOR_BLACK }}) {
             CLAY(CLAY_ID("ACContainer"), {StatPageSubDivider, .backgroundColor = COLOR_TRANSPARENT}) {
                 CLAY_TEXT(CLAY_STRING("Armor Class"), CLAY_TEXT_CONFIG(StatPageTextConfig));
-                CLAY_TEXT(StatArmorClass, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                CLAY_TEXT(gAppState->CurrentStatBlock.StatArmorClass, CLAY_TEXT_CONFIG(StatPageTextConfig));
             }
             CLAY(CLAY_ID("HPContainer"), {StatPageSubDivider, .backgroundColor = COLOR_TRANSPARENT}) {
                 CLAY_TEXT(CLAY_STRING("Hit Points"), CLAY_TEXT_CONFIG(StatPageTextConfig));
-                CLAY_TEXT(StatHitpointsAvg, CLAY_TEXT_CONFIG(StatPageTextConfig));
-                CLAY_TEXT(StatHitpointsRoll, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                CLAY_TEXT(gAppState->CurrentStatBlock.StatHitpointsAvg, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                CLAY_TEXT(gAppState->CurrentStatBlock.StatHitpointsRoll, CLAY_TEXT_CONFIG(StatPageTextConfig));
             }
         }; /* Start Ability Scores container*/
         CLAY(CLAY_ID("AbilityScoresContainer"), {StatPageDivider, .backgroundColor = COLOR_TRANSPARENT}) {
@@ -181,148 +181,148 @@ static void FillStats(void) {
             } /* Ability score values*/
             CLAY_AUTO_ID({StatPageSubDivider, .backgroundColor = COLOR_TRANSPARENT, .border = { .width = { .bottom = 5 }, .color = COLOR_BLACK }}) {
                 CLAY_AUTO_ID({StatPageAbilityDivider, .backgroundColor = COLOR_TRANSPARENT}) {
-                    CLAY_TEXT(StatStr, CLAY_TEXT_CONFIG(StatPageAbilityScoreTextConfig));
+                    CLAY_TEXT(gAppState->CurrentStatBlock.StatStr, CLAY_TEXT_CONFIG(StatPageAbilityScoreTextConfig));
                 }
                 CLAY_AUTO_ID({StatPageAbilityDivider, .backgroundColor = COLOR_TRANSPARENT}) {
-                    CLAY_TEXT(StatDex, CLAY_TEXT_CONFIG(StatPageAbilityScoreTextConfig));
+                    CLAY_TEXT(gAppState->CurrentStatBlock.StatDex, CLAY_TEXT_CONFIG(StatPageAbilityScoreTextConfig));
                 }
                 CLAY_AUTO_ID({StatPageAbilityDivider, .backgroundColor = COLOR_TRANSPARENT}) {
-                    CLAY_TEXT(StatCon, CLAY_TEXT_CONFIG(StatPageAbilityScoreTextConfig));
+                    CLAY_TEXT(gAppState->CurrentStatBlock.StatCon, CLAY_TEXT_CONFIG(StatPageAbilityScoreTextConfig));
                 }
                 CLAY_AUTO_ID({StatPageAbilityDivider, .backgroundColor = COLOR_TRANSPARENT}) {
-                    CLAY_TEXT(StatInt, CLAY_TEXT_CONFIG(StatPageAbilityScoreTextConfig));
+                    CLAY_TEXT(gAppState->CurrentStatBlock.StatInt, CLAY_TEXT_CONFIG(StatPageAbilityScoreTextConfig));
                 }
                 CLAY_AUTO_ID({StatPageAbilityDivider, .backgroundColor = COLOR_TRANSPARENT}) {
-                    CLAY_TEXT(StatWis, CLAY_TEXT_CONFIG(StatPageAbilityScoreTextConfig));
+                    CLAY_TEXT(gAppState->CurrentStatBlock.StatWis, CLAY_TEXT_CONFIG(StatPageAbilityScoreTextConfig));
                 }
                 CLAY_AUTO_ID({StatPageAbilityDivider, .backgroundColor = COLOR_TRANSPARENT}) {
-                    CLAY_TEXT(StatCha, CLAY_TEXT_CONFIG(StatPageAbilityScoreTextConfig));
+                    CLAY_TEXT(gAppState->CurrentStatBlock.StatCha, CLAY_TEXT_CONFIG(StatPageAbilityScoreTextConfig));
                 }
             }
         }; /* Write senses  */
         CLAY(CLAY_ID("SensesContainer"), {StatPageDivider, .backgroundColor = COLOR_TRANSPARENT, .border = { .width = { .bottom = 5 }, .color = COLOR_BLACK }}) {
-            if (0 != SDL_strcmp("0", StatSavingThrows.chars) && 0 != SDL_strcmp("NULL", StatSavingThrows.chars)){
+            if (0 != SDL_strcmp("0", gAppState->CurrentStatBlock.StatSavingThrows.chars) && 0 != SDL_strcmp("NULL", gAppState->CurrentStatBlock.StatSavingThrows.chars)){
                 CLAY_AUTO_ID({StatPageSubDivider, .backgroundColor = COLOR_TRANSPARENT}) {
-                    CLAY_TEXT(StatSavingThrows, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                    CLAY_TEXT(gAppState->CurrentStatBlock.StatSavingThrows, CLAY_TEXT_CONFIG(StatPageTextConfig));
                 }
             }
-            if (0 != SDL_strcmp("0", StatSkills.chars) && 0 != SDL_strcmp("NULL", StatSkills.chars)){
+            if (0 != SDL_strcmp("0", gAppState->CurrentStatBlock.StatSkills.chars) && 0 != SDL_strcmp("NULL", gAppState->CurrentStatBlock.StatSkills.chars)){
                 CLAY_AUTO_ID({StatPageSubDivider, .backgroundColor = COLOR_TRANSPARENT}) {
-                    CLAY_TEXT(StatSkills, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                    CLAY_TEXT(gAppState->CurrentStatBlock.StatSkills, CLAY_TEXT_CONFIG(StatPageTextConfig));
                 }
             }
-            if (0 != SDL_strcmp("0", StatSenses.chars) && 0 != SDL_strcmp("NULL", StatSenses.chars)){
+            if (0 != SDL_strcmp("0", gAppState->CurrentStatBlock.StatSenses.chars) && 0 != SDL_strcmp("NULL", gAppState->CurrentStatBlock.StatSenses.chars)){
                 CLAY_AUTO_ID({StatPageSubDivider, .backgroundColor = COLOR_TRANSPARENT}) {
-                    CLAY_TEXT(StatSenses, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                    CLAY_TEXT(gAppState->CurrentStatBlock.StatSenses, CLAY_TEXT_CONFIG(StatPageTextConfig));
                 }
             }
-            if (0 != SDL_strcmp("0", StatLanguages.chars) && 0 != SDL_strcmp("NULL", StatLanguages.chars)){
+            if (0 != SDL_strcmp("0", gAppState->CurrentStatBlock.StatLanguages.chars) && 0 != SDL_strcmp("NULL", gAppState->CurrentStatBlock.StatLanguages.chars)){
                 CLAY_AUTO_ID({StatPageSubDivider, .backgroundColor = COLOR_TRANSPARENT}) {
-                    CLAY_TEXT(StatLanguages, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                    CLAY_TEXT(gAppState->CurrentStatBlock.StatLanguages, CLAY_TEXT_CONFIG(StatPageTextConfig));
                 }
             }
             CLAY_AUTO_ID({StatPageSubDivider, .backgroundColor = COLOR_TRANSPARENT}) {
                 CLAY_TEXT(CLAY_STRING("Challenge Rating"), CLAY_TEXT_CONFIG(StatPageTextConfig));
-                CLAY_TEXT(StatCr, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                CLAY_TEXT(gAppState->CurrentStatBlock.StatCr, CLAY_TEXT_CONFIG(StatPageTextConfig));
             }
         }; /* Write racial traits/features */
         CLAY(CLAY_ID("RacialContainer"), {StatPageDivider, .backgroundColor = COLOR_TRANSPARENT, .border = { .width = { .bottom = 5 }, .color = COLOR_BLACK }}) {
-            if (0 != SDL_strcmp("0", StatSpecialAbilityOne.chars) && 0 != SDL_strcmp("NULL", StatSpecialAbilityOne.chars)){
+            if (0 != SDL_strcmp("0", gAppState->CurrentStatBlock.StatSpecialAbilityOne.chars) && 0 != SDL_strcmp("NULL", gAppState->CurrentStatBlock.StatSpecialAbilityOne.chars)){
                 CLAY_AUTO_ID({StatPageActionDivider, .backgroundColor = COLOR_TRANSPARENT}) {
-                    CLAY_TEXT(StatSpecialAbilityOne, CLAY_TEXT_CONFIG(StatPageTextConfig));
-                    CLAY_TEXT(StatSpecialAbilityOneDesc, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                    CLAY_TEXT(gAppState->CurrentStatBlock.StatSpecialAbilityOne, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                    CLAY_TEXT(gAppState->CurrentStatBlock.StatSpecialAbilityOneDesc, CLAY_TEXT_CONFIG(StatPageTextConfig));
                 }
             }
-            if (0 != SDL_strcmp("0", StatSpecialAbilityTwo.chars) && 0 != SDL_strcmp("NULL", StatSpecialAbilityTwo.chars)){
+            if (0 != SDL_strcmp("0", gAppState->CurrentStatBlock.StatSpecialAbilityTwo.chars) && 0 != SDL_strcmp("NULL", gAppState->CurrentStatBlock.StatSpecialAbilityTwo.chars)){
                 CLAY_AUTO_ID({StatPageActionDivider, .backgroundColor = COLOR_TRANSPARENT}) {
-                    CLAY_TEXT(StatSpecialAbilityTwo, CLAY_TEXT_CONFIG(StatPageTextConfig));
-                    CLAY_TEXT(StatSpecialAbilityTwoDesc, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                    CLAY_TEXT(gAppState->CurrentStatBlock.StatSpecialAbilityTwo, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                    CLAY_TEXT(gAppState->CurrentStatBlock.StatSpecialAbilityTwoDesc, CLAY_TEXT_CONFIG(StatPageTextConfig));
                 }
             }
-            if (0 != SDL_strcmp("0", StatSpecialAbilityThree.chars) && 0 != SDL_strcmp("NULL", StatSpecialAbilityThree.chars)){
+            if (0 != SDL_strcmp("0", gAppState->CurrentStatBlock.StatSpecialAbilityThree.chars) && 0 != SDL_strcmp("NULL", gAppState->CurrentStatBlock.StatSpecialAbilityThree.chars)){
                 CLAY_AUTO_ID({StatPageActionDivider, .backgroundColor = COLOR_TRANSPARENT}) {
-                    CLAY_TEXT(StatSpecialAbilityThree, CLAY_TEXT_CONFIG(StatPageTextConfig));
-                    CLAY_TEXT(StatSpecialAbilityThreeDesc, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                    CLAY_TEXT(gAppState->CurrentStatBlock.StatSpecialAbilityThree, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                    CLAY_TEXT(gAppState->CurrentStatBlock.StatSpecialAbilityThreeDesc, CLAY_TEXT_CONFIG(StatPageTextConfig));
                 }
             }
         }; /* Write creature actions */
         CLAY(CLAY_ID("ActionsContainer"), {StatPageDivider, .backgroundColor = COLOR_TRANSPARENT, .border = { .width = { .bottom = 5 }, .color = COLOR_BLACK }}) {
             CLAY_AUTO_ID({StatPageActionDivider, .backgroundColor = COLOR_TRANSPARENT}) {
-                CLAY_TEXT(StatAttack1, CLAY_TEXT_CONFIG(StatPageTextConfig));
-                CLAY_TEXT(StatAttack1Desc, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                CLAY_TEXT(gAppState->CurrentStatBlock.StatAttack1, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                CLAY_TEXT(gAppState->CurrentStatBlock.StatAttack1Desc, CLAY_TEXT_CONFIG(StatPageTextConfig));
             }
-            if (0 != SDL_strcmp("0", StatAttack2.chars) && 0 != SDL_strcmp("NULL", StatAttack2.chars)){
+            if (0 != SDL_strcmp("0", gAppState->CurrentStatBlock.StatAttack2.chars) && 0 != SDL_strcmp("NULL", gAppState->CurrentStatBlock.StatAttack2.chars)){
                 CLAY_AUTO_ID({StatPageActionDivider, .backgroundColor = COLOR_TRANSPARENT}) {
-                    CLAY_TEXT(StatAttack2, CLAY_TEXT_CONFIG(StatPageTextConfig));
-                    CLAY_TEXT(StatAttack2Desc, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                    CLAY_TEXT(gAppState->CurrentStatBlock.StatAttack2, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                    CLAY_TEXT(gAppState->CurrentStatBlock.StatAttack2Desc, CLAY_TEXT_CONFIG(StatPageTextConfig));
                 }
             }
-            if (0 != SDL_strcmp("0", StatAttack3.chars) && 0 != SDL_strcmp("NULL", StatAttack3.chars)){
+            if (0 != SDL_strcmp("0", gAppState->CurrentStatBlock.StatAttack3.chars) && 0 != SDL_strcmp("NULL", gAppState->CurrentStatBlock.StatAttack3.chars)){
                 CLAY_AUTO_ID({StatPageActionDivider, .backgroundColor = COLOR_TRANSPARENT}) {
-                    CLAY_TEXT(StatAttack3, CLAY_TEXT_CONFIG(StatPageTextConfig));
-                    CLAY_TEXT(StatAttack3Desc, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                    CLAY_TEXT(gAppState->CurrentStatBlock.StatAttack3, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                    CLAY_TEXT(gAppState->CurrentStatBlock.StatAttack3Desc, CLAY_TEXT_CONFIG(StatPageTextConfig));
                 }
             }
-            if (0 != SDL_strcmp("0", StatAttack4.chars) && 0 != SDL_strcmp("NULL", StatAttack4.chars)){
+            if (0 != SDL_strcmp("0", gAppState->CurrentStatBlock.StatAttack4.chars) && 0 != SDL_strcmp("NULL", gAppState->CurrentStatBlock.StatAttack4.chars)){
                 CLAY_AUTO_ID({StatPageActionDivider, .backgroundColor = COLOR_TRANSPARENT}) {
-                    CLAY_TEXT(StatAttack4, CLAY_TEXT_CONFIG(StatPageTextConfig));
-                    CLAY_TEXT(StatAttack4Desc, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                    CLAY_TEXT(gAppState->CurrentStatBlock.StatAttack4, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                    CLAY_TEXT(gAppState->CurrentStatBlock.StatAttack4Desc, CLAY_TEXT_CONFIG(StatPageTextConfig));
                 }
             }
-            if (0 != SDL_strcmp("0", StatAttack5.chars) && 0 != SDL_strcmp("NULL", StatAttack5.chars)){
+            if (0 != SDL_strcmp("0", gAppState->CurrentStatBlock.StatAttack5.chars) && 0 != SDL_strcmp("NULL", gAppState->CurrentStatBlock.StatAttack5.chars)){
                 CLAY_AUTO_ID({StatPageActionDivider, .backgroundColor = COLOR_TRANSPARENT}) {
-                    CLAY_TEXT(StatAttack5, CLAY_TEXT_CONFIG(StatPageTextConfig));
-                    CLAY_TEXT(StatAttack5Desc, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                    CLAY_TEXT(gAppState->CurrentStatBlock.StatAttack5, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                    CLAY_TEXT(gAppState->CurrentStatBlock.StatAttack5Desc, CLAY_TEXT_CONFIG(StatPageTextConfig));
                 }
             }
-            if (0 != SDL_strcmp("0", StatAttack6.chars) && 0 != SDL_strcmp("NULL", StatAttack6.chars)){
+            if (0 != SDL_strcmp("0", gAppState->CurrentStatBlock.StatAttack6.chars) && 0 != SDL_strcmp("NULL", gAppState->CurrentStatBlock.StatAttack6.chars)){
                 CLAY_AUTO_ID({StatPageActionDivider, .backgroundColor = COLOR_TRANSPARENT}) {
-                    CLAY_TEXT(StatAttack5, CLAY_TEXT_CONFIG(StatPageTextConfig));
-                    CLAY_TEXT(StatAttack5Desc, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                    CLAY_TEXT(gAppState->CurrentStatBlock.StatAttack6, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                    CLAY_TEXT(gAppState->CurrentStatBlock.StatAttack6Desc, CLAY_TEXT_CONFIG(StatPageTextConfig));
                 }
             }
         };
         CLAY(CLAY_ID("LegendaryBonusContainer"), {StatPageDivider, .backgroundColor = COLOR_TRANSPARENT, .border = { .width = { .bottom = 5 }, .color = COLOR_BLACK }}) {
-            if (0 != SDL_strcmp("0", StatActionLeg.chars) && 0 != SDL_strcmp("NULL", StatActionLeg.chars)){
+            if (0 != SDL_strcmp("0", gAppState->CurrentStatBlock.StatActionLeg.chars) && 0 != SDL_strcmp("NULL", gAppState->CurrentStatBlock.StatActionLeg.chars)){
                 CLAY_AUTO_ID({StatPageActionDivider, .backgroundColor = COLOR_TRANSPARENT}) {
                     CLAY_TEXT(CLAY_STRING("The creature can take 3 legendary actions, choosing from the options below. Only one legendary action can be used at a time and only at the end of another creature's turn. The creature regains spent legendary actions at the start of its turn."), CLAY_TEXT_CONFIG(StatPageTextConfig));
-                    CLAY_TEXT(StatActionLeg1, CLAY_TEXT_CONFIG(StatPageTextConfig));
-                    CLAY_TEXT(StatActionLeg1Desc, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                    CLAY_TEXT(gAppState->CurrentStatBlock.StatActionLeg1, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                    CLAY_TEXT(gAppState->CurrentStatBlock.StatActionLeg1Desc, CLAY_TEXT_CONFIG(StatPageTextConfig));
                 }
             }
-            if (0 != SDL_strcmp("0", StatActionLeg2.chars) && 0 != SDL_strcmp("NULL", StatActionLeg2.chars)){
+            if (0 != SDL_strcmp("0", gAppState->CurrentStatBlock.StatActionLeg2.chars) && 0 != SDL_strcmp("NULL", gAppState->CurrentStatBlock.StatActionLeg2.chars)){
                 CLAY_AUTO_ID({StatPageActionDivider, .backgroundColor = COLOR_TRANSPARENT}) {
-                    CLAY_TEXT(StatActionLeg2, CLAY_TEXT_CONFIG(StatPageTextConfig));
-                    CLAY_TEXT(StatActionLeg2Desc, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                    CLAY_TEXT(gAppState->CurrentStatBlock.StatActionLeg2, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                    CLAY_TEXT(gAppState->CurrentStatBlock.StatActionLeg2Desc, CLAY_TEXT_CONFIG(StatPageTextConfig));
                 }
             }
-            if (0 != SDL_strcmp("0", StatActionLeg3.chars) && 0 != SDL_strcmp("NULL", StatActionLeg3.chars)){
+            if (0 != SDL_strcmp("0", gAppState->CurrentStatBlock.StatActionLeg3.chars) && 0 != SDL_strcmp("NULL", gAppState->CurrentStatBlock.StatActionLeg3.chars)){
                 CLAY_AUTO_ID({StatPageActionDivider, .backgroundColor = COLOR_TRANSPARENT}) {
-                    CLAY_TEXT(StatActionLeg3, CLAY_TEXT_CONFIG(StatPageTextConfig));
-                    CLAY_TEXT(StatActionLeg3Desc, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                    CLAY_TEXT(gAppState->CurrentStatBlock.StatActionLeg3, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                    CLAY_TEXT(gAppState->CurrentStatBlock.StatActionLeg3Desc, CLAY_TEXT_CONFIG(StatPageTextConfig));
                 }
             }
         };
         CLAY(CLAY_ID("LairReactionContainer"), {StatPageDivider, .backgroundColor = COLOR_TRANSPARENT, .border = { .width = { .bottom = 5 }, .color = COLOR_BLACK }}) {
-            if (0 != SDL_strcmp("0", StatActionLair.chars) && 0 != SDL_strcmp("NULL", StatActionLair.chars)){
+            if (0 != SDL_strcmp("0", gAppState->CurrentStatBlock.StatActionLair.chars) && 0 != SDL_strcmp("NULL", gAppState->CurrentStatBlock.StatActionLair.chars)){
                 CLAY_AUTO_ID({StatPageActionDivider, .backgroundColor = COLOR_TRANSPARENT}) {
-                    CLAY_TEXT(StatActionLair, CLAY_TEXT_CONFIG(StatPageTextConfig));
-                    CLAY_TEXT(StatActionLair1, CLAY_TEXT_CONFIG(StatPageTextConfig));
-                    CLAY_TEXT(StatActionLair1Desc, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                    CLAY_TEXT(gAppState->CurrentStatBlock.StatActionLair, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                    CLAY_TEXT(gAppState->CurrentStatBlock.StatActionLair1, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                    CLAY_TEXT(gAppState->CurrentStatBlock.StatActionLair1Desc, CLAY_TEXT_CONFIG(StatPageTextConfig));
                 }
             }
-            if (0 != SDL_strcmp("0", StatActionLair2.chars) && 0 != SDL_strcmp("NULL", StatActionLair2.chars)){
+            if (0 != SDL_strcmp("0", gAppState->CurrentStatBlock.StatActionLair2.chars) && 0 != SDL_strcmp("NULL", gAppState->CurrentStatBlock.StatActionLair2.chars)){
                 CLAY_AUTO_ID({StatPageActionDivider, .backgroundColor = COLOR_TRANSPARENT}) {
-                    CLAY_TEXT(StatActionLair2, CLAY_TEXT_CONFIG(StatPageTextConfig));
-                    CLAY_TEXT(StatActionLair2, CLAY_TEXT_CONFIG(StatPageTextConfig));
-                    CLAY_TEXT(StatActionLair2Desc, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                    CLAY_TEXT(gAppState->CurrentStatBlock.StatActionLair2, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                    CLAY_TEXT(gAppState->CurrentStatBlock.StatActionLair2, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                    CLAY_TEXT(gAppState->CurrentStatBlock.StatActionLair2Desc, CLAY_TEXT_CONFIG(StatPageTextConfig));
                 }
             }
-            if (0 != SDL_strcmp("0", StatActionLair3.chars) && 0 != SDL_strcmp("NULL", StatActionLair3.chars)){
+            if (0 != SDL_strcmp("0", gAppState->CurrentStatBlock.StatActionLair3.chars) && 0 != SDL_strcmp("NULL", gAppState->CurrentStatBlock.StatActionLair3.chars)){
                 CLAY_AUTO_ID({StatPageActionDivider, .backgroundColor = COLOR_TRANSPARENT}) {
-                    CLAY_TEXT(StatActionLair3, CLAY_TEXT_CONFIG(StatPageTextConfig));
-                    CLAY_TEXT(StatActionLair3, CLAY_TEXT_CONFIG(StatPageTextConfig));
-                    CLAY_TEXT(StatActionLair3Desc, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                    CLAY_TEXT(gAppState->CurrentStatBlock.StatActionLair3, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                    CLAY_TEXT(gAppState->CurrentStatBlock.StatActionLair3, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                    CLAY_TEXT(gAppState->CurrentStatBlock.StatActionLair3Desc, CLAY_TEXT_CONFIG(StatPageTextConfig));
                 }
             }
         };
@@ -333,29 +333,29 @@ static void FillStats(void) {
             // CLAY_TEXT(CLAY_STRING("Fill stats here"), CLAY_TEXT_CONFIG(StatPageTextConfig));
         };
         CLAY(CLAY_ID("RegionalEffectContainer"), {StatPageDivider, .backgroundColor = COLOR_TRANSPARENT, .border = { .width = { .bottom = 5 }, .color = COLOR_BLACK }}) {
-            if (0 != SDL_strcmp("0", StatRegionalEffect.chars) && 0 != SDL_strcmp("NULL", StatRegionalEffect.chars)){
+            if (0 != SDL_strcmp("0", gAppState->CurrentStatBlock.StatRegionalEffect.chars) && 0 != SDL_strcmp("NULL", gAppState->CurrentStatBlock.StatRegionalEffect.chars)){
                 CLAY_AUTO_ID({StatPageActionDivider, .backgroundColor = COLOR_TRANSPARENT}) {
-                    CLAY_TEXT(StatRegionalEffect, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                    CLAY_TEXT(gAppState->CurrentStatBlock.StatRegionalEffect, CLAY_TEXT_CONFIG(StatPageTextConfig));
                 }
             }
-            if (0 != SDL_strcmp("0", StatRegionalEffect1.chars) && 0 != SDL_strcmp("NULL", StatRegionalEffect1.chars)){
+            if (0 != SDL_strcmp("0", gAppState->CurrentStatBlock.StatRegionalEffect1.chars) && 0 != SDL_strcmp("NULL", gAppState->CurrentStatBlock.StatRegionalEffect1.chars)){
                 CLAY_AUTO_ID({StatPageActionDivider, .backgroundColor = COLOR_TRANSPARENT}) {
-                    CLAY_TEXT(StatRegionalEffect1, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                    CLAY_TEXT(gAppState->CurrentStatBlock.StatRegionalEffect1, CLAY_TEXT_CONFIG(StatPageTextConfig));
                 }
             }
-            if (0 != SDL_strcmp("0", StatRegionalEffect2.chars) && 0 != SDL_strcmp("NULL", StatRegionalEffect2.chars)){
+            if (0 != SDL_strcmp("0", gAppState->CurrentStatBlock.StatRegionalEffect2.chars) && 0 != SDL_strcmp("NULL", gAppState->CurrentStatBlock.StatRegionalEffect2.chars)){
                 CLAY_AUTO_ID({StatPageActionDivider, .backgroundColor = COLOR_TRANSPARENT}) {
-                    CLAY_TEXT(StatRegionalEffect2, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                    CLAY_TEXT(gAppState->CurrentStatBlock.StatRegionalEffect2, CLAY_TEXT_CONFIG(StatPageTextConfig));
                 }
             }
-            if (0 != SDL_strcmp("0", StatRegionalEffect3.chars) && 0 != SDL_strcmp("NULL", StatRegionalEffect3.chars)){
+            if (0 != SDL_strcmp("0", gAppState->CurrentStatBlock.StatRegionalEffect3.chars) && 0 != SDL_strcmp("NULL", gAppState->CurrentStatBlock.StatRegionalEffect3.chars)){
                 CLAY_AUTO_ID({StatPageActionDivider, .backgroundColor = COLOR_TRANSPARENT}) {
-                    CLAY_TEXT(StatRegionalEffect3, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                    CLAY_TEXT(gAppState->CurrentStatBlock.StatRegionalEffect3, CLAY_TEXT_CONFIG(StatPageTextConfig));
                 }
             }
-            if (0 != SDL_strcmp("0", StatEndRegionalEffect.chars) && 0 != SDL_strcmp("NULL", StatEndRegionalEffect.chars)){
+            if (0 != SDL_strcmp("0", gAppState->CurrentStatBlock.StatEndRegionalEffect.chars) && 0 != SDL_strcmp("NULL", gAppState->CurrentStatBlock.StatEndRegionalEffect.chars)){
                 CLAY_AUTO_ID({StatPageActionDivider, .backgroundColor = COLOR_TRANSPARENT}) {
-                    CLAY_TEXT(StatEndRegionalEffect, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                    CLAY_TEXT(gAppState->CurrentStatBlock.StatEndRegionalEffect, CLAY_TEXT_CONFIG(StatPageTextConfig));
                 }
             }
         };

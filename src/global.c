@@ -28,6 +28,8 @@ TextBox BuildCreatureSearch;
 TextBox BuildPlayerSearch;
 TextBox DBCreatureSearch;
 TextBox DBPlayerSearch;
+TextBox BuildListMemberQuantity[BUILD_LIST_MAX] = {0};
+TextBox BuildListMemberInitiative[BUILD_LIST_MAX] = {0};
 
 Clay_String StatId = {0};
 Clay_String StatName = {0};
@@ -194,6 +196,13 @@ void FocusAndWriteTextBox(Clay_ElementId IdToFocus, uint32_t CurrentFocus, TextB
     CLAY_TEXT(TextToModify->StringToDisplay, CLAY_TEXT_CONFIG(InputTextConfig));
 }
 
+void InitializeOneTextBox(TextBox * TextBoxToInit) {
+    SDL_memset(TextBoxToInit->TextBoxBuffer, 0, sizeof(TextBoxToInit->TextBoxBuffer));
+    TextBoxToInit->StringToDisplay.chars = TextBoxToInit->TextBoxBuffer;
+    TextBoxToInit->StringToDisplay.length = 0;
+    TextBoxToInit->StringToDisplay.isStaticallyAllocated = false;
+}
+
 void InitializeTextBoxes() {
     SDL_memset(BuildCreatureSearch.TextBoxBuffer, 0, sizeof(BuildCreatureSearch.TextBoxBuffer));
     BuildCreatureSearch.StringToDisplay.chars = BuildCreatureSearch.TextBoxBuffer;
@@ -214,6 +223,303 @@ void InitializeTextBoxes() {
     DBPlayerSearch.StringToDisplay.chars = DBPlayerSearch.TextBoxBuffer;
     DBPlayerSearch.StringToDisplay.length = 0;
     DBPlayerSearch.StringToDisplay.isStaticallyAllocated = false;
+
+    for (int i = 0; i < BUILD_LIST_MAX; i++){
+        SDL_memset(BuildListMemberQuantity[i].TextBoxBuffer, 0, sizeof(BuildListMemberQuantity[i].TextBoxBuffer));
+        BuildListMemberQuantity[i].StringToDisplay.chars = BuildListMemberQuantity[i].TextBoxBuffer;
+        BuildListMemberQuantity[i].StringToDisplay.length = 0;
+        BuildListMemberQuantity[i].StringToDisplay.isStaticallyAllocated = false;
+
+        SDL_memset(BuildListMemberInitiative[i].TextBoxBuffer, 0, sizeof(BuildListMemberInitiative[i].TextBoxBuffer));
+        BuildListMemberInitiative[i].StringToDisplay.chars = BuildListMemberInitiative[i].TextBoxBuffer;
+        BuildListMemberInitiative[i].StringToDisplay.length = 0;
+        BuildListMemberInitiative[i].StringToDisplay.isStaticallyAllocated = false;
+    }
+    
+}
+
+#include "global.h"
+
+/* Initialize every Clay_String in a StatBlock to an empty string. */
+void InitStatBlock(StatBlock *sb)
+{
+    if (!sb) return;
+
+    sb->StatId = MakeClayString("");
+    sb->StatName = MakeClayString("");
+    sb->StatCr = MakeClayString("");
+    sb->StatType = MakeClayString("");
+    sb->StatSize = MakeClayString("");
+
+    sb->StatArmorClass = MakeClayString("");
+    sb->StatHitpointsAvg = MakeClayString("");
+    sb->StatHitDice = MakeClayString("");
+    sb->StatHitpointsRoll = MakeClayString("");
+
+    sb->StatSpeedType = MakeClayString("");
+    sb->StatSpeedWalk = MakeClayString("");
+    sb->StatSpeedFly = MakeClayString("");
+    sb->StatSpeedSwim = MakeClayString("");
+    sb->StatSpeedClimb = MakeClayString("");
+    sb->StatSpeedBurrow = MakeClayString("");
+
+    sb->StatAlignment = MakeClayString("");
+    sb->StatLegendary = MakeClayString("");
+
+    sb->StatStr = MakeClayString("");
+    sb->StatDex = MakeClayString("");
+    sb->StatCon = MakeClayString("");
+    sb->StatInt = MakeClayString("");
+    sb->StatWis = MakeClayString("");
+    sb->StatCha = MakeClayString("");
+
+    sb->StatProfBonus = MakeClayString("");
+
+    sb->StatThrowStr = MakeClayString("");
+    sb->StatThrowDex = MakeClayString("");
+    sb->StatThrowCon = MakeClayString("");
+    sb->StatThrowInt = MakeClayString("");
+    sb->StatThrowWis = MakeClayString("");
+    sb->StatThrowCha = MakeClayString("");
+
+    sb->StatSavingThrows = MakeClayString("");
+
+    sb->StatSkills = MakeClayString("");
+    sb->StatLanguages = MakeClayString("");
+    sb->StatSenses = MakeClayString("");
+
+    sb->StatRangeDarkvision = MakeClayString("");
+    sb->StatRangeTremorsense = MakeClayString("");
+    sb->StatRangeBlindsight = MakeClayString("");
+    sb->StatRangeTruesight = MakeClayString("");
+
+    sb->StatSpecialAbilityOne = MakeClayString("");
+    sb->StatSpecialAbilityOneDesc = MakeClayString("");
+    sb->StatSpecialAbilityTwo = MakeClayString("");
+    sb->StatSpecialAbilityTwoDesc = MakeClayString("");
+    sb->StatSpecialAbilityThree = MakeClayString("");
+    sb->StatSpecialAbilityThreeDesc = MakeClayString("");
+    sb->StatSpecialAbilityFour = MakeClayString("");
+    sb->StatSpecialAbilityFourDesc = MakeClayString("");
+
+    sb->StatAttack1 = MakeClayString("");
+    sb->StatAttack1Desc = MakeClayString("");
+    sb->StatAttack2 = MakeClayString("");
+    sb->StatAttack2Desc = MakeClayString("");
+    sb->StatAttack3 = MakeClayString("");
+    sb->StatAttack3Desc = MakeClayString("");
+    sb->StatAttack4 = MakeClayString("");
+    sb->StatAttack4Desc = MakeClayString("");
+
+    sb->StatAttack5 = MakeClayString("");
+    sb->StatAttack5Desc = MakeClayString("");
+
+    sb->StatAttack6 = MakeClayString("");
+    sb->StatAttack6Desc = MakeClayString("");
+
+    sb->StatActionLeg = MakeClayString("");
+    sb->StatActionLeg1 = MakeClayString("");
+    sb->StatActionLeg1Desc = MakeClayString("");
+    sb->StatActionLeg2 = MakeClayString("");
+    sb->StatActionLeg2Desc = MakeClayString("");
+    sb->StatActionLeg3 = MakeClayString("");
+    sb->StatActionLeg3Desc = MakeClayString("");
+
+    sb->StatActionLair = MakeClayString("");
+    sb->StatActionLair1 = MakeClayString("");
+    sb->StatActionLair1Desc = MakeClayString("");
+    sb->StatActionLair2 = MakeClayString("");
+    sb->StatActionLair2Desc = MakeClayString("");
+    sb->StatActionLair3 = MakeClayString("");
+    sb->StatActionLair3Desc = MakeClayString("");
+
+    sb->StatRegionalEffect = MakeClayString("");
+    sb->StatRegionalEffect1 = MakeClayString("");
+    sb->StatRegionalEffect2 = MakeClayString("");
+    sb->StatRegionalEffect3 = MakeClayString("");
+    sb->StatEndRegionalEffect = MakeClayString("");
+
+    sb->StatEnvironment = MakeClayString("");
+
+    sb->StatBa1 = MakeClayString("");
+    sb->StatBa1Desc = MakeClayString("");
+    sb->StatBa2 = MakeClayString("");
+    sb->StatBa2Desc = MakeClayString("");
+    sb->StatBa3 = MakeClayString("");
+    sb->StatBa3Desc = MakeClayString("");
+    sb->StatBa4 = MakeClayString("");
+    sb->StatBa4Desc = MakeClayString("");
+
+    sb->StatReaction1 = MakeClayString("");
+    sb->StatReaction1Desc = MakeClayString("");
+    sb->StatReaction2 = MakeClayString("");
+    sb->StatReaction2Desc = MakeClayString("");
+    sb->StatReaction3 = MakeClayString("");
+    sb->StatReaction3Desc = MakeClayString("");
+
+    sb->StatVillAction = MakeClayString("");
+    sb->StatVillAction1 = MakeClayString("");
+    sb->StatVillAction1Desc = MakeClayString("");
+    sb->StatVillAction2 = MakeClayString("");
+    sb->StatVillAction2Desc = MakeClayString("");
+    sb->StatVillAction3 = MakeClayString("");
+    sb->StatVillAction3Desc = MakeClayString("");
+
+    sb->StatUtilitySpells = MakeClayString("");
+    sb->StatUtilitySpellsList = MakeClayString("");
+
+    sb->StatFeature1 = MakeClayString("");
+    sb->StatFeature1Desc = MakeClayString("");
+    sb->StatFeature2 = MakeClayString("");
+    sb->StatFeature2Desc = MakeClayString("");
+    sb->StatFeature3 = MakeClayString("");
+    sb->StatFeature3Desc = MakeClayString("");
+    sb->StatFeature4 = MakeClayString("");
+    sb->StatFeature4Desc = MakeClayString("");
+    sb->StatFeature5 = MakeClayString("");
+    sb->StatFeature5Desc = MakeClayString("");
+}
+
+#include "global.h"
+
+/* Free every Clay_String in a StatBlock using ClearClayString. */
+void FreeStatBlock(StatBlock *sb)
+{
+    if (!sb) return;
+
+    ClearClayString(&sb->StatId);
+    ClearClayString(&sb->StatName);
+    ClearClayString(&sb->StatCr);
+    ClearClayString(&sb->StatType);
+    ClearClayString(&sb->StatSize);
+
+    ClearClayString(&sb->StatArmorClass);
+    ClearClayString(&sb->StatHitpointsAvg);
+    ClearClayString(&sb->StatHitDice);
+    ClearClayString(&sb->StatHitpointsRoll);
+
+    ClearClayString(&sb->StatSpeedType);
+    ClearClayString(&sb->StatSpeedWalk);
+    ClearClayString(&sb->StatSpeedFly);
+    ClearClayString(&sb->StatSpeedSwim);
+    ClearClayString(&sb->StatSpeedClimb);
+    ClearClayString(&sb->StatSpeedBurrow);
+
+    ClearClayString(&sb->StatAlignment);
+    ClearClayString(&sb->StatLegendary);
+
+    ClearClayString(&sb->StatStr);
+    ClearClayString(&sb->StatDex);
+    ClearClayString(&sb->StatCon);
+    ClearClayString(&sb->StatInt);
+    ClearClayString(&sb->StatWis);
+    ClearClayString(&sb->StatCha);
+
+    ClearClayString(&sb->StatProfBonus);
+
+    ClearClayString(&sb->StatThrowStr);
+    ClearClayString(&sb->StatThrowDex);
+    ClearClayString(&sb->StatThrowCon);
+    ClearClayString(&sb->StatThrowInt);
+    ClearClayString(&sb->StatThrowWis);
+    ClearClayString(&sb->StatThrowCha);
+
+    ClearClayString(&sb->StatSavingThrows);
+
+    ClearClayString(&sb->StatSkills);
+    ClearClayString(&sb->StatLanguages);
+    ClearClayString(&sb->StatSenses);
+
+    ClearClayString(&sb->StatRangeDarkvision);
+    ClearClayString(&sb->StatRangeTremorsense);
+    ClearClayString(&sb->StatRangeBlindsight);
+    ClearClayString(&sb->StatRangeTruesight);
+
+    ClearClayString(&sb->StatSpecialAbilityOne);
+    ClearClayString(&sb->StatSpecialAbilityOneDesc);
+    ClearClayString(&sb->StatSpecialAbilityTwo);
+    ClearClayString(&sb->StatSpecialAbilityTwoDesc);
+    ClearClayString(&sb->StatSpecialAbilityThree);
+    ClearClayString(&sb->StatSpecialAbilityThreeDesc);
+    ClearClayString(&sb->StatSpecialAbilityFour);
+    ClearClayString(&sb->StatSpecialAbilityFourDesc);
+
+    ClearClayString(&sb->StatAttack1);
+    ClearClayString(&sb->StatAttack1Desc);
+    ClearClayString(&sb->StatAttack2);
+    ClearClayString(&sb->StatAttack2Desc);
+    ClearClayString(&sb->StatAttack3);
+    ClearClayString(&sb->StatAttack3Desc);
+    ClearClayString(&sb->StatAttack4);
+    ClearClayString(&sb->StatAttack4Desc);
+
+    ClearClayString(&sb->StatAttack5);
+    ClearClayString(&sb->StatAttack5Desc);
+
+    ClearClayString(&sb->StatAttack6);
+    ClearClayString(&sb->StatAttack6Desc);
+
+    ClearClayString(&sb->StatActionLeg);
+    ClearClayString(&sb->StatActionLeg1);
+    ClearClayString(&sb->StatActionLeg1Desc);
+    ClearClayString(&sb->StatActionLeg2);
+    ClearClayString(&sb->StatActionLeg2Desc);
+    ClearClayString(&sb->StatActionLeg3);
+    ClearClayString(&sb->StatActionLeg3Desc);
+
+    ClearClayString(&sb->StatActionLair);
+    ClearClayString(&sb->StatActionLair1);
+    ClearClayString(&sb->StatActionLair1Desc);
+    ClearClayString(&sb->StatActionLair2);
+    ClearClayString(&sb->StatActionLair2Desc);
+    ClearClayString(&sb->StatActionLair3);
+    ClearClayString(&sb->StatActionLair3Desc);
+
+    ClearClayString(&sb->StatRegionalEffect);
+    ClearClayString(&sb->StatRegionalEffect1);
+    ClearClayString(&sb->StatRegionalEffect2);
+    ClearClayString(&sb->StatRegionalEffect3);
+    ClearClayString(&sb->StatEndRegionalEffect);
+
+    ClearClayString(&sb->StatEnvironment);
+
+    ClearClayString(&sb->StatBa1);
+    ClearClayString(&sb->StatBa1Desc);
+    ClearClayString(&sb->StatBa2);
+    ClearClayString(&sb->StatBa2Desc);
+    ClearClayString(&sb->StatBa3);
+    ClearClayString(&sb->StatBa3Desc);
+    ClearClayString(&sb->StatBa4);
+    ClearClayString(&sb->StatBa4Desc);
+
+    ClearClayString(&sb->StatReaction1);
+    ClearClayString(&sb->StatReaction1Desc);
+    ClearClayString(&sb->StatReaction2);
+    ClearClayString(&sb->StatReaction2Desc);
+    ClearClayString(&sb->StatReaction3);
+    ClearClayString(&sb->StatReaction3Desc);
+
+    ClearClayString(&sb->StatVillAction);
+    ClearClayString(&sb->StatVillAction1);
+    ClearClayString(&sb->StatVillAction1Desc);
+    ClearClayString(&sb->StatVillAction2);
+    ClearClayString(&sb->StatVillAction2Desc);
+    ClearClayString(&sb->StatVillAction3);
+    ClearClayString(&sb->StatVillAction3Desc);
+
+    ClearClayString(&sb->StatUtilitySpells);
+    ClearClayString(&sb->StatUtilitySpellsList);
+
+    ClearClayString(&sb->StatFeature1);
+    ClearClayString(&sb->StatFeature1Desc);
+    ClearClayString(&sb->StatFeature2);
+    ClearClayString(&sb->StatFeature2Desc);
+    ClearClayString(&sb->StatFeature3);
+    ClearClayString(&sb->StatFeature3Desc);
+    ClearClayString(&sb->StatFeature4);
+    ClearClayString(&sb->StatFeature4Desc);
+    ClearClayString(&sb->StatFeature5);
+    ClearClayString(&sb->StatFeature5Desc);
 }
 
 /* Callbacks*/
@@ -237,6 +543,11 @@ void ReturnToMainScreenCallback(Clay_ElementId elementId, Clay_PointerData point
         for (int i = 0; i <TotalCreatures; i++) {
             HeadersToShow[i] = i;
         }
+        if (gAppState->SortedListArray) {
+        free(gAppState->SortedListArray);
+        gAppState->SortedListArray = NULL;
+        gAppState->SortedListCount = 0;
+    }
     }
 }
 

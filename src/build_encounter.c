@@ -21,7 +21,6 @@ BuildListMember BuildListMembers[BUILD_LIST_MAX] = {0};
  *  SECTION - Local variables
  *========================================================================* 
  */
-static char BuildList[BUILD_LIST_MAX][64] = {0};
 static Clay_String FinnName = {0};
 static Clay_String RaviName = {0};
 static Clay_String PaxName = {0};
@@ -126,7 +125,7 @@ void BuildEncounterWindow(AppState * state, int CallingScreen) {
                 .clip = {true, true, Clay_GetScrollOffset()}
             }) {
                 for (int i = 0; i < BUILD_LIST_MAX; i++) {
-                    if ('\0' != BuildList[i][0]) {
+                    if ('\0' != BuildListMembers->name[i][0]) {
                         BuildEncounterChain(i);
                     }
                 }
@@ -206,29 +205,30 @@ void BuildEncounterWindow(AppState * state, int CallingScreen) {
  *========================================================================* 
  */
 void BuildEncounterChain(int position) {
-    BuildListMembers[position].initiative = 0;
-    BuildListMembers[position].name = BuildList[position];
-    //BuildListMembers[position].Quantity = 1;
     CLAY_AUTO_ID({
         BuildWindowRow,
         .backgroundColor = COLOR_BUTTON_GRAY,
         .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_LG_PX)
     }){
-        CLAY(CLAY_IDI("BuildListPosition", position), {
+        CLAY(CLAY_IDI("BuildListInitiative", position), {
             BuildInitiativeQuantityLayoutConfig,
-            .backgroundColor = (gAppState->focusedId.id == CLAY_IDI("BuildListPosition", position).id) ? COLOR_BLACK : COLOR_BUTTON_GRAY,
+            .backgroundColor = (gAppState->focusedId.id == CLAY_IDI("BuildListInitiative", position).id) ? COLOR_BLACK : COLOR_BUTTON_GRAY,
             .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_SM_PX)
         }){
             Clay_OnHover(FocusWindowCallback, gAppState);
-            if (gAppState->focusedId.id == CLAY_IDI("BuildListPosition", position).id) {
-                /* Using dynamically changing char * SearchText */
-                Clay_String Initiative = MakeClayIntString(BuildListMembers[position].initiative);
-                CLAY_TEXT(Initiative, CLAY_TEXT_CONFIG(InputTextConfig));
-            }
+            uint32_t CurrentFocus = gAppState->focusedId.id;
+            FocusAndWriteTextBox(CLAY_IDI("BuildListInitiative", position), CurrentFocus, &BuildListMemberInitiative[position]);
+            BuildListMembers[position].initiative = SDL_atoi(BuildListMemberInitiative[position].TextBoxBuffer);
         }
-        CLAY(CLAY_IDI("BuildListInitiative", position), {BuildWindowDescriptionHeader}){
-            if ('\0' != BuildList[position][0]) {
-                Clay_String NameAdd = MakeClayString(BuildList[position]);
+        CLAY(CLAY_IDI("BuildListName", position), {BuildWindowDescriptionHeader}){
+            if ('\0' != BuildListMembers->name[position][0]) {
+                char NameBuffer[64] = {0};
+                SDL_strlcpy(NameBuffer, BuildListMembers->name[position], 64);
+                Clay_String NameAdd = {
+                    .chars = BuildListMembers->name[position],
+                    .length = (int32_t)SDL_strlen(BuildListMembers->name[position]),
+                    .isStaticallyAllocated = true
+                };
                 CLAY_TEXT(NameAdd, CLAY_TEXT_CONFIG(StatPageTextConfig));
             }
         }
@@ -238,19 +238,17 @@ void BuildEncounterChain(int position) {
             .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_SM_PX)
         }){
             Clay_OnHover(FocusWindowCallback, gAppState);
-            Clay_String Quantity = MakeClayIntString(BuildListMembers[position].Quantity);
-            CLAY_TEXT(Quantity, CLAY_TEXT_CONFIG(InputTextConfig));
+            uint32_t CurrentFocus = gAppState->focusedId.id;
+            FocusAndWriteTextBox(CLAY_IDI("BuildListQuantity", position), CurrentFocus, &BuildListMemberQuantity[position]);
+            BuildListMembers[position].Quantity = SDL_atoi(BuildListMemberQuantity[position].TextBoxBuffer);
         }
-    }    
-    BuildListMembers[position].initiative = 0;
-    BuildListMembers[position].name = BuildList[position];
-    //BuildListMembers[position].Quantity = 1;
+    }
 }
 
 void AddToBuildChain(const char *ParticipantToAdd, bool IsCreature) {
     for (int i = 0; i < BUILD_LIST_MAX; i++) {
-        if ('\0' == BuildList[i][0]) {
-            SDL_strlcpy(BuildList[i], ParticipantToAdd, 64);
+        if ('\0' == BuildListMembers->name[i][0]) {
+            SDL_strlcpy(BuildListMembers->name[i], ParticipantToAdd, 64);
             BuildListMembers[i].Quantity = 1;
             if (IsCreature) {
                 BuildListMembers[i].IsCreature = true;
@@ -260,7 +258,7 @@ void AddToBuildChain(const char *ParticipantToAdd, bool IsCreature) {
             }
             break;
         }
-        else if (SDL_strncasecmp(BuildList[i], ParticipantToAdd, SDL_strlen(ParticipantToAdd)) == 0) {
+        else if (SDL_strncasecmp(BuildListMembers->name[i], ParticipantToAdd, SDL_strlen(ParticipantToAdd)) == 0) {
             BuildListMembers[i].Quantity += 1;
             if (IsCreature) {
                 BuildListMembers[i].IsCreature = true;

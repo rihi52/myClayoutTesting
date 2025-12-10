@@ -289,6 +289,42 @@ Clay_LayoutConfig TTBBuildListBottom = {
     .layoutDirection = CLAY_LEFT_TO_RIGHT
 };
 
+/*========================================================================* 
+ *  SECTION - Running combat window styles
+ *========================================================================* 
+ */
+Clay_LayoutConfig TTBCombatWindow = {
+    .sizing = { CLAY_SIZING_PERCENT(0.5), CLAY_SIZING_GROW(0) },
+    .padding = { 8, 8, 8, 8},
+    .childGap = 8,
+    .childAlignment =  { CLAY_ALIGN_X_CENTER, CLAY_ALIGN_Y_TOP },
+    .layoutDirection = CLAY_TOP_TO_BOTTOM
+};
+
+Clay_LayoutConfig CombatWindowInitiativeContainer = {
+    .sizing = { CLAY_SIZING_PERCENT(0.2), CLAY_SIZING_GROW(0) },
+    .padding = { 8, 8, 8, 8},
+    .childGap = 8,
+    .childAlignment =  { CLAY_ALIGN_X_LEFT, CLAY_ALIGN_Y_CENTER },
+    .layoutDirection = CLAY_LEFT_TO_RIGHT
+};
+
+Clay_LayoutConfig CombatWindowArmorClassContainer = {
+    .sizing = { CLAY_SIZING_PERCENT(0.2), CLAY_SIZING_GROW(0) },
+    .padding = { 8, 8, 8, 8},
+    .childGap = 8,
+    .childAlignment =  { CLAY_ALIGN_X_RIGHT, CLAY_ALIGN_Y_CENTER },
+    .layoutDirection = CLAY_LEFT_TO_RIGHT
+};
+
+Clay_LayoutConfig CombatWindowNameContainer = {
+    .sizing = { CLAY_SIZING_PERCENT(0.4), CLAY_SIZING_GROW(0) },
+    .padding = { 8, 8, 8, 8},
+    .childGap = 8,
+    .childAlignment =  { CLAY_ALIGN_X_LEFT, CLAY_ALIGN_Y_CENTER },
+    .layoutDirection = CLAY_LEFT_TO_RIGHT
+};
+
 
 /*========================================================================* 
  *  SECTION - Text configurations

@@ -15,5 +15,6 @@
  *========================================================================* 
  */
 void CreatureDatabaseWindow(AppState * state);
+void MakeCreatureHeader(int i, int CallingWindow);
 
 #endif /* CREATURE_DB_H */

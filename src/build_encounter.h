@@ -8,7 +8,7 @@
  *  SECTION - Defines
  *========================================================================* 
  */
-#define BUILD_LIST_MAX  50
+
 
 /*========================================================================* 
  *  SECTION - Global structs
@@ -16,7 +16,7 @@
  */
 typedef struct BuildListMember {
     int initiative;
-    char *name;
+    char name[BUILD_LIST_MAX][64];
     int Quantity;
     bool IsCreature;
 }BuildListMember;
@@ -27,9 +27,9 @@ typedef struct BuildListMember {
  */
 extern BuildListMember BuildListMembers[BUILD_LIST_MAX];
 
-/*========================================================================* 
+/*========================================================================*
  *  SECTION - Global prototypes
- *========================================================================* 
+ *========================================================================*
  */
 void BuildEncounterWindow(AppState * state, int CallingScreen);
 void PlayerBuildListCallback(Clay_ElementId elementId, Clay_PointerData pointerData, void *userData);

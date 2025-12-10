@@ -108,139 +108,134 @@ int LoadCreatureHeaderAlphabetical(int MonsterId) {
 void LookUpCreatureStats(int MonsterId) {
 
     // Clear all Clay_Strings before writing new data
-    ClearClayString(&StatId);
-    ClearClayString(&StatName);
-    ClearClayString(&StatCr);
-    ClearClayString(&StatType);
-    ClearClayString(&StatSize);
+    ClearClayString(&gAppState->CurrentStatBlock.StatId);
+    ClearClayString(&gAppState->CurrentStatBlock.StatName);
+    ClearClayString(&gAppState->CurrentStatBlock.StatCr);
+    ClearClayString(&gAppState->CurrentStatBlock.StatType);
+    ClearClayString(&gAppState->CurrentStatBlock.StatSize);
+    ClearClayString(&gAppState->CurrentStatBlock.StatArmorClass);
+    ClearClayString(&gAppState->CurrentStatBlock.StatHitpointsAvg);
+    ClearClayString(&gAppState->CurrentStatBlock.StatHitDice);
+    ClearClayString(&gAppState->CurrentStatBlock.StatHitpointsRoll);
 
-    ClearClayString(&StatArmorClass);
-    ClearClayString(&StatHitpointsAvg);
-    ClearClayString(&StatHitDice);
-    ClearClayString(&StatHitpointsRoll);
+    ClearClayString(&gAppState->CurrentStatBlock.StatSpeedType);
+    ClearClayString(&gAppState->CurrentStatBlock.StatSpeedWalk);
+    ClearClayString(&gAppState->CurrentStatBlock.StatSpeedFly);
+    ClearClayString(&gAppState->CurrentStatBlock.StatSpeedSwim);
+    ClearClayString(&gAppState->CurrentStatBlock.StatSpeedClimb);
+    ClearClayString(&gAppState->CurrentStatBlock.StatSpeedBurrow);
 
-    ClearClayString(&StatSpeedType);
-    ClearClayString(&StatSpeedWalk);
-    ClearClayString(&StatSpeedFly);
-    ClearClayString(&StatSpeedSwim);
-    ClearClayString(&StatSpeedClimb);
-    ClearClayString(&StatSpeedBurrow);
+    ClearClayString(&gAppState->CurrentStatBlock.StatAlignment);
+    ClearClayString(&gAppState->CurrentStatBlock.StatLegendary);
 
-    ClearClayString(&StatAlignment);
-    ClearClayString(&StatLegendary);
+    ClearClayString(&gAppState->CurrentStatBlock.StatStr);
+    ClearClayString(&gAppState->CurrentStatBlock.StatDex);
+    ClearClayString(&gAppState->CurrentStatBlock.StatCon);
+    ClearClayString(&gAppState->CurrentStatBlock.StatInt);
+    ClearClayString(&gAppState->CurrentStatBlock.StatWis);
+    ClearClayString(&gAppState->CurrentStatBlock.StatCha);
 
-    ClearClayString(&StatStr);
-    ClearClayString(&StatDex);
-    ClearClayString(&StatCon);
-    ClearClayString(&StatInt);
-    ClearClayString(&StatWis);
-    ClearClayString(&StatCha);
+    ClearClayString(&gAppState->CurrentStatBlock.StatProfBonus);
 
-    ClearClayString(&StatProfBonus);
+    ClearClayString(&gAppState->CurrentStatBlock.StatThrowStr);
+    ClearClayString(&gAppState->CurrentStatBlock.StatThrowDex);
+    ClearClayString(&gAppState->CurrentStatBlock.StatThrowCon);
+    ClearClayString(&gAppState->CurrentStatBlock.StatThrowInt);
+    ClearClayString(&gAppState->CurrentStatBlock.StatThrowWis);
+    ClearClayString(&gAppState->CurrentStatBlock.StatThrowCha);
+    ClearClayString(&gAppState->CurrentStatBlock.StatSavingThrows);
 
-    ClearClayString(&StatThrowStr);
-    ClearClayString(&StatThrowDex);
-    ClearClayString(&StatThrowCon);
-    ClearClayString(&StatThrowInt);
-    ClearClayString(&StatThrowWis);
-    ClearClayString(&StatThrowCha);
+    ClearClayString(&gAppState->CurrentStatBlock.StatSkills);
+    ClearClayString(&gAppState->CurrentStatBlock.StatLanguages);
+    ClearClayString(&gAppState->CurrentStatBlock.StatSenses);
 
-    ClearClayString(&StatSavingThrows);
+    ClearClayString(&gAppState->CurrentStatBlock.StatRangeDarkvision);
+    ClearClayString(&gAppState->CurrentStatBlock.StatRangeTremorsense);
+    ClearClayString(&gAppState->CurrentStatBlock.StatRangeBlindsight);
+    ClearClayString(&gAppState->CurrentStatBlock.StatRangeTruesight);
 
-    ClearClayString(&StatSkills);
-    ClearClayString(&StatLanguages);
-    ClearClayString(&StatSenses);
+    ClearClayString(&gAppState->CurrentStatBlock.StatSpecialAbilityOne);
+    ClearClayString(&gAppState->CurrentStatBlock.StatSpecialAbilityOneDesc);
+    ClearClayString(&gAppState->CurrentStatBlock.StatSpecialAbilityTwo);
+    ClearClayString(&gAppState->CurrentStatBlock.StatSpecialAbilityTwoDesc);
+    ClearClayString(&gAppState->CurrentStatBlock.StatSpecialAbilityThree);
+    ClearClayString(&gAppState->CurrentStatBlock.StatSpecialAbilityThreeDesc);
+    ClearClayString(&gAppState->CurrentStatBlock.StatSpecialAbilityFour);
+    ClearClayString(&gAppState->CurrentStatBlock.StatSpecialAbilityFourDesc);
+    ClearClayString(&gAppState->CurrentStatBlock.StatAttack1);
+    ClearClayString(&gAppState->CurrentStatBlock.StatAttack1Desc);
+    ClearClayString(&gAppState->CurrentStatBlock.StatAttack2);
+    ClearClayString(&gAppState->CurrentStatBlock.StatAttack2Desc);
+    ClearClayString(&gAppState->CurrentStatBlock.StatAttack3);
+    ClearClayString(&gAppState->CurrentStatBlock.StatAttack3Desc);
+    ClearClayString(&gAppState->CurrentStatBlock.StatAttack4);
+    ClearClayString(&gAppState->CurrentStatBlock.StatAttack4Desc);
 
-    ClearClayString(&StatRangeDarkvision);
-    ClearClayString(&StatRangeTremorsense);
-    ClearClayString(&StatRangeBlindsight);
-    ClearClayString(&StatRangeTruesight);
+    ClearClayString(&gAppState->CurrentStatBlock.StatAttack5);
+    ClearClayString(&gAppState->CurrentStatBlock.StatAttack5Desc);
 
-    ClearClayString(&StatSpecialAbilityOne);
-    ClearClayString(&StatSpecialAbilityOneDesc);
-    ClearClayString(&StatSpecialAbilityTwo);
-    ClearClayString(&StatSpecialAbilityTwoDesc);
-    ClearClayString(&StatSpecialAbilityThree);
-    ClearClayString(&StatSpecialAbilityThreeDesc);
-    ClearClayString(&StatSpecialAbilityFour);
-    ClearClayString(&StatSpecialAbilityFourDesc);
+    ClearClayString(&gAppState->CurrentStatBlock.StatAttack6);
+    ClearClayString(&gAppState->CurrentStatBlock.StatAttack6Desc);
+    ClearClayString(&gAppState->CurrentStatBlock.StatActionLeg);
+    ClearClayString(&gAppState->CurrentStatBlock.StatActionLeg1);
+    ClearClayString(&gAppState->CurrentStatBlock.StatActionLeg1Desc);
+    ClearClayString(&gAppState->CurrentStatBlock.StatActionLeg2);
+    ClearClayString(&gAppState->CurrentStatBlock.StatActionLeg2Desc);
+    ClearClayString(&gAppState->CurrentStatBlock.StatActionLeg3);
+    ClearClayString(&gAppState->CurrentStatBlock.StatActionLeg3Desc);
 
-    ClearClayString(&StatAttack1);
-    ClearClayString(&StatAttack1Desc);
-    ClearClayString(&StatAttack2);
-    ClearClayString(&StatAttack2Desc);
-    ClearClayString(&StatAttack3);
-    ClearClayString(&StatAttack3Desc);
-    ClearClayString(&StatAttack4);
-    ClearClayString(&StatAttack4Desc);
+    ClearClayString(&gAppState->CurrentStatBlock.StatActionLair);
+    ClearClayString(&gAppState->CurrentStatBlock.StatActionLair1);
+    ClearClayString(&gAppState->CurrentStatBlock.StatActionLair1Desc);
+    ClearClayString(&gAppState->CurrentStatBlock.StatActionLair2);
+    ClearClayString(&gAppState->CurrentStatBlock.StatActionLair2Desc);
+    ClearClayString(&gAppState->CurrentStatBlock.StatActionLair3);
+    ClearClayString(&gAppState->CurrentStatBlock.StatActionLair3Desc);
 
-    ClearClayString(&StatAttack5);
-    ClearClayString(&StatAttack5Desc);
+    ClearClayString(&gAppState->CurrentStatBlock.StatRegionalEffect);
+    ClearClayString(&gAppState->CurrentStatBlock.StatRegionalEffect1);
+    ClearClayString(&gAppState->CurrentStatBlock.StatRegionalEffect2);
+    ClearClayString(&gAppState->CurrentStatBlock.StatRegionalEffect3);
+    ClearClayString(&gAppState->CurrentStatBlock.StatEndRegionalEffect);
 
-    ClearClayString(&StatAttack6);
-    ClearClayString(&StatAttack6Desc);
+    ClearClayString(&gAppState->CurrentStatBlock.StatEnvironment);
 
-    ClearClayString(&StatActionLeg);
-    ClearClayString(&StatActionLeg1);
-    ClearClayString(&StatActionLeg1Desc);
-    ClearClayString(&StatActionLeg2);
-    ClearClayString(&StatActionLeg2Desc);
-    ClearClayString(&StatActionLeg3);
-    ClearClayString(&StatActionLeg3Desc);
+    ClearClayString(&gAppState->CurrentStatBlock.StatBa1);
+    ClearClayString(&gAppState->CurrentStatBlock.StatBa1Desc);
+    ClearClayString(&gAppState->CurrentStatBlock.StatBa2);
+    ClearClayString(&gAppState->CurrentStatBlock.StatBa2Desc);
+    ClearClayString(&gAppState->CurrentStatBlock.StatBa3);
+    ClearClayString(&gAppState->CurrentStatBlock.StatBa3Desc);
+    ClearClayString(&gAppState->CurrentStatBlock.StatBa4);
+    ClearClayString(&gAppState->CurrentStatBlock.StatBa4Desc);
 
-    ClearClayString(&StatActionLair);
-    ClearClayString(&StatActionLair1);
-    ClearClayString(&StatActionLair1Desc);
-    ClearClayString(&StatActionLair2);
-    ClearClayString(&StatActionLair2Desc);
-    ClearClayString(&StatActionLair3);
-    ClearClayString(&StatActionLair3Desc);
+    ClearClayString(&gAppState->CurrentStatBlock.StatReaction1);
+    ClearClayString(&gAppState->CurrentStatBlock.StatReaction1Desc);
+    ClearClayString(&gAppState->CurrentStatBlock.StatReaction2);
+    ClearClayString(&gAppState->CurrentStatBlock.StatReaction2Desc);
+    ClearClayString(&gAppState->CurrentStatBlock.StatReaction3);
+    ClearClayString(&gAppState->CurrentStatBlock.StatReaction3Desc);
+    ClearClayString(&gAppState->CurrentStatBlock.StatVillAction);
+    ClearClayString(&gAppState->CurrentStatBlock.StatVillAction1);
+    ClearClayString(&gAppState->CurrentStatBlock.StatVillAction1Desc);
+    ClearClayString(&gAppState->CurrentStatBlock.StatVillAction2);
+    ClearClayString(&gAppState->CurrentStatBlock.StatVillAction2Desc);
+    ClearClayString(&gAppState->CurrentStatBlock.StatVillAction3);
+    ClearClayString(&gAppState->CurrentStatBlock.StatVillAction3Desc);
 
-    ClearClayString(&StatRegionalEffect);
-    ClearClayString(&StatRegionalEffect1);
-    ClearClayString(&StatRegionalEffect2);
-    ClearClayString(&StatRegionalEffect3);
-    ClearClayString(&StatEndRegionalEffect);
+    ClearClayString(&gAppState->CurrentStatBlock.StatUtilitySpells);
+    ClearClayString(&gAppState->CurrentStatBlock.StatUtilitySpellsList);
 
-    ClearClayString(&StatEnvironment);
-
-    ClearClayString(&StatBa1);
-    ClearClayString(&StatBa1Desc);
-    ClearClayString(&StatBa2);
-    ClearClayString(&StatBa2Desc);
-    ClearClayString(&StatBa3);
-    ClearClayString(&StatBa3Desc);
-    ClearClayString(&StatBa4);
-    ClearClayString(&StatBa4Desc);
-
-    ClearClayString(&StatReaction1);
-    ClearClayString(&StatReaction1Desc);
-    ClearClayString(&StatReaction2);
-    ClearClayString(&StatReaction2Desc);
-    ClearClayString(&StatReaction3);
-    ClearClayString(&StatReaction3Desc);
-
-    ClearClayString(&StatVillAction);
-    ClearClayString(&StatVillAction1);
-    ClearClayString(&StatVillAction1Desc);
-    ClearClayString(&StatVillAction2);
-    ClearClayString(&StatVillAction2Desc);
-    ClearClayString(&StatVillAction3);
-    ClearClayString(&StatVillAction3Desc);
-
-    ClearClayString(&StatUtilitySpells);
-    ClearClayString(&StatUtilitySpellsList);
-
-    ClearClayString(&StatFeature1);
-    ClearClayString(&StatFeature1Desc);
-    ClearClayString(&StatFeature2);
-    ClearClayString(&StatFeature2Desc);
-    ClearClayString(&StatFeature3);
-    ClearClayString(&StatFeature3Desc);
-    ClearClayString(&StatFeature4);
-    ClearClayString(&StatFeature4Desc);
-    ClearClayString(&StatFeature5);
-    ClearClayString(&StatFeature5Desc);
+    ClearClayString(&gAppState->CurrentStatBlock.StatFeature1);
+    ClearClayString(&gAppState->CurrentStatBlock.StatFeature1Desc);
+    ClearClayString(&gAppState->CurrentStatBlock.StatFeature2);
+    ClearClayString(&gAppState->CurrentStatBlock.StatFeature2Desc);
+    ClearClayString(&gAppState->CurrentStatBlock.StatFeature3);
+    ClearClayString(&gAppState->CurrentStatBlock.StatFeature3Desc);
+    ClearClayString(&gAppState->CurrentStatBlock.StatFeature4);
+    ClearClayString(&gAppState->CurrentStatBlock.StatFeature4Desc);
+    ClearClayString(&gAppState->CurrentStatBlock.StatFeature5);
+    ClearClayString(&gAppState->CurrentStatBlock.StatFeature5Desc);
     
     sqlite3_stmt *stmt = NULL;
     const char *sql = "SELECT * FROM monsters WHERE id = ?";
@@ -259,35 +254,34 @@ void LookUpCreatureStats(int MonsterId) {
     {
         int col = 0;
 
-        StatId                = MakeClayIntString(sqlite3_column_int(stmt, col++));
-        StatName              = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
-        StatCr                = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
-        StatType              = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
-        StatSize              = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatId                = MakeClayIntString(sqlite3_column_int(stmt, col++));
+        gAppState->CurrentStatBlock.StatName              = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatCr                = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatType              = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatSize              = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatArmorClass        = MakeClayIntString(sqlite3_column_int(stmt, col++));
+        gAppState->CurrentStatBlock.StatHitpointsAvg      = MakeClayIntString(sqlite3_column_int(stmt, col++));
+        gAppState->CurrentStatBlock.StatHitDice           = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatHitpointsRoll     = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
 
-        StatArmorClass        = MakeClayIntString(sqlite3_column_int(stmt, col++));
-        StatHitpointsAvg      = MakeClayIntString(sqlite3_column_int(stmt, col++));
-        StatHitDice           = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
-        StatHitpointsRoll     = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatSpeedType         = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatSpeedWalk         = MakeClayIntString(sqlite3_column_int(stmt, col++));
+        gAppState->CurrentStatBlock.StatSpeedFly          = MakeClayIntString(sqlite3_column_int(stmt, col++));
+        gAppState->CurrentStatBlock.StatSpeedSwim         = MakeClayIntString(sqlite3_column_int(stmt, col++));
+        gAppState->CurrentStatBlock.StatSpeedClimb        = MakeClayIntString(sqlite3_column_int(stmt, col++));
+        gAppState->CurrentStatBlock.StatSpeedBurrow       = MakeClayIntString(sqlite3_column_int(stmt, col++));
 
-        StatSpeedType         = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
-        StatSpeedWalk         = MakeClayIntString(sqlite3_column_int(stmt, col++));
-        StatSpeedFly          = MakeClayIntString(sqlite3_column_int(stmt, col++));
-        StatSpeedSwim         = MakeClayIntString(sqlite3_column_int(stmt, col++));
-        StatSpeedClimb        = MakeClayIntString(sqlite3_column_int(stmt, col++));
-        StatSpeedBurrow       = MakeClayIntString(sqlite3_column_int(stmt, col++));
+        gAppState->CurrentStatBlock.StatAlignment         = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatLegendary         = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
 
-        StatAlignment         = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
-        StatLegendary         = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatStr               = MakeClayIntString(sqlite3_column_int(stmt, col++));
+        gAppState->CurrentStatBlock.StatDex               = MakeClayIntString(sqlite3_column_int(stmt, col++));
+        gAppState->CurrentStatBlock.StatCon               = MakeClayIntString(sqlite3_column_int(stmt, col++));
+        gAppState->CurrentStatBlock.StatInt               = MakeClayIntString(sqlite3_column_int(stmt, col++));
+        gAppState->CurrentStatBlock.StatWis               = MakeClayIntString(sqlite3_column_int(stmt, col++));
+        gAppState->CurrentStatBlock.StatCha               = MakeClayIntString(sqlite3_column_int(stmt, col++));
 
-        StatStr               = MakeClayIntString(sqlite3_column_int(stmt, col++));
-        StatDex               = MakeClayIntString(sqlite3_column_int(stmt, col++));
-        StatCon               = MakeClayIntString(sqlite3_column_int(stmt, col++));
-        StatInt               = MakeClayIntString(sqlite3_column_int(stmt, col++));
-        StatWis               = MakeClayIntString(sqlite3_column_int(stmt, col++));
-        StatCha               = MakeClayIntString(sqlite3_column_int(stmt, col++));
-
-        StatProfBonus         = MakeClayIntString(sqlite3_column_int(stmt, col++));
+        gAppState->CurrentStatBlock.StatProfBonus         = MakeClayIntString(sqlite3_column_int(stmt, col++));
 
         int throwStr = sqlite3_column_int(stmt, col++);
         int throwDex = sqlite3_column_int(stmt, col++);
@@ -324,102 +318,98 @@ void LookUpCreatureStats(int MonsterId) {
         }
 
         // Convert to Clay_String
-        StatSavingThrows = MakeClayString(finalBuffer);
+        gAppState->CurrentStatBlock.StatSavingThrows = MakeClayString(finalBuffer);
 
 
-        StatSkills            = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
-        StatLanguages         = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
-        StatSenses            = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatSkills            = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatLanguages         = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatSenses            = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
 
-        StatRangeDarkvision   = MakeClayIntString(sqlite3_column_int(stmt, col++));
-        StatRangeTremorsense  = MakeClayIntString(sqlite3_column_int(stmt, col++));
-        StatRangeBlindsight   = MakeClayIntString(sqlite3_column_int(stmt, col++));
-        StatRangeTruesight    = MakeClayIntString(sqlite3_column_int(stmt, col++));
+        gAppState->CurrentStatBlock.StatRangeDarkvision   = MakeClayIntString(sqlite3_column_int(stmt, col++));
+        gAppState->CurrentStatBlock.StatRangeTremorsense  = MakeClayIntString(sqlite3_column_int(stmt, col++));
+        gAppState->CurrentStatBlock.StatRangeBlindsight   = MakeClayIntString(sqlite3_column_int(stmt, col++));
+        gAppState->CurrentStatBlock.StatRangeTruesight    = MakeClayIntString(sqlite3_column_int(stmt, col++));
 
-        StatSpecialAbilityOne       = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
-        StatSpecialAbilityOneDesc  = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
-        StatSpecialAbilityTwo       = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
-        StatSpecialAbilityTwoDesc  = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
-        StatSpecialAbilityThree     = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
-        StatSpecialAbilityThreeDesc= MakeClayString((const char*)sqlite3_column_text(stmt, col++));
-        StatSpecialAbilityFour      = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
-        StatSpecialAbilityFourDesc = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatSpecialAbilityOne       = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatSpecialAbilityOneDesc  = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatSpecialAbilityTwo       = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatSpecialAbilityTwoDesc  = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatSpecialAbilityThree     = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatSpecialAbilityThreeDesc= MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatSpecialAbilityFour      = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatSpecialAbilityFourDesc = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatAttack1          = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatAttack1Desc      = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatAttack2          = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatAttack2Desc      = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatAttack3          = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatAttack3Desc      = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatAttack4          = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatAttack4Desc      = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
 
-        StatAttack1          = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
-        StatAttack1Desc      = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
-        StatAttack2          = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
-        StatAttack2Desc      = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
-        StatAttack3          = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
-        StatAttack3Desc      = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
-        StatAttack4          = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
-        StatAttack4Desc      = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatAttack5          = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatAttack5Desc      = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatAttack6          = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatAttack6Desc      = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
 
-        StatAttack5          = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
-        StatAttack5Desc      = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
-        StatAttack6          = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
-        StatAttack6Desc      = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatActionLeg        = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatActionLeg1       = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatActionLeg1Desc   = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatActionLeg2       = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatActionLeg2Desc   = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatActionLeg3       = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatActionLeg3Desc   = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatActionLair       = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatActionLair1      = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatActionLair1Desc  = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatActionLair2      = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatActionLair2Desc  = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatActionLair3      = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatActionLair3Desc  = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
 
-        StatActionLeg        = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
-        StatActionLeg1       = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
-        StatActionLeg1Desc   = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
-        StatActionLeg2       = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
-        StatActionLeg2Desc   = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
-        StatActionLeg3       = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
-        StatActionLeg3Desc   = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatRegionalEffect    = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatRegionalEffect1   = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatRegionalEffect2   = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatRegionalEffect3   = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatEndRegionalEffect = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
 
-        StatActionLair       = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
-        StatActionLair1      = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
-        StatActionLair1Desc  = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
-        StatActionLair2      = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
-        StatActionLair2Desc  = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
-        StatActionLair3      = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
-        StatActionLair3Desc  = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatEnvironment       = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
 
-        StatRegionalEffect    = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
-        StatRegionalEffect1   = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
-        StatRegionalEffect2   = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
-        StatRegionalEffect3   = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
-        StatEndRegionalEffect = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatBa1               = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatBa1Desc           = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatBa2               = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatBa2Desc           = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatBa3               = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatBa3Desc           = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatBa4               = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatBa4Desc           = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
 
-        StatEnvironment       = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatReaction1         = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatReaction1Desc     = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatReaction2         = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatReaction2Desc     = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatReaction3         = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatReaction3Desc     = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatVillAction        = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatVillAction1       = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatVillAction1Desc   = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatVillAction2       = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatVillAction2Desc   = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatVillAction3       = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatVillAction3Desc   = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
 
-        StatBa1               = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
-        StatBa1Desc           = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
-        StatBa2               = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
-        StatBa2Desc           = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
-        StatBa3               = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
-        StatBa3Desc           = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
-        StatBa4               = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
-        StatBa4Desc           = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
-
-        StatReaction1         = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
-        StatReaction1Desc     = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
-        StatReaction2         = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
-        StatReaction2Desc     = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
-        StatReaction3         = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
-        StatReaction3Desc     = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
-
-        StatVillAction        = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
-        StatVillAction1       = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
-        StatVillAction1Desc   = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
-        StatVillAction2       = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
-        StatVillAction2Desc   = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
-        StatVillAction3       = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
-        StatVillAction3Desc   = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
-
-        StatUtilitySpells      = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
-        StatUtilitySpellsList  = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
-
-        StatFeature1           = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
-        StatFeature1Desc       = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
-        StatFeature2           = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
-        StatFeature2Desc       = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
-        StatFeature3           = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
-        StatFeature3Desc       = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
-        StatFeature4           = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
-        StatFeature4Desc       = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
-        StatFeature5           = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
-        StatFeature5Desc       = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatUtilitySpells      = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatUtilitySpellsList  = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatFeature1           = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatFeature1Desc       = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatFeature2           = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatFeature2Desc       = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatFeature3           = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatFeature3Desc       = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatFeature4           = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatFeature4Desc       = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatFeature5           = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+        gAppState->CurrentStatBlock.StatFeature5Desc       = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
         
     }
     else if (rc != SQLITE_DONE)
@@ -428,6 +418,43 @@ void LookUpCreatureStats(int MonsterId) {
     }
 
     sqlite3_finalize(stmt);
+}
+
+DisplayListMember * LookupCreatureForCombat(const char * CreatureName, int Initiative) {
+    DisplayListMember * Member = SDL_malloc(sizeof(DisplayListMember));
+    Member->Name = MakeClayString(CreatureName);
+    Member->Initiative = Initiative;
+    Member->IsCreature = true;
+    Member->Next = NULL;
+
+    sqlite3_stmt *stmt = NULL;
+    const char *sql = "SELECT armor_class, hitpoints_avg FROM monsters WHERE name = ?";
+
+    int rc = sqlite3_prepare_v2(pGuidnbatterDB, sql, -1, &stmt, NULL);
+    if (rc != SQLITE_OK)
+    {
+        SDL_Log("Failed to prepare statement: %s", sqlite3_errmsg(pGuidnbatterDB));
+        return NULL;
+    }
+
+    sqlite3_bind_text(stmt, 1, CreatureName, -1, SQLITE_STATIC);
+
+    rc = sqlite3_step(stmt);
+    if (rc == SQLITE_ROW)
+    {
+        int col = 0;
+
+        Member->ArmorClass  = sqlite3_column_int(stmt, col++);
+        Member->HitPoints   = sqlite3_column_int(stmt, col++);
+        
+    }
+    else if (rc != SQLITE_DONE)
+    {
+        SDL_Log("Failed to execute statement: %s", sqlite3_errmsg(pGuidnbatterDB));
+    }
+
+    return Member;
+
 }
 
 static const char * BoundedStrStr(const char * haystack, const char * needle, size_t haystackLen, size_t NeedleLen) {

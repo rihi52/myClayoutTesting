@@ -86,6 +86,9 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
     gAppState->StringToModify.chars = TextBuffer;
     gAppState->StringToModify.length = 0;
 
+    gAppState->CurrentStatBlock = (StatBlock){0};
+    InitStatBlock(&gAppState->CurrentStatBlock);
+
     if (!SDL_CreateWindowAndRenderer("GUIDNBATTER", 1280, 720, SDL_WINDOW_RESIZABLE, &gAppState->window, &gAppState->rendererData.renderer)) {
         SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Failed to create window and renderer: %s", SDL_GetError());
         return SDL_APP_FAILURE;
@@ -241,6 +244,7 @@ void SDL_AppQuit(void *appstate, SDL_AppResult result)
             free((void *)DBPageHeaders[i].CreatureName.chars);
         }
     }
+    FreeStatBlock(&gAppState->CurrentStatBlock);
 
     SDL_StopTextInput(gAppState->window);
 
