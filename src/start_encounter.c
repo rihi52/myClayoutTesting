@@ -7,6 +7,7 @@
 #include "main_window.h"
 #include "start_encounter.h"
 #include "build_encounter.h"
+#include "creature_db.h"
 
 /*========================================================================* 
  *  SECTION - Local defines
@@ -68,6 +69,10 @@ void StartEncounterWindow() {
             NewEncounterScreen();
             break;
 
+        case START_NEW_WITH_STATS_SCREEN:
+            NewEncounterScreen();
+            break;
+
         case SELECT_EXISTING_SCREEN:
             SelectExistingScreen();
             break;
@@ -111,7 +116,8 @@ void NewEncounterScreen() {
         Tail = NULL;
         for (int i = 0; i < BUILD_LIST_MAX; i++) {
         if ('\0' != BuildListMembers->name[i][0]) {
-            NewMember = LookupCreatureForCombat(BuildListMembers->name[i], BuildListMembers[i].initiative);
+            for (int j = 0; j < BuildListMembers[i].Quantity; j++) {
+                NewMember = LookupCreatureForCombat(BuildListMembers->name[i], BuildListMembers[i].initiative);
             
             if (NewMember == NULL)
             {
@@ -130,8 +136,9 @@ void NewEncounterScreen() {
 
             Tail = NewMember;
 
-            //NewMember = NewMember->Next;
             Tail->Next = NULL;
+
+            }            
         }
 
         }
@@ -161,12 +168,35 @@ void NewEncounterScreen() {
             .backgroundColor = COLOR_GRAY_BG,
             .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_LG_PX)
         }) {
-            for (int i = 0; i < gAppState->SortedListCount; i++) {
-                if (gAppState->SortedListArray[i] != NULL) {
-                    FillCombatScreen(i);
+            CLAY(CLAY_ID("CombatSection"), {
+                CombatWindowCombatSection,
+                .backgroundColor = COLOR_GRAY_BG,
+                .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_LG_PX)
+            }) {
+                for (int i = 0; i < gAppState->SortedListCount; i++) {
+                    if (gAppState->SortedListArray[i] != NULL) {
+                        FillCombatScreen(i);
+                    }
                 }
             }
+            CLAY(CLAY_ID("ButtonSection"), {
+                CombatWindowButtonSection,
+                .backgroundColor = COLOR_GRAY_BG,
+                .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_LG_PX)
+            }) {
+                CLAY(CLAY_ID("ExitEncounterButton"), {MainScreenButtonLayoutConfig, .backgroundColor = COLOR_BUTTON_GRAY, .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_LG_PX)}) {
+                    Clay_OnHover(ReturnToMainScreenCallback, gAppState);
+                    CLAY_TEXT(CLAY_STRING("Exit Encounter"), CLAY_TEXT_CONFIG(ButtonTextConfig));
+                };
+            }            
         };
+        CLAY(CLAY_ID("CreatureHeaderContainer"), {  
+            LTRParentWindowLayoutConfig,
+            .backgroundColor = COLOR_TRANSPARENT,
+            .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_LG_PX),
+        }) {
+            FillStats();
+        }
     };
 }
 
@@ -187,12 +217,12 @@ void SelectExistingScreen() {
 void FillCombatScreen(int position) {
     CLAY(CLAY_IDI("CombatantRow", position), {
         BuildWindowRow,
-        .backgroundColor = COLOR_BUTTON_GRAY,
+        .backgroundColor = (gAppState->focusedId.id == CLAY_IDI("CombatantRow", position).id) ? COLOR_GRAY_SELECT : COLOR_BUTTON_GRAY,
         .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_LG_PX)
     }) {
         CLAY(CLAY_IDI("CombatantInitiative", position), {
             CombatWindowInitiativeContainer,
-            .backgroundColor = COLOR_BUTTON_GRAY,
+            .backgroundColor = (gAppState->focusedId.id == CLAY_IDI("CombatantRow", position).id) ? COLOR_GRAY_SELECT : COLOR_BUTTON_GRAY,
             .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_SM_PX)
         }){
             SDL_itoa(gAppState->SortedListArray[position]->Initiative, gAppState->SortedListArray[position]->InitiativeBuffer, 10);
@@ -205,7 +235,7 @@ void FillCombatScreen(int position) {
         }
         CLAY(CLAY_IDI("CombatantName", position), {
             CombatWindowNameContainer,
-            .backgroundColor = COLOR_BUTTON_GRAY,
+            .backgroundColor = (gAppState->focusedId.id == CLAY_IDI("CombatantRow", position).id) ? COLOR_GRAY_SELECT : COLOR_BUTTON_GRAY,
             .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_SM_PX)
         }){
             CLAY_TEXT(gAppState->SortedListArray[position]->Name, CLAY_TEXT_CONFIG(StatPageTextConfig));
@@ -213,7 +243,7 @@ void FillCombatScreen(int position) {
             if (gAppState->SortedListArray[position]->IsCreature) {
             CLAY(CLAY_IDI("CombatantArmorClass", position), {
                 CombatWindowArmorClassContainer,
-                .backgroundColor = COLOR_BUTTON_GRAY,
+                .backgroundColor = (gAppState->focusedId.id == CLAY_IDI("CombatantRow", position).id) ? COLOR_GRAY_SELECT : COLOR_BUTTON_GRAY,
                 .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_SM_PX)
             }){
                 SDL_itoa(gAppState->SortedListArray[position]->ArmorClass, gAppState->SortedListArray[position]->ArmorClassBuffer, 10);
@@ -236,20 +266,22 @@ void FillCombatScreen(int position) {
                     .length = (int32_t)SDL_strlen(gAppState->SortedListArray[position]->HitPointsBuffer),
                     .isStaticallyAllocated = true
                 };
-                if (ListStarted == 1 ) {
+                if (true != gAppState->SortedListArray[position]->HitPointsTextBox.IsInitialized) {
                     InitializeOneTextBox(&gAppState->SortedListArray[position]->HitPointsTextBox);
                     SDL_strlcpy(gAppState->SortedListArray[position]->HitPointsTextBox.TextBoxBuffer, gAppState->SortedListArray[position]->HitPointsBuffer, sizeof(gAppState->SortedListArray[position]->HitPointsTextBox.TextBoxBuffer));
-                    ListStarted = 2;
                 }
                 
                 
                 Clay_OnHover(FocusWindowCallback, gAppState);
                 uint32_t CurrentFocus = gAppState->focusedId.id;
                 FocusAndWriteTextBox(CLAY_IDI("CombatantHitPoints", position), CurrentFocus, &gAppState->SortedListArray[position]->HitPointsTextBox);
-                
-                // CLAY_TEXT(Initiative, CLAY_TEXT_CONFIG(StatPageTextConfig));
-                // CLAY_TEXT(CLAY_STRING("HP"), CLAY_TEXT_CONFIG(StatPageTextConfig));
             }
+        }
+        if (gAppState->SortedListArray[position]->IsCreature) {
+            Clay_OnHover(FocusWindowAndCallStatBlockCallback, &gAppState->SortedListArray[position]->SqliteDbId);
+        }
+        else {
+            Clay_OnHover(FocusWindowCallback, gAppState);
         }
     };
 }

@@ -14,18 +14,13 @@
  *  SECTION - Global structs
  *========================================================================* 
  */
-typedef struct BuildListMember {
-    int initiative;
-    char name[BUILD_LIST_MAX][64];
-    int Quantity;
-    bool IsCreature;
-}BuildListMember;
+
 
 /*========================================================================* 
  *  SECTION - Extern variables
  *========================================================================* 
  */
-extern BuildListMember BuildListMembers[BUILD_LIST_MAX];
+
 
 /*========================================================================*
  *  SECTION - Global prototypes

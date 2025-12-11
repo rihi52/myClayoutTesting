@@ -14,7 +14,6 @@
  *  SECTION - Local prototypes
  *========================================================================* 
  */
-static void FillStats(void);
 static void CallStatBlockCallback(Clay_ElementId elementId, Clay_PointerData pointerData, void *userData);
 
 /*========================================================================* 
@@ -128,11 +127,7 @@ void MakeCreatureHeader(int i, int CallingWindow) {
     };
 }
 
-/*========================================================================* 
- *  SECTION - Local functions
- *========================================================================* 
- */
-static void FillStats(void) {
+void FillStats(void) {
     CLAY(CLAY_ID("StatPage"), {
         StatPageContainer,
         .backgroundColor = (WindowState == CREATURE_DB_SCREEN) ? COLOR_TRANSPARENT : COLOR_BUTTON_GRAY,
@@ -362,6 +357,10 @@ static void FillStats(void) {
     };
 }
 
+/*========================================================================* 
+ *  SECTION - Local functions
+ *========================================================================* 
+ */
 static void CallStatBlockCallback(Clay_ElementId elementId, Clay_PointerData pointerData, void *userData) {
     if (pointerData.state == CLAY_POINTER_DATA_PRESSED_THIS_FRAME) {
         gAppState->focusedId = elementId;

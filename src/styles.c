@@ -19,9 +19,9 @@ const Clay_Color COLOR_RED          = (Clay_Color) {220, 0, 0, 255};
 const Clay_Color COLOR_GREEN        = (Clay_Color) {0, 220, 0, 255};
 const Clay_Color COLOR_WHITE        = (Clay_Color) { 255, 255, 255, 255};
 const Clay_Color COLOR_GRAY_BG      = (Clay_Color) {30, 30, 30, 255};
-const Clay_Color COLOR_GRAY_SELECT  = (Clay_Color) {40, 40, 40, 255};
+const Clay_Color COLOR_GRAY_SELECT  = (Clay_Color) {70, 70, 70, 255};
 const Clay_Color COLOR_TRANSPARENT  = (Clay_Color) {0, 0, 0, 0};
-const Clay_Color COLOR_BUTTON_GRAY  = (Clay_Color) {70, 70, 70, 255};
+const Clay_Color COLOR_BUTTON_GRAY  = (Clay_Color) {50, 50, 50, 255};
 
 /*========================================================================* 
  *  SECTION - Global style structs
@@ -299,6 +299,22 @@ Clay_LayoutConfig TTBCombatWindow = {
     .childGap = 8,
     .childAlignment =  { CLAY_ALIGN_X_CENTER, CLAY_ALIGN_Y_TOP },
     .layoutDirection = CLAY_TOP_TO_BOTTOM
+};
+
+Clay_LayoutConfig CombatWindowCombatSection = {
+    .sizing = { CLAY_SIZING_GROW(0), CLAY_SIZING_PERCENT(0.8) },
+    .padding = { 8, 8, 8, 8},
+    .childGap = 8,
+    .childAlignment =  { CLAY_ALIGN_X_CENTER, CLAY_ALIGN_Y_TOP },
+    .layoutDirection = CLAY_TOP_TO_BOTTOM
+};
+
+Clay_LayoutConfig CombatWindowButtonSection = {
+    .sizing = { CLAY_SIZING_GROW(0), CLAY_SIZING_PERCENT(0.2) },
+    .padding = { 8, 8, 8, 8},
+    .childGap = 8,
+    .childAlignment =  { CLAY_ALIGN_X_CENTER, CLAY_ALIGN_Y_CENTER },
+    .layoutDirection = CLAY_LEFT_TO_RIGHT
 };
 
 Clay_LayoutConfig CombatWindowInitiativeContainer = {

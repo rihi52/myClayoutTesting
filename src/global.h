@@ -37,6 +37,7 @@
 typedef struct TextBox {
     Clay_String StringToDisplay;
     char TextBoxBuffer[MAX_TEXT];
+    bool IsInitialized;
 }TextBox;
 
  typedef struct DisplayListMember {
@@ -48,6 +49,7 @@ typedef struct TextBox {
     int HitPoints;
     char HitPointsBuffer[10];
     bool IsCreature;
+    int SqliteDbId;
     TextBox HitPointsTextBox;
     struct DisplayListMember * Next;
 }DisplayListMember;
@@ -203,12 +205,27 @@ typedef struct app_state {
     StatBlock CurrentStatBlock;
 } AppState;
 
+typedef struct BuildListMember {
+    int initiative;
+    char name[BUILD_LIST_MAX][64];
+    int Quantity;
+    bool IsCreature;
+}BuildListMember;
 
+extern BuildListMember BuildListMembers[BUILD_LIST_MAX];
 
-/*========================================================================* 
+/*========================================================================*
  *  SECTION - Global variables
- *========================================================================* 
+ *========================================================================*
  */
+extern DisplayListMember * NewMember;
+extern DisplayListMember * Head;
+extern DisplayListMember * Tail;
+
+extern int ListStarted;
+
+extern int StartEncounterState;
+
 extern TextBox BuildCreatureSearch;
 extern TextBox BuildPlayerSearch;
 extern TextBox DBCreatureSearch;
@@ -252,5 +269,6 @@ void InitializeOneTextBox(TextBox * TextBoxToInit);
 void ReturnToMainScreenCallback(Clay_ElementId elementId, Clay_PointerData pointerData, void *userData);
 void FocusWindowCallback(Clay_ElementId elementId, Clay_PointerData pointerData, void * userData);
 void SearchButtonCallback(Clay_ElementId elementId, Clay_PointerData pointerData, void *userData);
+void FocusWindowAndCallStatBlockCallback(Clay_ElementId elementId, Clay_PointerData pointerData, void * userData);
 
 #endif /* GLOBAL_H */

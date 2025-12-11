@@ -106,7 +106,6 @@ int LoadCreatureHeaderAlphabetical(int MonsterId) {
 }
 
 void LookUpCreatureStats(int MonsterId) {
-
     // Clear all Clay_Strings before writing new data
     ClearClayString(&gAppState->CurrentStatBlock.StatId);
     ClearClayString(&gAppState->CurrentStatBlock.StatName);
@@ -428,7 +427,7 @@ DisplayListMember * LookupCreatureForCombat(const char * CreatureName, int Initi
     Member->Next = NULL;
 
     sqlite3_stmt *stmt = NULL;
-    const char *sql = "SELECT armor_class, hitpoints_avg FROM monsters WHERE name = ?";
+    const char *sql = "SELECT id, armor_class, hitpoints_avg FROM monsters WHERE name = ?";
 
     int rc = sqlite3_prepare_v2(pGuidnbatterDB, sql, -1, &stmt, NULL);
     if (rc != SQLITE_OK)
@@ -444,6 +443,7 @@ DisplayListMember * LookupCreatureForCombat(const char * CreatureName, int Initi
     {
         int col = 0;
 
+        Member->SqliteDbId  = sqlite3_column_int(stmt, col++);
         Member->ArmorClass  = sqlite3_column_int(stmt, col++);
         Member->HitPoints   = sqlite3_column_int(stmt, col++);
         

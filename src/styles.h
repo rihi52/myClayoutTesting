@@ -85,6 +85,8 @@ extern Clay_LayoutConfig TTBCombatWindow;
 extern Clay_LayoutConfig CombatWindowInitiativeContainer;
 extern Clay_LayoutConfig CombatWindowArmorClassContainer;
 extern Clay_LayoutConfig CombatWindowNameContainer;
+extern Clay_LayoutConfig CombatWindowCombatSection;
+extern Clay_LayoutConfig CombatWindowButtonSection;
 
 /* Colors */
 extern const Clay_Color COLOR_ORANGE;
