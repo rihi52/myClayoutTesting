@@ -194,7 +194,6 @@ static void CreatureDatabaseButtonCallback(Clay_ElementId elementId, Clay_Pointe
     int * check = (int *) userData;
     /* TODO: how should this work? changes only on mouse movement after clicking */
     if (pointerData.state == CLAY_POINTER_DATA_PRESSED_THIS_FRAME) {
-        ScrollOffset = 0;
         WindowState = CREATURE_DB_SCREEN;        
     }
 }

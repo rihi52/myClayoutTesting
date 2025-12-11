@@ -20,8 +20,6 @@ int WindowWidth = 0;
 int WindowHeight = 0;
 uint16_t TotalCreatures = 0;
 
-float ScrollOffset = 0;
-
 bool MouseDown;
 
 TextBox BuildCreatureSearch;
@@ -568,67 +566,52 @@ void FocusWindowAndCallStatBlockCallback(Clay_ElementId elementId, Clay_PointerD
 void ReturnToMainScreenCallback(Clay_ElementId elementId, Clay_PointerData pointerData, void *userData) {
     int * check = (int *) userData;
     if (pointerData.state == CLAY_POINTER_DATA_PRESSED_THIS_FRAME) {
+        /* Clear focused ID */
         gAppState->focusedId = CLAY_ID("NULL");
+
+        /* Reset all global text boxes */
         ClearTextBoxes();
-        ScrollOffset = 0;
+
+        /* Clear internal windowstate tracking */
         WindowState = MAIN_SCREEN;
+
+        /* Reset creatures to be shown in creature database screen */
         for (int i = 0; i <TotalCreatures; i++) {
             HeadersToShow[i] = i;
         }
+
+        /* Free combat linked list */
         if (Head != NULL) {
             FreeDisplayList(Head);
             NewMember = NULL;
             Head = NULL;
             Tail = NULL;
         }
+
+        /* Free appstate sorted array of combat linked list */
         if (gAppState->SortedListArray) {
-            for (int i = 0; i < gAppState->SortedListCount; i++) {            
-                // gAppState->SortedListArray[i]->ArmorClass = 0;
-                // gAppState->SortedListArray[i]->HitPoints = 0;
-                // gAppState->SortedListArray[i]->Initiative = 0;
-                // gAppState->SortedListArray[i]->IsCreature = false;
-                // //ClearClayString(&gAppState->SortedListArray[i]->Name);
-                // SDL_memset(gAppState->SortedListArray[i]->ArmorClassBuffer, 0, sizeof(gAppState->SortedListArray[i]->ArmorClassBuffer));
-                // SDL_memset(gAppState->SortedListArray[i]->HitPointsBuffer, 0, sizeof(gAppState->SortedListArray[i]->HitPointsBuffer));
-                // SDL_memset(gAppState->SortedListArray[i]->InitiativeBuffer, 0, sizeof(gAppState->SortedListArray[i]->InitiativeBuffer));
-                // gAppState->SortedListArray[i]->SqliteDbId = 0;
-
-                DisplayListMember *m = gAppState->SortedListArray[i];
-                if (!m) continue;
-
-                // Clear struct fields
-                m->ArmorClass = 0;
-                m->HitPoints = 0;
-                m->Initiative = 0;
-                m->IsCreature = false;
-                m->SqliteDbId = 0;
-
-                SDL_memset(m->ArmorClassBuffer, 0, sizeof(m->ArmorClassBuffer));
-                SDL_memset(m->HitPointsBuffer, 0, sizeof(m->HitPointsBuffer));
-                SDL_memset(m->InitiativeBuffer, 0, sizeof(m->InitiativeBuffer));
-
-                free(m);
-            }
             free(gAppState->SortedListArray);
             gAppState->SortedListArray = NULL;
             gAppState->SortedListCount = 0;
             StartEncounterState = MAIN_SCREEN;
         }
         
-        gAppState->SortedListCount = 0;
+        /* Reset all buildlist data */
         for (int i = 0; i < BUILD_LIST_MAX; i++) {
-            BuildListMemberQuantity[i].StringToDisplay.length = 0;
-            BuildListMemberInitiative[i].StringToDisplay.length = 0;
+            BuildListMemberQuantity[i].IsInitialized = false;
+            BuildListMemberInitiative[i].IsInitialized = false;
+
             BuildListMembers[i].initiative = 0;
             BuildListMembers[i].Quantity = 0;
             SDL_memset(BuildListMembers[i].name, 0, sizeof(BuildListMembers[i].name));
             BuildListMembers[i].IsCreature = false;
         }
-        // memset(BuildListMembers, 0, sizeof(*BuildListMembers) * BUILD_LIST_MAX);
         memset(&BuildListMembers, 0, sizeof(BuildListMembers));
 
-
+        /* Reset list to an unstarted state */
         ListStarted = 0;
+
+        /* Reset start encounter window to the initial two options */
         StartEncounterState = MAIN_SCREEN;
     }
 }
@@ -658,4 +641,14 @@ static void ClearTextBoxes() {
 
     SDL_memset(DBPlayerSearch.TextBoxBuffer, 0, sizeof(DBPlayerSearch.TextBoxBuffer));
     DBPlayerSearch.StringToDisplay.length = 0;
+
+    for (int i = 0; i < BUILD_LIST_MAX; i++){
+        SDL_memset(BuildListMemberQuantity[i].TextBoxBuffer, 0, sizeof(BuildListMemberQuantity[i].TextBoxBuffer));
+        BuildListMemberQuantity[i].StringToDisplay.length = 0;
+        BuildListMemberQuantity[i].IsInitialized = false;
+
+        SDL_memset(BuildListMemberInitiative[i].TextBoxBuffer, 0, sizeof(BuildListMemberInitiative[i].TextBoxBuffer));
+        BuildListMemberInitiative[i].StringToDisplay.length = 0;
+        BuildListMemberInitiative[i].IsInitialized = false;
+    }
 }
