@@ -87,7 +87,6 @@ int CountNodes(DisplayListMember *head) {
         count++;
         head = head->Next;
     }
-    SDL_Log("check 1");
     return count;
 }
 
@@ -261,11 +260,6 @@ void FillCombatScreen(int position) {
                 .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_SM_PX)
             }){
                 SDL_itoa(gAppState->SortedListArray[position]->HitPoints, gAppState->SortedListArray[position]->HitPointsBuffer, 10);
-                Clay_String Initiative = {
-                    .chars = gAppState->SortedListArray[position]->HitPointsBuffer,
-                    .length = (int32_t)SDL_strlen(gAppState->SortedListArray[position]->HitPointsBuffer),
-                    .isStaticallyAllocated = true
-                };
                 if (true != gAppState->SortedListArray[position]->HitPointsTextBox.IsInitialized) {
                     InitializeOneTextBox(&gAppState->SortedListArray[position]->HitPointsTextBox);
                     SDL_strlcpy(gAppState->SortedListArray[position]->HitPointsTextBox.TextBoxBuffer, gAppState->SortedListArray[position]->HitPointsBuffer, sizeof(gAppState->SortedListArray[position]->HitPointsTextBox.TextBoxBuffer));

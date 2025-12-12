@@ -221,7 +221,7 @@ SDL_AppResult SDL_AppIterate(void *appstate)
 
     // --- FPS counter ---
     if (lastTime > frame_timer + frequency) {
-        SDL_Log("FPS: %d", frame_counter);
+        // SDL_Log("FPS: %d", frame_counter);
         frame_counter = 0;
         frame_timer = lastTime;
     }
