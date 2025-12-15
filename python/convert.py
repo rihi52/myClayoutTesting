@@ -6,9 +6,6 @@ import os
 # ----------------------------------------------------------------------
 #  EXACT column order from your INSERT statement
 # ----------------------------------------------------------------------
-# ----------------------------------------------------------------------
-#  EXACT column order – NOW WITH attack_6
-# ----------------------------------------------------------------------
 HEADERS = [
     'name', 'cr', 'type', 'size', 'armor_class', 'hitpoints_avg', 'hit_dice', 'hitpoints_roll',
     'speed_type', 'speed_walk', 'speed_fly', 'speed_swim', 'speed_climb', 'speed_burrow',
@@ -20,7 +17,7 @@ HEADERS = [
     'special_ability_three_desc', 'special_ability_four', 'special_ability_four_desc',
     'attack_1', 'attack_1_desc', 'attack_2', 'attack_2_desc', 'attack_3', 'attack_3_desc',
     'attack_4', 'attack_4_desc', 'attack_5', 'attack_5_desc',
-    'attack_6', 'attack_6_desc',          # <-- ADDED
+    'attack_6', 'attack_6_desc',
     'action_leg', 'action_leg1', 'action_leg1_desc', 'action_leg2', 'action_leg2_desc',
     'action_leg3', 'action_leg3_desc', 'action_lair', 'action_lair1', 'action_lair1_desc',
     'action_lair2', 'action_lair2_desc', 'action_lair3', 'action_lair3_desc',
@@ -37,16 +34,19 @@ HEADERS = [
 # ----------------------------------------------------------------------
 #  Fill a block of columns (special abilities, attacks, legendary, etc.)
 # ----------------------------------------------------------------------
-# ----------------------------------------------------------------------
-#  fill_action_fields – now supports up to 6 attacks
-# ----------------------------------------------------------------------
-def fill_action_fields(actions, base_name, max_items, is_attack=False):
+def fill_action_fields(actions, base_name, max_items, start_index=1, is_attack=False):
+    """
+    Fill action fields starting from start_index.
+    This allows us to skip attack_1 when Multiattack is present.
+    """
     fields = {}
-    for i in range(1, max_items + 1):
+    
+    # Initialize all fields in the range
+    for i in range(start_index, start_index + max_items):
         if base_name == 'special_ability_one':
             name_key = f"special_ability_{'one' if i==1 else 'two' if i==2 else 'three' if i==3 else 'four'}"
         elif base_name == 'attack_1':
-            name_key = f"attack_{i}"                     # 1 through 6
+            name_key = f"attack_{i}"
         elif base_name == 'action_leg1':
             name_key = f"action_leg{i}"
         else:
@@ -54,26 +54,29 @@ def fill_action_fields(actions, base_name, max_items, is_attack=False):
         fields[name_key] = ''
         fields[f"{name_key}_desc"] = ''
 
+    # Fill with actual data
     for idx, act in enumerate(actions[:max_items]):
+        actual_index = start_index + idx
         name = act.get('name', '')
         desc = act.get('desc', '')
 
         if base_name == 'special_ability_one':
-            col = ['one','two','three','four'][idx]
+            col = ['one','two','three','four'][actual_index-1]
             name_key = f"special_ability_{col}"
         elif base_name == 'attack_1':
-            name_key = f"attack_{idx+1}"                 # attack_1 → attack_6
+            name_key = f"attack_{actual_index}"
         elif base_name == 'action_leg1':
-            name_key = f"action_leg{idx+1}"
+            name_key = f"action_leg{actual_index}"
         else:
-            name_key = f"{base_name}_{idx+1}"
+            name_key = f"{base_name}_{actual_index}"
 
         fields[name_key] = name
         fields[f"{name_key}_desc"] = desc
+    
     return fields
 
 # ----------------------------------------------------------------------
-#  Process a single monster (unchanged except for the attack-5 fix)
+#  Process a single monster
 # ----------------------------------------------------------------------
 def process_monster(m):
     row = {h: '' for h in HEADERS}
@@ -120,11 +123,12 @@ def process_monster(m):
     # ---- saving throws AND skills ------------------------------------
     row.update(parse_proficiencies(m.get('proficiencies', [])))
     row['skills'] = parse_skills(m.get('proficiencies', []))
+    
     # ---- special abilities (max 4) ------------------------------------
     specials = m.get('special_abilities',[])
-    row.update(fill_action_fields(specials, 'special_ability_one', max_items=4, is_attack=False))
+    row.update(fill_action_fields(specials, 'special_ability_one', max_items=4, start_index=1, is_attack=False))
 
-        # ---- ACTIONS – Multiattack first (now supports 6) -----------------
+    # ---- ACTIONS – Multiattack first (now supports 6) -----------------
     actions = m.get('actions',[])
     multi = None
     other = []
@@ -135,16 +139,19 @@ def process_monster(m):
             other.append(a)
 
     if multi:
+        # Place Multiattack in attack_1
         row['attack_1'] = multi.get('name','')
         row['attack_1_desc'] = multi.get('desc','')
-        row.update(fill_action_fields(other, 'attack_1', max_items=5, is_attack=True))  # 5 more = 6 total
+        # Fill other attacks starting from attack_2
+        row.update(fill_action_fields(other, 'attack_1', max_items=5, start_index=2, is_attack=True))
     else:
-        row.update(fill_action_fields(actions, 'attack_1', max_items=6, is_attack=True))  # 6 total
+        # No multiattack, fill all 6 slots normally
+        row.update(fill_action_fields(actions, 'attack_1', max_items=6, start_index=1, is_attack=True))
 
     # ---- LEGENDARY ACTIONS --------------------------------------------
     leg = m.get('legendary_actions',[])
     row['action_leg'] = 1 if leg else 0
-    row.update(fill_action_fields(leg, 'action_leg1', max_items=3, is_attack=False))
+    row.update(fill_action_fields(leg, 'action_leg1', max_items=3, start_index=1, is_attack=False))
 
     # ---- placeholders -------------------------------------------------
     row['action_lair'] = 0
@@ -162,7 +169,7 @@ def process_monster(m):
     return row
 
 # ----------------------------------------------------------------------
-#  Helper functions (unchanged)
+#  Helper functions
 # ----------------------------------------------------------------------
 def parse_speed(speed_dict):
     speed_types = []
@@ -207,18 +214,14 @@ def parse_proficiencies(proficiencies):
             throws[key] = val
     return throws
 
-# ----------------------------------------------------------------------
-#  NEW: parse the "proficiencies" array for SKILL entries
-# ----------------------------------------------------------------------
 def parse_skills(proficiencies):
     """Return a comma-separated string like: History +12, Perception +10"""
     skill_parts = []
     for p in proficiencies:
         idx = p['proficiency']['index']
         if idx.startswith('skill-'):
-            skill_name = idx.split('-', 1)[1].capitalize()   # "history" -> "History"
+            skill_name = idx.split('-', 1)[1].capitalize()
             skill_val  = p['value']
-            # Optional: add proficiency bonus sign only if >0
             sign = '+' if skill_val >= 0 else ''
             skill_parts.append(f"{skill_name} {sign}{skill_val}")
     return ', '.join(skill_parts)
