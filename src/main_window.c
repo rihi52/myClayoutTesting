@@ -43,6 +43,7 @@ Clay_RenderCommandArray MainWindow(AppState * state)
 
         switch (WindowState){
             case MAIN_SCREEN:
+            gAppState->ActiveScreen = MAIN_SCREEN;
             /* Main label */
             CLAY_TEXT(CLAY_STRING("GUIDNBATTER"), CLAY_TEXT_CONFIG(MainLabelTextConfig));
             /* Start button */
@@ -71,23 +72,28 @@ Clay_RenderCommandArray MainWindow(AppState * state)
             };
             break;
 
-        case START_ENCOUNTER_SCREEN:
+        case FIRST_START_ENCOUNTER_SCREEN:
+            gAppState->ActiveScreen = FIRST_START_ENCOUNTER_SCREEN;
             StartEncounterWindow();
             break;
         
         case BUILD_ENCOUNTER_SCREEN:
+            gAppState->ActiveScreen = BUILD_ENCOUNTER_SCREEN;
             BuildEncounterWindow(state, MAIN_SCREEN);
             break;
         
         case CREATURE_DB_SCREEN:
+            gAppState->ActiveScreen = CREATURE_DB_SCREEN;
             CreatureDatabaseWindow(state);
             break;
 
         case PLAYER_DB_SCREEN:
+            gAppState->ActiveScreen = PLAYER_DB_SCREEN;
             PlayerDatabaseWindow(state);            
             break;
 
         case ADD_STAT_SCREEN:
+            gAppState->ActiveScreen = ADD_STAT_SCREEN;
             CreatureDatabaseWindow(state);
             break;
 
@@ -179,7 +185,7 @@ void PlayerDatabaseWindow(AppState * state) {
 static void StartEncounterButtonCallback(Clay_ElementId elementId, Clay_PointerData pointerData, void *userData) {
     int * check = (int *) userData;
     if (pointerData.state == CLAY_POINTER_DATA_PRESSED_THIS_FRAME) {
-        WindowState = START_ENCOUNTER_SCREEN;
+        WindowState = FIRST_START_ENCOUNTER_SCREEN;
     }
 }
 

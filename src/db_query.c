@@ -419,12 +419,18 @@ void LookUpCreatureStats(int MonsterId) {
     sqlite3_finalize(stmt);
 }
 
-DisplayListMember * LookupCreatureForCombat(const char * CreatureName, int Initiative) {
+DisplayListMember * LookupCreatureForCombat(const char * CreatureName, int Initiative, bool IsCreature) {
     DisplayListMember * Member = SDL_malloc(sizeof(DisplayListMember));
     Member->Name = MakeClayString(CreatureName);
     Member->Initiative = Initiative;
-    Member->IsCreature = true;
     Member->Next = NULL;
+
+    if (!IsCreature) {
+        Member->IsCreature = false;
+        return Member;
+    }
+
+    Member->IsCreature = true;
 
     sqlite3_stmt *stmt = NULL;
     const char *sql = "SELECT id, armor_class, hitpoints_avg FROM monsters WHERE name = ?";

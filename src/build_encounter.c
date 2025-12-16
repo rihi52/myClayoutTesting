@@ -145,7 +145,7 @@ void BuildEncounterWindow(AppState * state, int CallingScreen) {
                         CLAY_TEXT(CLAY_STRING("Save"), CLAY_TEXT_CONFIG(ButtonTextConfig));
                     };
                 }
-                else if ( START_ENCOUNTER_SCREEN == CallingScreen) {
+                else if ( FIRST_START_ENCOUNTER_SCREEN == CallingScreen) {
                     CLAY(CLAY_ID("StartButton"), {MainScreenButtonLayoutConfig, .backgroundColor = COLOR_BUTTON_GRAY, .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_LG_PX)}) {
                         Clay_OnHover(StartButtonCallback, &WindowState);
                         CLAY_TEXT(CLAY_STRING("Start"), CLAY_TEXT_CONFIG(ButtonTextConfig));
@@ -287,6 +287,7 @@ void CreatureBuildListCallback(Clay_ElementId elementId, Clay_PointerData pointe
 
 void StartButtonCallback(Clay_ElementId elementId, Clay_PointerData pointerData, void *userData) {
     if (pointerData.state == CLAY_POINTER_DATA_PRESSED_THIS_FRAME) {
+        gAppState->IsTextInputFocused = false;
         StartEncounterState = START_NEW_ENCOUNTER_SCREEN;
         BuildingEncounter = 1;
     }

@@ -1,27 +1,22 @@
-# For native builds
+# Instructions
+
+## Roadmap
+
+Shift around initiaive in combat
+Add participants mid comabt
+Add custom enemies/statblocks
+Editable name in combat screen, but not affect statblock of db
+Arrow keys or spacebar to progress through initiative order
+    Highlight the current turn
+    Still have others selectable to adjust HP or bring up statblocks
+
+## For native builds
 
 ```bash
 mkdir build && cd build
 cmake ..
 make
 ./clay_sdl3_demo
-```
-
-Every 104px scrolled the containers created needs to increment by 1
-At start create 0-9
-+104px
-create 10-19
-
-```c
-for (int i = 0; i < MAX_VISIBLE_HEADERS; i++) {
-    MakeCreatureHeader(i);
-}
-
-// create the stat block element at the same time as the element that holds the headers, but don't fill it with stats
-// Fill it with empty string variables that get filled when the appropriate header button is selected
-// Then cleared out when closed, or when a new header is selected before being rewritten
-
-
 ```
 
 ```bash

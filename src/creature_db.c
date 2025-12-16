@@ -364,6 +364,7 @@ void FillStats(void) {
 static void CallStatBlockCallback(Clay_ElementId elementId, Clay_PointerData pointerData, void *userData) {
     if (pointerData.state == CLAY_POINTER_DATA_PRESSED_THIS_FRAME) {
         gAppState->focusedId = elementId;
+        gAppState->IsTextInputFocused = false;
         int * ArrayPosition = (int *) userData;
         LookUpCreatureStats(*ArrayPosition);
         WindowState = ADD_STAT_SCREEN;

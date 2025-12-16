@@ -15,21 +15,27 @@
  *  SECTION - Defines
  *========================================================================* 
  */
-#define MAIN_SCREEN             0
-#define START_ENCOUNTER_SCREEN  1
-#define BUILD_ENCOUNTER_SCREEN  2
-#define CREATURE_DB_SCREEN      3
-#define PLAYER_DB_SCREEN        4
-#define ADD_STAT_SCREEN         5
+#define MAIN_SCREEN                     0
+#define FIRST_START_ENCOUNTER_SCREEN    1
+#define BUILD_ENCOUNTER_SCREEN          2
+#define CREATURE_DB_SCREEN              3
+#define PLAYER_DB_SCREEN                4
+#define ADD_STAT_SCREEN                 5
+#define ENCOUNTER_MAIN_SCREEN           6
+#define START_NEW_ENCOUNTER_SCREEN      7
+#define START_NEW_WITH_STATS_SCREEN     8
+#define ADD_TO_ENCOUNTER                9
+#define BUILD_NEW_ENCOUNTER_SCREEN      10
+#define SELECT_EXISTING_SCREEN          11
 
-#define BACKSPACE_KEY           8
+#define BACKSPACE_KEY                   8
+#define SPACEBAR_KEY                    32
 
-#define COPY_TEXT               0
-#define WRITE_TEXT              1
+#define COPY_TEXT                       0
+#define WRITE_TEXT                      1
 
-#define MAX_TEXT                256
-#define BUILD_LIST_MAX          50
-
+#define MAX_TEXT                        256
+#define BUILD_LIST_MAX                  50
 /*========================================================================* 
  *  SECTION - Global struct typedefs
  *========================================================================* 
@@ -51,8 +57,10 @@ typedef struct TextBox {
     bool IsCreature;
     int SqliteDbId;
     TextBox HitPointsTextBox;
+    int TurnOrder;
     struct DisplayListMember * Next;
 }DisplayListMember;
+
 typedef struct {
     SDL_Renderer *renderer;
     TTF_TextEngine *textEngine;
@@ -199,16 +207,19 @@ typedef struct app_state {
     SDL_Window *window;
     Clay_SDL3RendererData rendererData;
     Clay_ElementId focusedId;
+    bool IsTextInputFocused;
     Clay_String StringToModify;
     DisplayListMember **SortedListArray;
     int SortedListCount;
     StatBlock CurrentStatBlock;
+    int ActiveScreen;
 } AppState;
 
 typedef struct BuildListMember {
     int initiative;
     char name[BUILD_LIST_MAX][64];
     int Quantity;
+    bool IsAdded;
     bool IsCreature;
 }BuildListMember;
 
@@ -264,6 +275,7 @@ void InitStatBlock(StatBlock *sb);
 void FreeStatBlock(StatBlock *sb);
 void ClearClayString(Clay_String *s);
 void InitializeOneTextBox(TextBox * TextBoxToInit);
+void FreeDisplayList(DisplayListMember *head);
 
 void ReturnToMainScreenCallback(Clay_ElementId elementId, Clay_PointerData pointerData, void *userData);
 void FocusWindowCallback(Clay_ElementId elementId, Clay_PointerData pointerData, void * userData);

@@ -8,14 +8,15 @@
  *  SECTION - Global variables
  *========================================================================* 
  */
-#define START_NEW_ENCOUNTER_SCREEN      3
-#define START_NEW_WITH_STATS_SCREEN     4
+
 
  /*========================================================================* 
  *  SECTION - Global variables
  *========================================================================* 
  */
 extern int BuildingEncounter;
+extern int AddToEncounter;
+extern int Turn;
 
  /*========================================================================* 
  *  SECTION - Global prototypes

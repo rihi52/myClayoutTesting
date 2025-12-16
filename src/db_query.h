@@ -38,6 +38,6 @@ void LookUpCreatureStats(int MonsterId);
 void SearchCreatureNames(const char * SearchTerm);
 void ModifyTypedString(void);
 Clay_String MakeClayIntString(int value);
-DisplayListMember * LookupCreatureForCombat(const char * CreatureName, int Initiative);
+DisplayListMember * LookupCreatureForCombat(const char * CreatureName, int Initiative, bool IsCreature);
 
 #endif /* DB_QUERY */

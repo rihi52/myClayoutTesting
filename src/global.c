@@ -184,6 +184,7 @@ void ModifyTextBoxText(TextBox * TextToModify, uint32_t CopyOrWrite) {
 
 void FocusAndWriteTextBox(Clay_ElementId IdToFocus, uint32_t CurrentFocus, TextBox * TextToModify) {
     if (gAppState->focusedId.id == IdToFocus.id) {
+        gAppState->IsTextInputFocused = true;
         if(PreviousFocusId != CurrentFocus) {
             ModifyTextBoxText(TextToModify, COPY_TEXT);
         }
@@ -550,6 +551,7 @@ void FocusWindowCallback(Clay_ElementId elementId, Clay_PointerData pointerData,
     if (pointerData.state == CLAY_POINTER_DATA_PRESSED_THIS_FRAME) {
         gAppState->focusedId = CLAY_ID("NULL");
         gAppState->focusedId = elementId;
+        gAppState->IsTextInputFocused = false;
     }
 }
 
@@ -557,6 +559,7 @@ void FocusWindowAndCallStatBlockCallback(Clay_ElementId elementId, Clay_PointerD
     if (pointerData.state == CLAY_POINTER_DATA_PRESSED_THIS_FRAME) {
         gAppState->focusedId = CLAY_ID("NULL");
         gAppState->focusedId = elementId;
+        gAppState->IsTextInputFocused = false;
         int * GivenId = (int *) userData;
         int LookUpId = *GivenId - 1;
         LookUpCreatureStats(LookUpId);
@@ -566,6 +569,7 @@ void FocusWindowAndCallStatBlockCallback(Clay_ElementId elementId, Clay_PointerD
 void ReturnToMainScreenCallback(Clay_ElementId elementId, Clay_PointerData pointerData, void *userData) {
     int * check = (int *) userData;
     if (pointerData.state == CLAY_POINTER_DATA_PRESSED_THIS_FRAME) {
+        gAppState->IsTextInputFocused = false;
         /* Clear focused ID */
         gAppState->focusedId = CLAY_ID("NULL");
 
@@ -593,7 +597,7 @@ void ReturnToMainScreenCallback(Clay_ElementId elementId, Clay_PointerData point
             free(gAppState->SortedListArray);
             gAppState->SortedListArray = NULL;
             gAppState->SortedListCount = 0;
-            StartEncounterState = MAIN_SCREEN;
+            StartEncounterState = ENCOUNTER_MAIN_SCREEN;
         }
         
         /* Reset all buildlist data */
@@ -604,6 +608,7 @@ void ReturnToMainScreenCallback(Clay_ElementId elementId, Clay_PointerData point
             BuildListMembers[i].initiative = 0;
             BuildListMembers[i].Quantity = 0;
             SDL_memset(BuildListMembers[i].name, 0, sizeof(BuildListMembers[i].name));
+            BuildListMembers[i].IsAdded = false;
             BuildListMembers[i].IsCreature = false;
         }
         memset(&BuildListMembers, 0, sizeof(BuildListMembers));
@@ -612,7 +617,7 @@ void ReturnToMainScreenCallback(Clay_ElementId elementId, Clay_PointerData point
         ListStarted = 0;
 
         /* Reset start encounter window to the initial two options */
-        StartEncounterState = MAIN_SCREEN;
+        StartEncounterState = ENCOUNTER_MAIN_SCREEN;
     }
 }
 

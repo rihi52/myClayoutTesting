@@ -13,16 +13,16 @@
  *  SECTION - Local defines
  *========================================================================* 
  */
-#define BUILD_NEW_ENCOUNTER_SCREEN  1
-#define SELECT_EXISTING_SCREEN      2
 
 /*========================================================================* 
  *  SECTION - Local variables
  *========================================================================* 
  */
-int StartEncounterState = 0;
+int StartEncounterState = ENCOUNTER_MAIN_SCREEN;
 int BuildingEncounter;
+int Turn = 0;
 int ListStarted = 0;
+int AddToEncounter = 0;
 DisplayListMember * NewMember = NULL;
 DisplayListMember * Head = NULL;
 DisplayListMember * Tail = NULL;
@@ -43,7 +43,8 @@ static void SelectExistingEncounterButtonCallback(Clay_ElementId elementId, Clay
 void StartEncounterWindow() {
     BuildingEncounter = 0;
     switch (StartEncounterState) {
-        case MAIN_SCREEN:
+        case ENCOUNTER_MAIN_SCREEN:
+            gAppState->ActiveScreen = ENCOUNTER_MAIN_SCREEN;
             CLAY(CLAY_ID("StartEncounterOuterContainer"), {
                 MainScreenLayoutConfig,
                 .backgroundColor = COLOR_BLACK,
@@ -62,18 +63,22 @@ void StartEncounterWindow() {
             };
             break;
         case BUILD_NEW_ENCOUNTER_SCREEN:
-            BuildEncounterWindow(gAppState, START_ENCOUNTER_SCREEN);
+            gAppState->ActiveScreen = BUILD_NEW_ENCOUNTER_SCREEN;
+            BuildEncounterWindow(gAppState, FIRST_START_ENCOUNTER_SCREEN);
             break;
 
         case START_NEW_ENCOUNTER_SCREEN:
+            gAppState->ActiveScreen = START_NEW_ENCOUNTER_SCREEN;
             NewEncounterScreen();
             break;
 
         case START_NEW_WITH_STATS_SCREEN:
+            gAppState->ActiveScreen = START_NEW_WITH_STATS_SCREEN;
             NewEncounterScreen();
             break;
 
         case SELECT_EXISTING_SCREEN:
+            gAppState->ActiveScreen = SELECT_EXISTING_SCREEN;
             SelectExistingScreen();
             break;
         default:
@@ -111,12 +116,13 @@ int CompareInitiative(const void *a, const void *b) {
 void NewEncounterScreen() {
     /* Build linked list */
     if (0 == ListStarted) {
-        Head = NULL;
-        Tail = NULL;
+        //Head = NULL;
+        //Tail = NULL;
         for (int i = 0; i < BUILD_LIST_MAX; i++) {
-        if ('\0' != BuildListMembers->name[i][0]) {
+        if ('\0' != BuildListMembers->name[i][0] && !BuildListMembers[i].IsAdded) {
             for (int j = 0; j < BuildListMembers[i].Quantity; j++) {
-                NewMember = LookupCreatureForCombat(BuildListMembers->name[i], BuildListMembers[i].initiative);
+                NewMember = LookupCreatureForCombat(BuildListMembers->name[i], BuildListMembers[i].initiative, BuildListMembers[i].IsCreature);
+                BuildListMembers[i].IsAdded = true;
             
             if (NewMember == NULL)
             {
@@ -154,6 +160,11 @@ void NewEncounterScreen() {
         // Save in global state
         gAppState->SortedListArray = arr;
         gAppState->SortedListCount = count;
+        for (int i = 0; i < gAppState->SortedListCount; i++) {
+            gAppState->SortedListArray[i]->TurnOrder = Turn;
+            Turn++;
+        }
+        Turn = 0;
         ListStarted = 1;
     }
 
@@ -183,6 +194,11 @@ void NewEncounterScreen() {
                 .backgroundColor = COLOR_GRAY_BG,
                 .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_LG_PX)
             }) {
+                CLAY(CLAY_ID("AddInitiativeButton"), {MainScreenButtonLayoutConfig, .backgroundColor = COLOR_BUTTON_GRAY, .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_LG_PX)}) {
+                    AddToEncounter = ADD_TO_ENCOUNTER;
+                    Clay_OnHover(NewEncounterButtonCallback, &AddToEncounter);
+                    CLAY_TEXT(CLAY_STRING("Add to Initiative"), CLAY_TEXT_CONFIG(ButtonTextConfig));
+                };
                 CLAY(CLAY_ID("ExitEncounterButton"), {MainScreenButtonLayoutConfig, .backgroundColor = COLOR_BUTTON_GRAY, .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_LG_PX)}) {
                     Clay_OnHover(ReturnToMainScreenCallback, gAppState);
                     CLAY_TEXT(CLAY_STRING("Exit Encounter"), CLAY_TEXT_CONFIG(ButtonTextConfig));
@@ -217,7 +233,11 @@ void FillCombatScreen(int position) {
     CLAY(CLAY_IDI("CombatantRow", position), {
         BuildWindowRow,
         .backgroundColor = (gAppState->focusedId.id == CLAY_IDI("CombatantRow", position).id) ? COLOR_GRAY_SELECT : COLOR_BUTTON_GRAY,
-        .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_LG_PX)
+        .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_LG_PX),
+        .border = {
+            .width = CLAY_BORDER_ALL(INPUT_BORDER_WIDTH_PX),
+            .color = (Turn == gAppState->SortedListArray[position]->TurnOrder) ? COLOR_WHITE : COLOR_BUTTON_GRAY,
+        }
     }) {
         CLAY(CLAY_IDI("CombatantInitiative", position), {
             CombatWindowInitiativeContainer,
@@ -283,6 +303,18 @@ void FillCombatScreen(int position) {
 static void NewEncounterButtonCallback(Clay_ElementId elementId, Clay_PointerData pointerData, void *userData) {
     int * check = (int *) userData;
     if (pointerData.state == CLAY_POINTER_DATA_PRESSED_THIS_FRAME) {
+        if (ADD_TO_ENCOUNTER == *check) {
+            AddToEncounter = 0;
+            ListStarted = 0;
+
+        /* Free appstate sorted array of combat linked list */
+        if (gAppState->SortedListArray) {
+            free(gAppState->SortedListArray);
+            gAppState->SortedListArray = NULL;
+            gAppState->SortedListCount = 0;
+            StartEncounterState = MAIN_SCREEN;
+        }
+        }
         StartEncounterState = BUILD_NEW_ENCOUNTER_SCREEN;
     }
 }

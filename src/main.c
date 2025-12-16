@@ -15,6 +15,7 @@
 #include "main_window.h"
 #include "text_input.h"
 #include "db_query.h"
+#include "start_encounter.h"
 
 // --- Global AppState ---
 AppState *gAppState = NULL;
@@ -88,6 +89,8 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
 
     gAppState->CurrentStatBlock = (StatBlock){0};
     InitStatBlock(&gAppState->CurrentStatBlock);
+    gAppState->ActiveScreen = MAIN_SCREEN;
+    gAppState->IsTextInputFocused = false;
 
     if (!SDL_CreateWindowAndRenderer("GUIDNBATTER", 1280, 720, SDL_WINDOW_RESIZABLE, &gAppState->window, &gAppState->rendererData.renderer)) {
         SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Failed to create window and renderer: %s", SDL_GetError());
@@ -161,7 +164,18 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
             SDL_strlcat(TextBuffer,event->text.text, MAX_TEXT);
             break;
         case SDL_EVENT_KEY_DOWN:
-            if (BACKSPACE_KEY == event->key.key) ModifyTypedString();
+            if (SDL_SCANCODE_BACKSPACE == event->key.scancode) ModifyTypedString();
+            if ((START_NEW_ENCOUNTER_SCREEN == gAppState->ActiveScreen || START_NEW_WITH_STATS_SCREEN == gAppState->ActiveScreen) && !gAppState->IsTextInputFocused) {
+                if (SDL_SCANCODE_SPACE == event->key.scancode) {
+                    if (gAppState->SortedListCount - 1 > Turn) {
+                        Turn++;
+                    }
+                    else {
+                        Turn = 0;
+                    }
+                    SDL_Log("Turn advanced to %d", Turn);
+                }
+            }
             break;
         case SDL_EVENT_WINDOW_RESIZED:
             Clay_SetLayoutDimensions((Clay_Dimensions){(float)event->window.data1, (float)event->window.data2});

@@ -60,67 +60,84 @@ add_custom_command(
 set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "Apps")
 
 
+##### NATIVE WINDOWS VERSION (comment out above for this) #####
 
 # cmake_minimum_required(VERSION 3.27)
-# project(clay_sdl3_demo C)
+# project(guidnbatter)
 # set(CMAKE_C_STANDARD 99)
 
-# # Source files
+# # === OUTPUT DIRECTORIES ===
+# set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/$<CONFIGURATION>")
+# set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/$<CONFIGURATION>")
+
+# # === SDL3 OPTIONS (before add_subdirectory) ===
+# # Tell SDL_ttf to use vendored FreeType instead of system FreeType
+# set(SDL3TTF_VENDORED ON CACHE BOOL "" FORCE)
+# set(SDL3TTF_FREETYPE_VENDORED ON CACHE BOOL "" FORCE)
+
+# # Disable other optional dependencies that might cause issues
+# set(SDL3IMAGE_VENDORED ON CACHE BOOL "" FORCE)
+
+# # === SOURCE FILES ===
 # set(SRC_FILES
 #     src/main.c
 #     src/main_window.c
 #     src/styles.c
 #     src/global.c
 #     SDL3/clay_renderer_SDL3.c
+#     src/db_query.c
+#     src/sql/sqlite3.c
+#     src/build_encounter.c
+#     src/creature_db.c
+#     src/start_encounter.c
 # )
 
-# # Fetch SDL3 and dependencies
-# include(FetchContent)
-# set(FETCHCONTENT_QUIET FALSE)
+# # === SDL3 (vendored) ===
+# add_subdirectory(vendored/SDL EXCLUDE_FROM_ALL)
 
-# # SDL3
-# FetchContent_Declare(
-#   SDL
-#   GIT_REPOSITORY https://github.com/libsdl-org/SDL.git
-#   GIT_TAG release-3.2.6
-#   GIT_SHALLOW TRUE
-# )
-# FetchContent_MakeAvailable(SDL)
-# set_property(DIRECTORY "${sdl_SOURCE_DIR}" PROPERTY EXCLUDE_FROM_ALL TRUE)
+# # === SDL3_ttf (vendored) ===
+# add_subdirectory(vendored/SDL_ttf EXCLUDE_FROM_ALL)
 
-# # SDL3_ttf
-# FetchContent_Declare(
-#   SDL_ttf
-#   GIT_REPOSITORY https://github.com/libsdl-org/SDL_ttf.git
-#   GIT_TAG release-3.2.2
-#   GIT_SHALLOW TRUE
-# )
-# FetchContent_MakeAvailable(SDL_ttf)
-# set_property(DIRECTORY "${sdl_ttf_SOURCE_DIR}" PROPERTY EXCLUDE_FROM_ALL TRUE)
+# # === SDL3_image (vendored) ===
+# add_subdirectory(vendored/SDL_image EXCLUDE_FROM_ALL)
 
-# # SDL3_image
-# FetchContent_Declare(
-#   SDL_image
-#   GIT_REPOSITORY "https://github.com/libsdl-org/SDL_image.git"
-#   GIT_TAG release-3.2.0
-#   GIT_SHALLOW TRUE
-# )
-# FetchContent_MakeAvailable(SDL_image)
-# set_property(DIRECTORY "${SDL_image_SOURCE_DIR}" PROPERTY EXCLUDE_FROM_ALL TRUE)
-
-# # Build executable
+# # === BUILD TARGET ===
 # add_executable(${PROJECT_NAME} ${SRC_FILES})
-# target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+
+# # === INCLUDE DIRECTORIES ===
+# target_include_directories(${PROJECT_NAME} PRIVATE
+#     ${CMAKE_CURRENT_SOURCE_DIR}
+#     ${CMAKE_SOURCE_DIR}/src/sql   # ✅ SQLite headers
+# )
+
+# # === LINK LIBRARIES ===
 # target_link_libraries(${PROJECT_NAME} PRIVATE
+#     SDL3::SDL3
 #     SDL3_ttf::SDL3_ttf
 #     SDL3_image::SDL3_image
-#     SDL3::SDL3
 # )
 
-# # Copy resources after build
+# # Platform-specific libraries
+# if(UNIX AND NOT APPLE)
+#     # Linux-specific libraries
+#     target_link_libraries(${PROJECT_NAME} PRIVATE
+#         m            # math library
+#         pthread      # threading library
+#         dl           # dynamic loading
+#     )
+# elseif(WIN32)
+#     # Windows doesn't need m, pthread, dl - they're built-in or use Windows API
+#     # Uncomment if you need Windows-specific libraries:
+#     # target_link_libraries(${PROJECT_NAME} PRIVATE ws2_32 winmm)
+# endif()
+
+# # === RESOURCE COPY ===
 # add_custom_command(
 #     TARGET ${PROJECT_NAME} POST_BUILD
 #     COMMAND ${CMAKE_COMMAND} -E copy_directory
 #         ${CMAKE_CURRENT_SOURCE_DIR}/resources
-#         ${CMAKE_CURRENT_BINARY_DIR}/resources
+#         $<TARGET_FILE_DIR:${PROJECT_NAME}>/resources
 # )
+
+# # === IDE GROUPING (optional) ===
+# set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "Apps")
