@@ -13,6 +13,131 @@ int HeadersToShow[MAX_DB_COUNT];
 
 static const char * BoundedStrStr(const char * haystack, const char * needle, size_t haystackLen, size_t NeedleLen);
 
+TextBox StatCrTextBox;
+TextBox StatArmorClassTextBox;
+TextBox StatHitpointsAvgTextBox;
+TextBox StatHitDiceTextBox;
+TextBox StatHitpointsRollTextBox;
+TextBox StatStrTextBox;
+TextBox StatDexTextBox;
+TextBox StatConTextBox;
+TextBox StatIntTextBox;
+TextBox StatWisTextBox;
+TextBox StatChaTextBox;
+TextBox StatProfBonusTextBox;
+TextBox StatThrowStrTextBox;
+TextBox StatThrowDexTextBox;
+TextBox StatThrowConTextBox;
+TextBox StatThrowIntTextBox;
+TextBox StatThrowWisTextBox;
+TextBox StatThrowChaTextBox;
+
+// Short text fields
+TextBox StatNameTextBox;
+TextBox StatTypeTextBox;
+TextBox StatSizeTextBox;
+TextBox StatSpeedTypeTextBox;
+TextBox StatSpeedWalkTextBox;
+TextBox StatSpeedFlyTextBox;
+TextBox StatSpeedSwimTextBox;
+TextBox StatSpeedClimbTextBox;
+TextBox StatSpeedBurrowTextBox;
+TextBox StatAlignmentTextBox;
+TextBox StatLegendaryTextBox;
+TextBox StatSkillsTextBox;
+TextBox StatLanguagesTextBox;
+TextBox StatSensesTextBox;
+TextBox StatRangeDarkvisionTextBox;
+TextBox StatRangeTremorsenseTextBox;
+TextBox StatRangeBlindsightTextBox;
+TextBox StatRangeTruesightTextBox;
+TextBox StatSavingThrowsTextBox;
+
+// Long text fields
+TextBox StatSpecialAbilityOneTextBox;
+TextBox StatSpecialAbilityOneDescTextBox;
+TextBox StatSpecialAbilityTwoTextBox;
+TextBox StatSpecialAbilityTwoDescTextBox;
+TextBox StatSpecialAbilityThreeTextBox;
+TextBox StatSpecialAbilityThreeDescTextBox;
+TextBox StatSpecialAbilityFourTextBox;
+TextBox StatSpecialAbilityFourDescTextBox;
+
+TextBox StatAttack1TextBox;
+TextBox StatAttack1DescTextBox;
+TextBox StatAttack2TextBox;
+TextBox StatAttack2DescTextBox;
+TextBox StatAttack3TextBox;
+TextBox StatAttack3DescTextBox;
+TextBox StatAttack4TextBox;
+TextBox StatAttack4DescTextBox;
+TextBox StatAttack5TextBox;
+TextBox StatAttack5DescTextBox;
+TextBox StatAttack6TextBox;
+TextBox StatAttack6DescTextBox;
+
+TextBox StatActionLegTextBox;
+TextBox StatActionLeg1TextBox;
+TextBox StatActionLeg1DescTextBox;
+TextBox StatActionLeg2TextBox;
+TextBox StatActionLeg2DescTextBox;
+TextBox StatActionLeg3TextBox;
+TextBox StatActionLeg3DescTextBox;
+
+TextBox StatActionLairTextBox;
+TextBox StatActionLair1TextBox;
+TextBox StatActionLair1DescTextBox;
+TextBox StatActionLair2TextBox;
+TextBox StatActionLair2DescTextBox;
+TextBox StatActionLair3TextBox;
+TextBox StatActionLair3DescTextBox;
+
+TextBox StatRegionalEffectTextBox;
+TextBox StatRegionalEffect1TextBox;
+TextBox StatRegionalEffect2TextBox;
+TextBox StatRegionalEffect3TextBox;
+TextBox StatEndRegionalEffectTextBox;
+
+TextBox StatEnvironmentTextBox;
+
+TextBox StatBa1TextBox;
+TextBox StatBa1DescTextBox;
+TextBox StatBa2TextBox;
+TextBox StatBa2DescTextBox;
+TextBox StatBa3TextBox;
+TextBox StatBa3DescTextBox;
+TextBox StatBa4TextBox;
+TextBox StatBa4DescTextBox;
+
+TextBox StatReaction1TextBox;
+TextBox StatReaction1DescTextBox;
+TextBox StatReaction2TextBox;
+TextBox StatReaction2DescTextBox;
+TextBox StatReaction3TextBox;
+TextBox StatReaction3DescTextBox;
+
+TextBox StatVillActionTextBox;
+TextBox StatVillAction1TextBox;
+TextBox StatVillAction1DescTextBox;
+TextBox StatVillAction2TextBox;
+TextBox StatVillAction2DescTextBox;
+TextBox StatVillAction3TextBox;
+TextBox StatVillAction3DescTextBox;
+
+TextBox StatUtilitySpellsTextBox;
+TextBox StatUtilitySpellsListTextBox;
+
+TextBox StatFeature1TextBox;
+TextBox StatFeature1DescTextBox;
+TextBox StatFeature2TextBox;
+TextBox StatFeature2DescTextBox;
+TextBox StatFeature3TextBox;
+TextBox StatFeature3DescTextBox;
+TextBox StatFeature4TextBox;
+TextBox StatFeature4DescTextBox;
+TextBox StatFeature5TextBox;
+TextBox StatFeature5DescTextBox;
+
 /*========================================================================*
  *  SECTION - Global function definitions                                 *
  *========================================================================*

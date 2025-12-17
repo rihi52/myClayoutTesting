@@ -181,6 +181,14 @@ Clay_LayoutConfig SingleLineInputLayoutConfig = {
     .layoutDirection = CLAY_TOP_TO_BOTTOM
 };
 
+Clay_LayoutConfig ShortSingleLineInputLayoutConfig = {
+    .sizing = { CLAY_SIZING_FIXED(32), CLAY_SIZING_FIXED(32) },
+    .padding = { 8, 8, 8, 8},
+    .childGap = 16,
+    .childAlignment =  { CLAY_ALIGN_X_LEFT, CLAY_ALIGN_Y_CENTER },
+    .layoutDirection = CLAY_TOP_TO_BOTTOM
+};
+
 Clay_LayoutConfig StatPageContainer = {
     .sizing = { CLAY_SIZING_GROW(0), CLAY_SIZING_GROW(0) },
     .padding = { MAIN_WINDOW_PADDING, MAIN_WINDOW_PADDING, MAIN_WINDOW_PADDING, MAIN_WINDOW_PADDING},

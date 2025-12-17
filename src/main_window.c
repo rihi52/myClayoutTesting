@@ -92,8 +92,13 @@ Clay_RenderCommandArray MainWindow(AppState * state)
             PlayerDatabaseWindow(state);            
             break;
 
-        case ADD_STAT_SCREEN:
-            gAppState->ActiveScreen = ADD_STAT_SCREEN;
+        case SHOW_STAT_BLOCK:
+            gAppState->ActiveScreen = SHOW_STAT_BLOCK;
+            CreatureDatabaseWindow(state);
+            break;
+
+        case NEW_STATBLOCK_SCREEN:
+            gAppState->ActiveScreen = NEW_STATBLOCK_SCREEN;
             CreatureDatabaseWindow(state);
             break;
 

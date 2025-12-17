@@ -236,7 +236,7 @@ void FillCombatScreen(int position) {
         .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_LG_PX),
         .border = {
             .width = CLAY_BORDER_ALL(INPUT_BORDER_WIDTH_PX),
-            .color = (Turn == gAppState->SortedListArray[position]->TurnOrder) ? COLOR_WHITE : COLOR_BUTTON_GRAY,
+            .color = (Turn == gAppState->SortedListArray[position]->TurnOrder) ? COLOR_WHITE : COLOR_TRANSPARENT,
         }
     }) {
         CLAY(CLAY_IDI("CombatantInitiative", position), {

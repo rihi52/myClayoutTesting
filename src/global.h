@@ -20,13 +20,14 @@
 #define BUILD_ENCOUNTER_SCREEN          2
 #define CREATURE_DB_SCREEN              3
 #define PLAYER_DB_SCREEN                4
-#define ADD_STAT_SCREEN                 5
+#define SHOW_STAT_BLOCK                 5
 #define ENCOUNTER_MAIN_SCREEN           6
 #define START_NEW_ENCOUNTER_SCREEN      7
 #define START_NEW_WITH_STATS_SCREEN     8
 #define ADD_TO_ENCOUNTER                9
 #define BUILD_NEW_ENCOUNTER_SCREEN      10
 #define SELECT_EXISTING_SCREEN          11
+#define NEW_STATBLOCK_SCREEN            12
 
 #define BACKSPACE_KEY                   8
 #define SPACEBAR_KEY                    32
