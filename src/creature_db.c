@@ -451,28 +451,74 @@ void NewStatblockPage(void) {
                     }
                 }
                 CLAY_AUTO_ID({StatPageAbilityDivider, .backgroundColor = COLOR_TRANSPARENT}) {
-                    CLAY_TEXT(gAppState->CurrentStatBlock.StatDex, CLAY_TEXT_CONFIG(StatPageAbilityScoreTextConfig));
+                    CLAY(CLAY_ID("DEXTextBox"), {
+                        ShortSingleLineInputLayoutConfig,
+                        .backgroundColor = (gAppState->focusedId.id == CLAY_ID("DEXTextBox").id) ? COLOR_BLACK : COLOR_GRAY_BG,
+                        .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_SM_PX),
+                    }) {
+                        Clay_OnHover(FocusWindowCallback, gAppState);
+                        uint32_t CurrentFocus = gAppState->focusedId.id;
+                        FocusAndWriteTextBox(CLAY_ID("DEXTextBox"), CurrentFocus, &StatDexTextBox); 
+                    }
                 }
                 CLAY_AUTO_ID({StatPageAbilityDivider, .backgroundColor = COLOR_TRANSPARENT}) {
-                    CLAY_TEXT(gAppState->CurrentStatBlock.StatCon, CLAY_TEXT_CONFIG(StatPageAbilityScoreTextConfig));
+                    CLAY(CLAY_ID("CONTextBox"), {
+                        ShortSingleLineInputLayoutConfig,
+                        .backgroundColor = (gAppState->focusedId.id == CLAY_ID("CONTextBox").id) ? COLOR_BLACK : COLOR_GRAY_BG,
+                        .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_SM_PX),
+                    }) {
+                        Clay_OnHover(FocusWindowCallback, gAppState);
+                        uint32_t CurrentFocus = gAppState->focusedId.id;
+                        FocusAndWriteTextBox(CLAY_ID("CONTextBox"), CurrentFocus, &StatConTextBox); 
+                    }
                 }
                 CLAY_AUTO_ID({StatPageAbilityDivider, .backgroundColor = COLOR_TRANSPARENT}) {
-                    CLAY_TEXT(gAppState->CurrentStatBlock.StatInt, CLAY_TEXT_CONFIG(StatPageAbilityScoreTextConfig));
+                    CLAY(CLAY_ID("INTTextBox"), {
+                        ShortSingleLineInputLayoutConfig,
+                        .backgroundColor = (gAppState->focusedId.id == CLAY_ID("INTTextBox").id) ? COLOR_BLACK : COLOR_GRAY_BG,
+                        .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_SM_PX),
+                    }) {
+                        Clay_OnHover(FocusWindowCallback, gAppState);
+                        uint32_t CurrentFocus = gAppState->focusedId.id;
+                        FocusAndWriteTextBox(CLAY_ID("INTTextBox"), CurrentFocus, &StatIntTextBox); 
+                    }
                 }
                 CLAY_AUTO_ID({StatPageAbilityDivider, .backgroundColor = COLOR_TRANSPARENT}) {
-                    CLAY_TEXT(gAppState->CurrentStatBlock.StatWis, CLAY_TEXT_CONFIG(StatPageAbilityScoreTextConfig));
+                    CLAY(CLAY_ID("WISTextBox"), {
+                        ShortSingleLineInputLayoutConfig,
+                        .backgroundColor = (gAppState->focusedId.id == CLAY_ID("WISTextBox").id) ? COLOR_BLACK : COLOR_GRAY_BG,
+                        .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_SM_PX),
+                    }) {
+                        Clay_OnHover(FocusWindowCallback, gAppState);
+                        uint32_t CurrentFocus = gAppState->focusedId.id;
+                        FocusAndWriteTextBox(CLAY_ID("WISTextBox"), CurrentFocus, &StatWisTextBox); 
+                    }
                 }
                 CLAY_AUTO_ID({StatPageAbilityDivider, .backgroundColor = COLOR_TRANSPARENT}) {
-                    CLAY_TEXT(gAppState->CurrentStatBlock.StatCha, CLAY_TEXT_CONFIG(StatPageAbilityScoreTextConfig));
+                    CLAY(CLAY_ID("CHATextBox"), {
+                        ShortSingleLineInputLayoutConfig,
+                        .backgroundColor = (gAppState->focusedId.id == CLAY_ID("CHATextBox").id) ? COLOR_BLACK : COLOR_GRAY_BG,
+                        .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_SM_PX),
+                    }) {
+                        Clay_OnHover(FocusWindowCallback, gAppState);
+                        uint32_t CurrentFocus = gAppState->focusedId.id;
+                        FocusAndWriteTextBox(CLAY_ID("CHATextBox"), CurrentFocus, &StatChaTextBox);
+                    }
                 }
             }
         }; /* Write senses  */
         CLAY(CLAY_ID("SensesContainerFill"), {StatPageDivider, .backgroundColor = COLOR_TRANSPARENT, .border = { .width = { .bottom = 5 }, .color = COLOR_BLACK }}) {
-            if (0 != SDL_strcmp("0", gAppState->CurrentStatBlock.StatSavingThrows.chars) && 0 != SDL_strcmp("NULL", gAppState->CurrentStatBlock.StatSavingThrows.chars)){
                 CLAY_AUTO_ID({StatPageSubDivider, .backgroundColor = COLOR_TRANSPARENT}) {
-                    CLAY_TEXT(gAppState->CurrentStatBlock.StatSavingThrows, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                    CLAY(CLAY_ID("SavingThrowTextBox"), {
+                        ShortSingleLineInputLayoutConfig,
+                        .backgroundColor = (gAppState->focusedId.id == CLAY_ID("SavingThrowTextBox").id) ? COLOR_BLACK : COLOR_GRAY_BG,
+                        .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_SM_PX),
+                    }) {
+                        Clay_OnHover(FocusWindowCallback, gAppState);
+                        uint32_t CurrentFocus = gAppState->focusedId.id;
+                        FocusAndWriteTextBox(CLAY_ID("SavingThrowTextBox"), CurrentFocus, &StatSavingThrowsTextBox); 
+                    }
                 }
-            }
             if (0 != SDL_strcmp("0", gAppState->CurrentStatBlock.StatSkills.chars) && 0 != SDL_strcmp("NULL", gAppState->CurrentStatBlock.StatSkills.chars)){
                 CLAY_AUTO_ID({StatPageSubDivider, .backgroundColor = COLOR_TRANSPARENT}) {
                     CLAY_TEXT(gAppState->CurrentStatBlock.StatSkills, CLAY_TEXT_CONFIG(StatPageTextConfig));
