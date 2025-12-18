@@ -2,7 +2,6 @@
 #include "styles.h"
 #include "global.h"
 #include "stdio.h"
-#include "text_input.h"
 #include "db_query.h"
 #include "build_encounter.h"
 #include "creature_db.h"
