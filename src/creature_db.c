@@ -84,11 +84,11 @@ void CreatureDatabaseWindow(AppState * state) {
                     .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_LG_PX),
                     .clip = {true, true, Clay_GetScrollOffset()}
                 }) {
-                    for (int i = 0; i < TotalCreatures; i++) {
-                        if (HeadersToShow[i] != -1) {
-                            MakeCreatureHeader(i, CREATURE_DB_SCREEN);
-                        }                    
-                    }
+                    // for (int i = 0; i < TotalCreatures; i++) {
+                    //     if (HeadersToShow[i] != -1) {
+                    //         MakeCreatureHeader(i, CREATURE_DB_SCREEN);
+                    //     }                    
+                    // }
                 }
 
                 if (WindowState == SHOW_STAT_BLOCK) {
@@ -509,8 +509,9 @@ void NewStatblockPage(void) {
         }; /* Write senses  */
         CLAY(CLAY_ID("SensesContainerFill"), {StatPageDivider, .backgroundColor = COLOR_TRANSPARENT, .border = { .width = { .bottom = 5 }, .color = COLOR_BLACK }}) {
                 CLAY_AUTO_ID({StatPageSubDivider, .backgroundColor = COLOR_TRANSPARENT}) {
+                    CLAY_TEXT(CLAY_STRING("Saving Throws"), CLAY_TEXT_CONFIG(StatPageTextConfig));
                     CLAY(CLAY_ID("SavingThrowTextBox"), {
-                        ShortSingleLineInputLayoutConfig,
+                        SingleLineInputLayoutConfig,
                         .backgroundColor = (gAppState->focusedId.id == CLAY_ID("SavingThrowTextBox").id) ? COLOR_BLACK : COLOR_GRAY_BG,
                         .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_SM_PX),
                     }) {
@@ -519,16 +520,30 @@ void NewStatblockPage(void) {
                         FocusAndWriteTextBox(CLAY_ID("SavingThrowTextBox"), CurrentFocus, &StatSavingThrowsTextBox); 
                     }
                 }
-            if (0 != SDL_strcmp("0", gAppState->CurrentStatBlock.StatSkills.chars) && 0 != SDL_strcmp("NULL", gAppState->CurrentStatBlock.StatSkills.chars)){
                 CLAY_AUTO_ID({StatPageSubDivider, .backgroundColor = COLOR_TRANSPARENT}) {
-                    CLAY_TEXT(gAppState->CurrentStatBlock.StatSkills, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                    CLAY_TEXT(CLAY_STRING("Skills"), CLAY_TEXT_CONFIG(StatPageTextConfig));
+                    CLAY(CLAY_ID("SkillsTextBox"), {
+                        SingleLineInputLayoutConfig,
+                        .backgroundColor = (gAppState->focusedId.id == CLAY_ID("SkillsTextBox").id) ? COLOR_BLACK : COLOR_GRAY_BG,
+                        .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_SM_PX),
+                    }) {
+                        Clay_OnHover(FocusWindowCallback, gAppState);
+                        uint32_t CurrentFocus = gAppState->focusedId.id;
+                        FocusAndWriteTextBox(CLAY_ID("SkillsTextBox"), CurrentFocus, &StatSkillsTextBox); 
+                    }
                 }
-            }
-            if (0 != SDL_strcmp("0", gAppState->CurrentStatBlock.StatSenses.chars) && 0 != SDL_strcmp("NULL", gAppState->CurrentStatBlock.StatSenses.chars)){
                 CLAY_AUTO_ID({StatPageSubDivider, .backgroundColor = COLOR_TRANSPARENT}) {
-                    CLAY_TEXT(gAppState->CurrentStatBlock.StatSenses, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                    CLAY_TEXT(CLAY_STRING("Senses"), CLAY_TEXT_CONFIG(StatPageTextConfig));
+                    CLAY(CLAY_ID("SensesTextBox"), {
+                        SingleLineInputLayoutConfig,
+                        .backgroundColor = (gAppState->focusedId.id == CLAY_ID("SensesTextBox").id) ? COLOR_BLACK : COLOR_GRAY_BG,
+                        .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_SM_PX),
+                    }) {
+                        Clay_OnHover(FocusWindowCallback, gAppState);
+                        uint32_t CurrentFocus = gAppState->focusedId.id;
+                        FocusAndWriteTextBox(CLAY_ID("SensesTextBox"), CurrentFocus, &StatSensesTextBox); 
+                    }
                 }
-            }
             if (0 != SDL_strcmp("0", gAppState->CurrentStatBlock.StatLanguages.chars) && 0 != SDL_strcmp("NULL", gAppState->CurrentStatBlock.StatLanguages.chars)){
                 CLAY_AUTO_ID({StatPageSubDivider, .backgroundColor = COLOR_TRANSPARENT}) {
                     CLAY_TEXT(gAppState->CurrentStatBlock.StatLanguages, CLAY_TEXT_CONFIG(StatPageTextConfig));

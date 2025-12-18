@@ -38,6 +38,7 @@ extern Clay_TextElementConfig InputTextConfig;
 extern Clay_TextElementConfig MainLabelTextConfig;
 extern Clay_LayoutConfig SingleLineInputLayoutConfig;
 extern Clay_LayoutConfig ShortSingleLineInputLayoutConfig;
+extern Clay_LayoutConfig LongSingleLineInputLayoutConfig;
 extern Clay_LayoutConfig TTBParentWindowLayoutConfig;
 
 /* Build Window Styles */
