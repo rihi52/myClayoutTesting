@@ -5,6 +5,7 @@
 #include "db_query.h"
 #include "build_encounter.h"
 #include "creature_db.h"
+#include "slider.h"
 
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_keyboard.h>
@@ -45,6 +46,8 @@ void CreatureDatabaseWindow(AppState * state) {
                 CLAY(CLAY_ID("CreatureDBEditButton"), {MainScreenButtonLayoutConfig, .backgroundColor = COLOR_BUTTON_GRAY, .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_LG_PX)}) {
                     CLAY_TEXT(CLAY_STRING("Edit"), CLAY_TEXT_CONFIG(ButtonTextConfig));
                 };
+                Clay_String BarName = {true, 10, "BarName"};
+                SliderBar(BarName, 2, 20, 2, COLOR_GREEN, COLOR_BLUE);
             };
             
             CLAY(CLAY_ID("SidebarBottom"), SidebarBottomLayoutConfig ) {

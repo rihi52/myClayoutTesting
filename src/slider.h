@@ -11,4 +11,6 @@ typedef struct SliderValues {
     uint32_t CurrentValue;
 }SliderValues;
 
+void SliderBar (Clay_String BarName, int BarWidth, int BarHeight, int BarRadius, Clay_Color PlainColor, Clay_Color HighlightedColor);
+
 #endif /* SLIDER_H */

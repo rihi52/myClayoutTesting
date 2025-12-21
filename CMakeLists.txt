@@ -18,6 +18,7 @@ set(SRC_FILES
     src/build_encounter.c
     src/creature_db.c
     src/start_encounter.c
+    src/slider.c
 )
 
 # === SDL3 (vendored) ===
