@@ -13,7 +13,7 @@
 #include <stdio.h>
 #include "global.h"
 #include "main_window.h"
-#include "text_input.h"
+
 #include "db_query.h"
 #include "start_encounter.h"
 
@@ -27,6 +27,10 @@ Uint64 frequency = 0;
 unsigned int frame_counter = 0;
 double frame_timer = 0;
 char fps_text[12] = {'0', 0};
+double deltaTime = 0.0;
+
+float MouseX = 0;
+float MouseY = 0;
 
 const int MinimumWidth = 1360;
 const int MinimumHeight = 800;
@@ -64,16 +68,8 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
     }
 
     DatabaseOpen();
-    for (int i = 0; i < MAX_DB_COUNT; i++) {
-        if (0 == LoadCreatureHeaderAlphabetical(i)) {
-            TotalCreatures++;
-            HeadersToShow[i] = i;
-        }
-        else {
-            HeadersToShow[i] = -1;
-            break;
-        }
-    }
+    LoadDatabaseMonsters();
+    LoadDatabasePlayers();
 
     InitializeTextBoxes();
     MouseDown = false;
@@ -82,6 +78,7 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
     if (!gAppState) return SDL_APP_FAILURE;
 
     gAppState->focusedId = CLAY_ID("NULL");
+    gAppState->SliderId = CLAY_ID("NULL");
 
     gAppState->StringToModify.isStaticallyAllocated = true;
     gAppState->StringToModify.chars = TextBuffer;
@@ -91,6 +88,12 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
     InitStatBlock(&gAppState->CurrentStatBlock);
     gAppState->ActiveScreen = MAIN_SCREEN;
     gAppState->IsTextInputFocused = false;
+    gAppState->IsModalOpen = false;
+    gAppState->ModalParentId = CLAY_ID("NULL");
+    memset(gAppState->ModalMessage, 0, sizeof(gAppState->ModalMessage));
+    memset(gAppState->EncounterSaved, 0, sizeof(gAppState->EncounterSaved));
+
+    StructureFieldArrays();
 
     if (!SDL_CreateWindowAndRenderer("GUIDNBATTER", 1280, 720, SDL_WINDOW_RESIZABLE, &gAppState->window, &gAppState->rendererData.renderer)) {
         SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Failed to create window and renderer: %s", SDL_GetError());
@@ -161,7 +164,18 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
             if (event->key.scancode == SDL_SCANCODE_SPACE) {}
             break;
         case SDL_EVENT_TEXT_INPUT:
-            SDL_strlcat(TextBuffer,event->text.text, MAX_TEXT);
+            Clay_ResetMeasureTextCache();
+            size_t len = SDL_strlen(TextBuffer);
+
+            // ignore if full
+            if (len >= MAX_TEXT - 1) {
+                break;
+            }
+
+            SDL_strlcat(TextBuffer, event->text.text, MAX_TEXT);
+
+            // force null termination (extra safety)
+            TextBuffer[MAX_TEXT - 1] = '\0';
             break;
         case SDL_EVENT_KEY_DOWN:
             if (SDL_SCANCODE_BACKSPACE == event->key.scancode) ModifyTypedString();
@@ -182,6 +196,8 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
         case SDL_EVENT_MOUSE_MOTION:
             Clay_SetPointerState((Clay_Vector2){event->motion.x, event->motion.y},
                                  event->motion.state & SDL_BUTTON_LMASK);
+            // MouseX = event->motion.x;
+            // MouseY = event->motion.y;
             break;
         case SDL_EVENT_MOUSE_BUTTON_DOWN:
             Clay_SetPointerState((Clay_Vector2){event->button.x, event->button.y},
@@ -224,6 +240,8 @@ SDL_AppResult SDL_AppIterate(void *appstate)
     Clay_UpdateScrollContainers(g_dragScrolling, ScrollDelta, 0.1f);
     ScrollDelta = (Clay_Vector2){0,0};
 
+    SDL_GetMouseState(&MouseX, &MouseY);
+
     // --- Frame timing ---
     Uint64 frameEnd = SDL_GetPerformanceCounter();
     double frameMS = (frameEnd - frameStart) / (double)frequency * 1000.0;
@@ -239,6 +257,15 @@ SDL_AppResult SDL_AppIterate(void *appstate)
         frame_timer = lastTime;
     }
     frame_counter++;
+
+    static Uint64 lastCounter = 0;
+
+    Uint64 now = SDL_GetPerformanceCounter();
+
+    if (lastCounter != 0) {
+        deltaTime = (double)(now - lastCounter) / (double)frequency;
+    }
+    lastCounter = now;
 
     return SDL_APP_CONTINUE;
 }

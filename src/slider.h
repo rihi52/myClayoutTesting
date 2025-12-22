@@ -5,6 +5,8 @@
 #include "stdio.h"
 #include "stdint.h"
 
+extern float KnobPosition;
+
 typedef struct SliderValues {
     uint32_t MaximumValue;
     uint32_t MinimumValue;

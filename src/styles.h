@@ -18,7 +18,7 @@
 #define MAIN_BTN_WIDTH_PX       200
 #define MAIN_BTN_HEIGHT_PX      50
 #define CREATURE_BTN_HEIGHT_PX  80
-#define PLAYER_BTN_HEIGHT_PX    50
+#define PLAYER_BTN_HEIGHT_PX    80
 
 /*========================================================================* 
  *  SECTION - External style struct declarations
@@ -39,6 +39,7 @@ extern Clay_TextElementConfig MainLabelTextConfig;
 extern Clay_LayoutConfig SingleLineInputLayoutConfig;
 extern Clay_LayoutConfig ShortSingleLineInputLayoutConfig;
 extern Clay_LayoutConfig LongSingleLineInputLayoutConfig;
+extern Clay_LayoutConfig MultiLineInputLayoutConfig;
 extern Clay_LayoutConfig TTBParentWindowLayoutConfig;
 
 /* Build Window Styles */
@@ -74,6 +75,8 @@ extern Clay_LayoutConfig CRContainerLayoutConfig;
 /* Container for creature name */
 extern Clay_LayoutConfig SizeContainerLayoutConfig;
 
+extern Clay_LayoutConfig PlayerACContainerLayoutConfig;
+
 /**/
 /* Container for creature name container and cr container*/
 extern Clay_LayoutConfig TypeSrcContainerLayoutConfig;
@@ -102,6 +105,7 @@ extern const Clay_Color COLOR_GRAY_BG;
 extern const Clay_Color COLOR_BUTTON_GRAY;
 extern const Clay_Color COLOR_TRANSPARENT;
 extern const Clay_Color COLOR_GRAY_SELECT;
+extern const Clay_Color COLOR_MODAL_BG;
 
 /* Styles */
 

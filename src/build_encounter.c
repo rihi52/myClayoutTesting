@@ -2,11 +2,12 @@
 #include "styles.h"
 #include "global.h"
 #include "stdio.h"
-#include "text_input.h"
+#include "modal.h"
 #include "db_query.h"
 #include "main_window.h"
 #include "build_encounter.h"
 #include "start_encounter.h"
+#include "player_db.h"
 
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_keyboard.h>
@@ -33,6 +34,7 @@ static Clay_String TheonName = {0};
 void BuildEncounterChain(int position);
 void AddToBuildChain(const char *ParticipantToAdd, bool IsCreature);
 void StartButtonCallback(Clay_ElementId elementId, Clay_PointerData pointerData, void *userData);
+void SaveEncounterButtonCallback(Clay_ElementId elementId, Clay_PointerData pointerData, void *userData);
 
 /*========================================================================* 
  *  SECTION - Global functions
@@ -53,27 +55,32 @@ void BuildEncounterWindow(AppState * state, int CallingScreen) {
                 .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_LG_PX),
                 .clip = {true, true, Clay_GetScrollOffset()}
             }) {
+                for (int i = 0; i < TotalPlayers; i++) {
+                    if (PlayersToShow[i] != -1) {
+                        MakePlayerHeader(i, BUILD_ENCOUNTER_SCREEN);
+                    }
+                }
 
-                CLAY(CLAY_ID("PlayerOne"), {PlayerButtonLayoutConfig, .backgroundColor = COLOR_BUTTON_GRAY, .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_LG_PX)}) {
-                    FinnName = CLAY_STRING("Finn");
-                    Clay_OnHover(PlayerBuildListCallback, &FinnName);
-                    CLAY_TEXT(CLAY_STRING("Finn"), CLAY_TEXT_CONFIG(ButtonTextConfig));
-                };
-                CLAY(CLAY_ID("PlayerTwo"), {PlayerButtonLayoutConfig, .backgroundColor = COLOR_BUTTON_GRAY, .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_LG_PX)}) {
-                    RaviName = CLAY_STRING("Ravi");
-                    Clay_OnHover(PlayerBuildListCallback, &RaviName);
-                    CLAY_TEXT(CLAY_STRING("Ravi"), CLAY_TEXT_CONFIG(ButtonTextConfig));
-                };
-                CLAY(CLAY_ID("PlayerThree"), {PlayerButtonLayoutConfig, .backgroundColor = COLOR_BUTTON_GRAY, .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_LG_PX)}) {
-                    PaxName = CLAY_STRING("Pax");
-                    Clay_OnHover(PlayerBuildListCallback, &PaxName);
-                    CLAY_TEXT(CLAY_STRING("Pax"), CLAY_TEXT_CONFIG(ButtonTextConfig));
-                };
-                CLAY(CLAY_ID("PlayerFour"), {PlayerButtonLayoutConfig, .backgroundColor = COLOR_BUTTON_GRAY, .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_LG_PX)}) {
-                    TheonName = CLAY_STRING("Theon");
-                    Clay_OnHover(PlayerBuildListCallback, &TheonName);
-                    CLAY_TEXT(CLAY_STRING("Theon"), CLAY_TEXT_CONFIG(ButtonTextConfig));
-                };
+                // CLAY(CLAY_ID("PlayerOne"), {PlayerButtonLayoutConfig, .backgroundColor = COLOR_BUTTON_GRAY, .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_LG_PX)}) {
+                //     FinnName = CLAY_STRING("Finn");
+                //     Clay_OnHover(PlayerBuildListCallback, &FinnName);
+                //     CLAY_TEXT(CLAY_STRING("Finn"), CLAY_TEXT_CONFIG(ButtonTextConfig));
+                // };
+                // CLAY(CLAY_ID("PlayerTwo"), {PlayerButtonLayoutConfig, .backgroundColor = COLOR_BUTTON_GRAY, .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_LG_PX)}) {
+                //     RaviName = CLAY_STRING("Ravi");
+                //     Clay_OnHover(PlayerBuildListCallback, &RaviName);
+                //     CLAY_TEXT(CLAY_STRING("Ravi"), CLAY_TEXT_CONFIG(ButtonTextConfig));
+                // };
+                // CLAY(CLAY_ID("PlayerThree"), {PlayerButtonLayoutConfig, .backgroundColor = COLOR_BUTTON_GRAY, .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_LG_PX)}) {
+                //     PaxName = CLAY_STRING("Pax");
+                //     Clay_OnHover(PlayerBuildListCallback, &PaxName);
+                //     CLAY_TEXT(CLAY_STRING("Pax"), CLAY_TEXT_CONFIG(ButtonTextConfig));
+                // };
+                // CLAY(CLAY_ID("PlayerFour"), {PlayerButtonLayoutConfig, .backgroundColor = COLOR_BUTTON_GRAY, .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_LG_PX)}) {
+                //     TheonName = CLAY_STRING("Theon");
+                //     Clay_OnHover(PlayerBuildListCallback, &TheonName);
+                //     CLAY_TEXT(CLAY_STRING("Theon"), CLAY_TEXT_CONFIG(ButtonTextConfig));
+                // };
             };
             
             CLAY(CLAY_ID("PlayerSidebarBottom"), SidebarBottomLayoutConfig) {
@@ -105,6 +112,27 @@ void BuildEncounterWindow(AppState * state, int CallingScreen) {
             .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_LG_PX)
             //.clip = {true, true, Clay_GetScrollOffset()}
         }) {
+            if ( MAIN_SCREEN == CallingScreen) {
+                CLAY(CLAY_ID("NameEncounter"),{
+                    BuildWindowRow,
+                    .backgroundColor = COLOR_TRANSPARENT,
+                }) {
+                    CLAY_TEXT(CLAY_STRING("Encounter Name"), CLAY_TEXT_CONFIG(StatPageTextConfig));
+                    CLAY(CLAY_ID("EncounterNameTextBox"), {
+                    SingleLineInputLayoutConfig,
+                    .backgroundColor = (state->focusedId.id == CLAY_ID("EncounterNameTextBox").id) ? COLOR_BLACK : COLOR_GRAY_BG,
+                    .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_SM_PX),
+                    .border = {
+                        .width = CLAY_BORDER_ALL(INPUT_BORDER_WIDTH_PX),
+                        .color = COLOR_WHITE
+                    }
+                }){
+                    Clay_OnHover(FocusWindowCallback, gAppState);
+                    uint32_t CurrentFocus = gAppState->focusedId.id;
+                    FocusAndWriteTextBox(CLAY_ID("EncounterNameTextBox"), CurrentFocus, &EncounterName);
+                }
+                }
+            }
             CLAY(CLAY_ID("BuildListHeader"), {
                     BuildWindowRow
                 }) {
@@ -118,14 +146,14 @@ void BuildEncounterWindow(AppState * state, int CallingScreen) {
                         CLAY_TEXT(CLAY_STRING("Quantity"), CLAY_TEXT_CONFIG(StatPageTextConfig));
                     }
                 }
-            CLAY(CLAY_ID("BuildEncounteListContainer"), {
+            CLAY(CLAY_ID("BuildEncounterListContainer"), {
                 TTBBuildWindowLayoutConfig,
                 .backgroundColor = COLOR_GRAY_BG,
                 .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_LG_PX),
                 .clip = {true, true, Clay_GetScrollOffset()}
             }) {
                 for (int i = 0; i < BUILD_LIST_MAX; i++) {
-                    if ('\0' != BuildListMembers->name[i][0]) {
+                    if (SDL_strlen(BuildListMembers[i].name) != 0) {
                         BuildEncounterChain(i);
                     }
                 }
@@ -141,7 +169,7 @@ void BuildEncounterWindow(AppState * state, int CallingScreen) {
                 };
                 if ( MAIN_SCREEN == CallingScreen) {
                     CLAY(CLAY_ID("SaveButton"), {MainScreenButtonLayoutConfig, .backgroundColor = COLOR_BUTTON_GRAY, .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_LG_PX)}) {
-                        Clay_OnHover(ReturnToMainScreenCallback, &WindowState);
+                        Clay_OnHover(SaveEncounterButtonCallback, &WindowState);
                         CLAY_TEXT(CLAY_STRING("Save"), CLAY_TEXT_CONFIG(ButtonTextConfig));
                     };
                 }
@@ -221,12 +249,12 @@ void BuildEncounterChain(int position) {
             BuildListMembers[position].initiative = SDL_atoi(BuildListMemberInitiative[position].TextBoxBuffer);
         }
         CLAY(CLAY_IDI("BuildListName", position), {BuildWindowDescriptionHeader}){
-            if ('\0' != BuildListMembers->name[position][0]) {
+            if ('\0' != BuildListMembers[position].name[0]) {
                 char NameBuffer[64] = {0};
-                SDL_strlcpy(NameBuffer, BuildListMembers->name[position], 64);
+                SDL_strlcpy(NameBuffer, BuildListMembers[position].name, 64);
                 Clay_String NameAdd = {
-                    .chars = BuildListMembers->name[position],
-                    .length = (int32_t)SDL_strlen(BuildListMembers->name[position]),
+                    .chars = BuildListMembers[position].name,
+                    .length = (int32_t)SDL_strlen(BuildListMembers[position].name),
                     .isStaticallyAllocated = true
                 };
                 CLAY_TEXT(NameAdd, CLAY_TEXT_CONFIG(StatPageTextConfig));
@@ -247,8 +275,8 @@ void BuildEncounterChain(int position) {
 
 void AddToBuildChain(const char *ParticipantToAdd, bool IsCreature) {
     for (int i = 0; i < BUILD_LIST_MAX; i++) {
-        if ('\0' == BuildListMembers->name[i][0]) {
-            SDL_strlcpy(BuildListMembers->name[i], ParticipantToAdd, 64);
+        if ('\0' == BuildListMembers[i].name[0]) {
+            SDL_strlcpy(BuildListMembers[i].name, ParticipantToAdd, 64);
             BuildListMembers[i].Quantity = 1;
             if (IsCreature) {
                 BuildListMembers[i].IsCreature = true;
@@ -258,7 +286,7 @@ void AddToBuildChain(const char *ParticipantToAdd, bool IsCreature) {
             }
             break;
         }
-        else if (SDL_strncasecmp(BuildListMembers->name[i], ParticipantToAdd, SDL_strlen(ParticipantToAdd)) == 0) {
+        else if (SDL_strncasecmp(BuildListMembers[i].name, ParticipantToAdd, SDL_strlen(ParticipantToAdd)) == 0) {
             BuildListMembers[i].Quantity += 1;
             if (IsCreature) {
                 BuildListMembers[i].IsCreature = true;
@@ -282,6 +310,30 @@ void CreatureBuildListCallback(Clay_ElementId elementId, Clay_PointerData pointe
     if (pointerData.state == CLAY_POINTER_DATA_PRESSED_THIS_FRAME) {
         Clay_String *NameToAdd = (Clay_String *) userData;
         AddToBuildChain(NameToAdd->chars, true);
+    }
+}
+
+void SaveEncounterButtonCallback(Clay_ElementId elementId, Clay_PointerData pointerData, void *userData) {
+    if (pointerData.state == CLAY_POINTER_DATA_PRESSED_THIS_FRAME) {
+        gAppState->IsTextInputFocused = false;
+        SaveEncounterToDB();
+
+        /* Saving encounter name before reset to display in modal */
+        SDL_strlcpy(gAppState->EncounterSaved, EncounterName.StringToDisplay.chars, sizeof(gAppState->EncounterSaved));
+
+        /* Reset and return to main window after saving successfully */
+        ClearFocus();
+        ClearTextBoxes();
+        WindowState = MAIN_SCREEN;
+        ResetVisibleCreatureHeaders();
+        FreeLinkedLists();
+        ResetBuildListData();
+
+        /* Building modal message */
+        gAppState->IsModalOpen = true;
+        gAppState->ModalParentId = CLAY_ID("OuterContainer");
+        char temp[256];
+        SDL_snprintf(gAppState->ModalMessage, sizeof(gAppState->ModalMessage), "Encounter %s saved successfully.", gAppState->EncounterSaved);
     }
 }
 

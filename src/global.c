@@ -2,12 +2,12 @@
 #include "global.h"
 #include "db_query.h"
 #include "styles.h"
+#include "start_encounter.h"
 
 /*========================================================================* 
  *  SECTION - Local prototypes
  *========================================================================* 
  */
-static void ClearTextBoxes();
 
 int WindowState = 0;
 
@@ -19,9 +19,11 @@ const int FONT_ID_BODY_32 = 0;
 int WindowWidth = 0;
 int WindowHeight = 0;
 uint16_t TotalCreatures = 0;
+uint16_t TotalPlayers = 0;
 
 bool MouseDown;
 
+TextBox EncounterName;
 TextBox BuildCreatureSearch;
 TextBox BuildPlayerSearch;
 TextBox DBCreatureSearch;
@@ -170,19 +172,27 @@ Clay_String StatFeature5Desc = {0};
 /* Helpers */
 void ModifyTextBoxText(TextBox * TextToModify, uint32_t CopyOrWrite) {
     
+    if (!TextToModify || !TextToModify->IsInitialized) {
+        return;
+    }
     
     if (COPY_TEXT == CopyOrWrite) {
-        memset(TextBuffer, 0, sizeof(TextBuffer));
+        memset(TextBuffer, 0, MAX_TEXT);
         SDL_strlcpy(TextBuffer, TextToModify->TextBoxBuffer, MAX_TEXT);
     }
     else {
-        SDL_strlcpy(TextToModify->TextBoxBuffer, TextBuffer, sizeof(TextBuffer));
+        SDL_strlcpy(TextToModify->TextBoxBuffer, TextBuffer, MAX_TEXT);
         
     }
     TextToModify->StringToDisplay.length = SDL_strlen(TextToModify->TextBoxBuffer);
 }
 
 void FocusAndWriteTextBox(Clay_ElementId IdToFocus, uint32_t CurrentFocus, TextBox * TextToModify) {
+
+    if (!TextToModify || !TextToModify->IsInitialized) {
+        return;
+    }
+    
     if (gAppState->focusedId.id == IdToFocus.id) {
         gAppState->IsTextInputFocused = true;
         if(PreviousFocusId != CurrentFocus) {
@@ -204,6 +214,13 @@ void InitializeOneTextBox(TextBox * TextBoxToInit) {
 }
 
 void InitializeTextBoxes() {
+
+    SDL_memset(EncounterName.TextBoxBuffer, 0, sizeof(EncounterName.TextBoxBuffer));
+    EncounterName.StringToDisplay.chars = EncounterName.TextBoxBuffer;
+    EncounterName.StringToDisplay.length = 0;
+    EncounterName.StringToDisplay.isStaticallyAllocated = false;
+    EncounterName.IsInitialized = true;
+
     SDL_memset(BuildCreatureSearch.TextBoxBuffer, 0, sizeof(BuildCreatureSearch.TextBoxBuffer));
     BuildCreatureSearch.StringToDisplay.chars = BuildCreatureSearch.TextBoxBuffer;
     BuildCreatureSearch.StringToDisplay.length = 0;
@@ -329,6 +346,12 @@ void InitializeTextBoxes() {
     StatChaTextBox.StringToDisplay.length = 0;
     StatChaTextBox.StringToDisplay.isStaticallyAllocated = false;
     StatChaTextBox.IsInitialized = true;
+
+    SDL_memset(StatProfBonusTextBox.TextBoxBuffer, 0, sizeof(StatProfBonusTextBox.TextBoxBuffer));
+    StatProfBonusTextBox.StringToDisplay.chars = StatProfBonusTextBox.TextBoxBuffer;
+    StatProfBonusTextBox.StringToDisplay.length = 0;
+    StatProfBonusTextBox.StringToDisplay.isStaticallyAllocated = false;
+    StatProfBonusTextBox.IsInitialized = true;
 
     // Saving Throws
     SDL_memset(StatThrowStrTextBox.TextBoxBuffer, 0, sizeof(StatThrowStrTextBox.TextBoxBuffer));
@@ -888,7 +911,14 @@ void InitializeTextBoxes() {
     StatFeature3DescTextBox.StringToDisplay.isStaticallyAllocated = false;
     StatFeature3DescTextBox.IsInitialized = true;
 
-    
+    for (int i = 0; i < BUILD_LIST_MAX; i++) {
+        BuildListMembers[i].initiative = 0;
+        BuildListMembers[i].Quantity = 0;
+        SDL_memset(BuildListMembers[i].name, '\0', sizeof(BuildListMembers[i].name));
+        BuildListMembers[i].IsAdded = false;
+        BuildListMembers[i].IsCreature = false;
+    }
+
 }
 
 #include "global.h"
@@ -1190,96 +1220,57 @@ void FreeDisplayList(DisplayListMember *head) {
     }
 }
 
-/* Callbacks*/
-
-void FocusWindowCallback(Clay_ElementId elementId, Clay_PointerData pointerData, void * userData) {
-    AppState *state = userData;
-    if (pointerData.state == CLAY_POINTER_DATA_PRESSED_THIS_FRAME) {
-        gAppState->focusedId = CLAY_ID("NULL");
-        gAppState->focusedId = elementId;
-        gAppState->IsTextInputFocused = false;
-    }
-}
-
-void FocusWindowAndCallStatBlockCallback(Clay_ElementId elementId, Clay_PointerData pointerData, void * userData) {
-    if (pointerData.state == CLAY_POINTER_DATA_PRESSED_THIS_FRAME) {
-        gAppState->focusedId = CLAY_ID("NULL");
-        gAppState->focusedId = elementId;
-        gAppState->IsTextInputFocused = false;
-        int * GivenId = (int *) userData;
-        int LookUpId = *GivenId - 1;
-        LookUpCreatureStats(LookUpId);
-    }
-}
-
-void ReturnToMainScreenCallback(Clay_ElementId elementId, Clay_PointerData pointerData, void *userData) {
-    int * check = (int *) userData;
-    if (pointerData.state == CLAY_POINTER_DATA_PRESSED_THIS_FRAME) {
-        gAppState->IsTextInputFocused = false;
+void ClearFocus() {
+    gAppState->IsTextInputFocused = false;
         /* Clear focused ID */
-        gAppState->focusedId = CLAY_ID("NULL");
+    gAppState->focusedId = CLAY_ID("NULL");
+}
 
-        /* Reset all global text boxes */
-        ClearTextBoxes();
+void ResetVisibleCreatureHeaders() {
+    for (int i = 0; i <TotalCreatures; i++) {
+        HeadersToShow[i] = i;
+    }
+}
 
-        /* Clear internal windowstate tracking */
-        WindowState = MAIN_SCREEN;
+void FreeLinkedLists() {
+    /* Free combat linked list */
+    if (Head != NULL) {
+        FreeDisplayList(Head);
+        NewMember = NULL;
+        Head = NULL;
+        Tail = NULL;
+    }
 
-        /* Reset creatures to be shown in creature database screen */
-        for (int i = 0; i <TotalCreatures; i++) {
-            HeadersToShow[i] = i;
-        }
-
-        /* Free combat linked list */
-        if (Head != NULL) {
-            FreeDisplayList(Head);
-            NewMember = NULL;
-            Head = NULL;
-            Tail = NULL;
-        }
-
-        /* Free appstate sorted array of combat linked list */
-        if (gAppState->SortedListArray) {
-            free(gAppState->SortedListArray);
-            gAppState->SortedListArray = NULL;
-            gAppState->SortedListCount = 0;
-            StartEncounterState = ENCOUNTER_MAIN_SCREEN;
-        }
-        
-        /* Reset all buildlist data */
-        for (int i = 0; i < BUILD_LIST_MAX; i++) {
-            BuildListMemberQuantity[i].IsInitialized = false;
-            BuildListMemberInitiative[i].IsInitialized = false;
-
-            BuildListMembers[i].initiative = 0;
-            BuildListMembers[i].Quantity = 0;
-            SDL_memset(BuildListMembers[i].name, 0, sizeof(BuildListMembers[i].name));
-            BuildListMembers[i].IsAdded = false;
-            BuildListMembers[i].IsCreature = false;
-        }
-        memset(&BuildListMembers, 0, sizeof(BuildListMembers));
-
-        /* Reset list to an unstarted state */
-        ListStarted = 0;
-
-        /* Reset start encounter window to the initial two options */
+    /* Free appstate sorted array of combat linked list */
+    if (gAppState->SortedListArray) {
+        free(gAppState->SortedListArray);
+        gAppState->SortedListArray = NULL;
+        gAppState->SortedListCount = 0;
         StartEncounterState = ENCOUNTER_MAIN_SCREEN;
     }
 }
 
-void SearchButtonCallback(Clay_ElementId elementId, Clay_PointerData pointerData, void *userData) {
-    if (pointerData.state == CLAY_POINTER_DATA_PRESSED_THIS_FRAME) {
-        char * SearchText = &TextBuffer[0];
-        SearchCreatureNames(SearchText);
+void ResetBuildListData() {
+    for (int i = 0; i < BUILD_LIST_MAX; i++) {
+        BuildListMembers[i].initiative = 0;
+        BuildListMembers[i].Quantity = 0;
+        SDL_memset(BuildListMembers[i].name, 0, sizeof(BuildListMembers[i].name));
+        BuildListMembers[i].IsAdded = false;
+        BuildListMembers[i].IsCreature = false;
     }
+
+    /* Reset list to an unstarted state */
+    ListStarted = 0;
+
+    /* Reset start encounter window to the initial two options */
+    StartEncounterState = ENCOUNTER_MAIN_SCREEN;
 }
 
-/*========================================================================* 
- *  SECTION - Local functions
- *========================================================================* 
- */
-static void ClearTextBoxes() {
-    SDL_memset(TextBuffer, 0, sizeof(TextBuffer));
+void ClearTextBoxes() {
+    SDL_memset(TextBuffer, 0, sizeof(TextBuffer)); 
+
+    SDL_memset(EncounterName.TextBoxBuffer, 0, sizeof(EncounterName.TextBoxBuffer));
+    EncounterName.StringToDisplay.length = 0;
 
     SDL_memset(BuildCreatureSearch.TextBoxBuffer, 0, sizeof(BuildCreatureSearch.TextBoxBuffer));
     BuildCreatureSearch.StringToDisplay.length = 0;
@@ -1296,14 +1287,189 @@ static void ClearTextBoxes() {
     for (int i = 0; i < BUILD_LIST_MAX; i++){
         SDL_memset(BuildListMemberQuantity[i].TextBoxBuffer, 0, sizeof(BuildListMemberQuantity[i].TextBoxBuffer));
         BuildListMemberQuantity[i].StringToDisplay.length = 0;
-        BuildListMemberQuantity[i].IsInitialized = false;
 
         SDL_memset(BuildListMemberInitiative[i].TextBoxBuffer, 0, sizeof(BuildListMemberInitiative[i].TextBoxBuffer));
         BuildListMemberInitiative[i].StringToDisplay.length = 0;
-        BuildListMemberInitiative[i].IsInitialized = false;
     }
 
-    // --- Legendary Actions ---
+    // Core Info
+    SDL_memset(StatNameTextBox.TextBoxBuffer, 0, sizeof(StatNameTextBox.TextBoxBuffer));
+    StatNameTextBox.StringToDisplay.length = 0;
+
+    SDL_memset(StatCrTextBox.TextBoxBuffer, 0, sizeof(StatCrTextBox.TextBoxBuffer));
+    StatCrTextBox.StringToDisplay.length = 0;
+
+    SDL_memset(StatTypeTextBox.TextBoxBuffer, 0, sizeof(StatTypeTextBox.TextBoxBuffer));
+    StatTypeTextBox.StringToDisplay.length = 0;
+
+    SDL_memset(StatSizeTextBox.TextBoxBuffer, 0, sizeof(StatSizeTextBox.TextBoxBuffer));
+    StatSizeTextBox.StringToDisplay.length = 0;
+
+    SDL_memset(StatArmorClassTextBox.TextBoxBuffer, 0, sizeof(StatArmorClassTextBox.TextBoxBuffer));
+    StatArmorClassTextBox.StringToDisplay.length = 0;
+
+    SDL_memset(StatHitpointsAvgTextBox.TextBoxBuffer, 0, sizeof(StatHitpointsAvgTextBox.TextBoxBuffer));
+    StatHitpointsAvgTextBox.StringToDisplay.length = 0;
+
+    SDL_memset(StatHitDiceTextBox.TextBoxBuffer, 0, sizeof(StatHitDiceTextBox.TextBoxBuffer));
+    StatHitDiceTextBox.StringToDisplay.length = 0;
+
+    SDL_memset(StatHitpointsRollTextBox.TextBoxBuffer, 0, sizeof(StatHitpointsRollTextBox.TextBoxBuffer));
+    StatHitpointsRollTextBox.StringToDisplay.length = 0;
+
+    // Ability Scores
+    SDL_memset(StatStrTextBox.TextBoxBuffer, 0, sizeof(StatStrTextBox.TextBoxBuffer));
+    StatStrTextBox.StringToDisplay.length = 0;
+
+    SDL_memset(StatDexTextBox.TextBoxBuffer, 0, sizeof(StatDexTextBox.TextBoxBuffer));
+    StatDexTextBox.StringToDisplay.length = 0;
+
+    SDL_memset(StatConTextBox.TextBoxBuffer, 0, sizeof(StatConTextBox.TextBoxBuffer));
+    StatConTextBox.StringToDisplay.length = 0;
+
+    SDL_memset(StatIntTextBox.TextBoxBuffer, 0, sizeof(StatIntTextBox.TextBoxBuffer));
+    StatIntTextBox.StringToDisplay.length = 0;
+
+    SDL_memset(StatWisTextBox.TextBoxBuffer, 0, sizeof(StatWisTextBox.TextBoxBuffer));
+    StatWisTextBox.StringToDisplay.length = 0;
+
+    SDL_memset(StatChaTextBox.TextBoxBuffer, 0, sizeof(StatChaTextBox.TextBoxBuffer));
+    StatChaTextBox.StringToDisplay.length = 0;
+
+    SDL_memset(StatProfBonusTextBox.TextBoxBuffer, 0, sizeof(StatProfBonusTextBox.TextBoxBuffer));
+    StatProfBonusTextBox.StringToDisplay.length = 0;
+
+    // Saving Throws
+    SDL_memset(StatThrowStrTextBox.TextBoxBuffer, 0, sizeof(StatThrowStrTextBox.TextBoxBuffer));
+    StatThrowStrTextBox.StringToDisplay.length = 0;
+
+    SDL_memset(StatThrowDexTextBox.TextBoxBuffer, 0, sizeof(StatThrowDexTextBox.TextBoxBuffer));
+    StatThrowDexTextBox.StringToDisplay.length = 0;
+
+    SDL_memset(StatThrowConTextBox.TextBoxBuffer, 0, sizeof(StatThrowConTextBox.TextBoxBuffer));
+    StatThrowConTextBox.StringToDisplay.length = 0;
+
+    SDL_memset(StatThrowIntTextBox.TextBoxBuffer, 0, sizeof(StatThrowIntTextBox.TextBoxBuffer));
+    StatThrowIntTextBox.StringToDisplay.length = 0;
+
+    SDL_memset(StatThrowWisTextBox.TextBoxBuffer, 0, sizeof(StatThrowWisTextBox.TextBoxBuffer));
+    StatThrowWisTextBox.StringToDisplay.length = 0;
+
+    SDL_memset(StatThrowChaTextBox.TextBoxBuffer, 0, sizeof(StatThrowChaTextBox.TextBoxBuffer));
+    StatThrowChaTextBox.StringToDisplay.length = 0;
+
+    // Short Text Fields
+    SDL_memset(StatSpeedTypeTextBox.TextBoxBuffer, 0, sizeof(StatSpeedTypeTextBox.TextBoxBuffer));
+    StatSpeedTypeTextBox.StringToDisplay.length = 0;
+
+    SDL_memset(StatSpeedWalkTextBox.TextBoxBuffer, 0, sizeof(StatSpeedWalkTextBox.TextBoxBuffer));
+    StatSpeedWalkTextBox.StringToDisplay.length = 0;
+
+    SDL_memset(StatSpeedFlyTextBox.TextBoxBuffer, 0, sizeof(StatSpeedFlyTextBox.TextBoxBuffer));
+    StatSpeedFlyTextBox.StringToDisplay.length = 0;
+
+    SDL_memset(StatSpeedSwimTextBox.TextBoxBuffer, 0, sizeof(StatSpeedSwimTextBox.TextBoxBuffer));
+    StatSpeedSwimTextBox.StringToDisplay.length = 0;
+
+    SDL_memset(StatSpeedClimbTextBox.TextBoxBuffer, 0, sizeof(StatSpeedClimbTextBox.TextBoxBuffer));
+    StatSpeedClimbTextBox.StringToDisplay.length = 0;
+
+    SDL_memset(StatSpeedBurrowTextBox.TextBoxBuffer, 0, sizeof(StatSpeedBurrowTextBox.TextBoxBuffer));
+    StatSpeedBurrowTextBox.StringToDisplay.length = 0;
+
+    SDL_memset(StatAlignmentTextBox.TextBoxBuffer, 0, sizeof(StatAlignmentTextBox.TextBoxBuffer));
+    StatAlignmentTextBox.StringToDisplay.length = 0;
+
+    SDL_memset(StatLegendaryTextBox.TextBoxBuffer, 0, sizeof(StatLegendaryTextBox.TextBoxBuffer));
+    StatLegendaryTextBox.StringToDisplay.length = 0;
+
+    SDL_memset(StatSkillsTextBox.TextBoxBuffer, 0, sizeof(StatSkillsTextBox.TextBoxBuffer));
+    StatSkillsTextBox.StringToDisplay.length = 0;
+
+    SDL_memset(StatLanguagesTextBox.TextBoxBuffer, 0, sizeof(StatLanguagesTextBox.TextBoxBuffer));
+    StatLanguagesTextBox.StringToDisplay.length = 0;
+
+    SDL_memset(StatSensesTextBox.TextBoxBuffer, 0, sizeof(StatSensesTextBox.TextBoxBuffer));
+    StatSensesTextBox.StringToDisplay.length = 0;
+
+    SDL_memset(StatRangeDarkvisionTextBox.TextBoxBuffer, 0, sizeof(StatRangeDarkvisionTextBox.TextBoxBuffer));
+    StatRangeDarkvisionTextBox.StringToDisplay.length = 0;
+
+    SDL_memset(StatRangeTremorsenseTextBox.TextBoxBuffer, 0, sizeof(StatRangeTremorsenseTextBox.TextBoxBuffer));
+    StatRangeTremorsenseTextBox.StringToDisplay.length = 0;
+
+    SDL_memset(StatRangeBlindsightTextBox.TextBoxBuffer, 0, sizeof(StatRangeBlindsightTextBox.TextBoxBuffer));
+    StatRangeBlindsightTextBox.StringToDisplay.length = 0;
+
+    SDL_memset(StatRangeTruesightTextBox.TextBoxBuffer, 0, sizeof(StatRangeTruesightTextBox.TextBoxBuffer));
+    StatRangeTruesightTextBox.StringToDisplay.length = 0;
+
+    SDL_memset(StatSavingThrowsTextBox.TextBoxBuffer, 0, sizeof(StatSavingThrowsTextBox.TextBoxBuffer));
+    StatSavingThrowsTextBox.StringToDisplay.length = 0;
+
+    // Special Abilities
+    SDL_memset(StatSpecialAbilityOneTextBox.TextBoxBuffer, 0, sizeof(StatSpecialAbilityOneTextBox.TextBoxBuffer));
+    StatSpecialAbilityOneTextBox.StringToDisplay.length = 0;
+
+    SDL_memset(StatSpecialAbilityOneDescTextBox.TextBoxBuffer, 0, sizeof(StatSpecialAbilityOneDescTextBox.TextBoxBuffer));
+    StatSpecialAbilityOneDescTextBox.StringToDisplay.length = 0;
+
+    SDL_memset(StatSpecialAbilityTwoTextBox.TextBoxBuffer, 0, sizeof(StatSpecialAbilityTwoTextBox.TextBoxBuffer));
+    StatSpecialAbilityTwoTextBox.StringToDisplay.length = 0;
+
+    SDL_memset(StatSpecialAbilityTwoDescTextBox.TextBoxBuffer, 0, sizeof(StatSpecialAbilityTwoDescTextBox.TextBoxBuffer));
+    StatSpecialAbilityTwoDescTextBox.StringToDisplay.length = 0;
+
+    SDL_memset(StatSpecialAbilityThreeTextBox.TextBoxBuffer, 0, sizeof(StatSpecialAbilityThreeTextBox.TextBoxBuffer));
+    StatSpecialAbilityThreeTextBox.StringToDisplay.length = 0;
+
+    SDL_memset(StatSpecialAbilityThreeDescTextBox.TextBoxBuffer, 0, sizeof(StatSpecialAbilityThreeDescTextBox.TextBoxBuffer));
+    StatSpecialAbilityThreeDescTextBox.StringToDisplay.length = 0;
+
+    SDL_memset(StatSpecialAbilityFourTextBox.TextBoxBuffer, 0, sizeof(StatSpecialAbilityFourTextBox.TextBoxBuffer));
+    StatSpecialAbilityFourTextBox.StringToDisplay.length = 0;
+
+    SDL_memset(StatSpecialAbilityFourDescTextBox.TextBoxBuffer, 0, sizeof(StatSpecialAbilityFourDescTextBox.TextBoxBuffer));
+    StatSpecialAbilityFourDescTextBox.StringToDisplay.length = 0;
+
+    // Attacks
+    SDL_memset(StatAttack1TextBox.TextBoxBuffer, 0, sizeof(StatAttack1TextBox.TextBoxBuffer));
+    StatAttack1TextBox.StringToDisplay.length = 0;
+
+    SDL_memset(StatAttack1DescTextBox.TextBoxBuffer, 0, sizeof(StatAttack1DescTextBox.TextBoxBuffer));
+    StatAttack1DescTextBox.StringToDisplay.length = 0;
+
+    SDL_memset(StatAttack2TextBox.TextBoxBuffer, 0, sizeof(StatAttack2TextBox.TextBoxBuffer));
+    StatAttack2TextBox.StringToDisplay.length = 0;
+
+    SDL_memset(StatAttack2DescTextBox.TextBoxBuffer, 0, sizeof(StatAttack2DescTextBox.TextBoxBuffer));
+    StatAttack2DescTextBox.StringToDisplay.length = 0;
+
+    SDL_memset(StatAttack3TextBox.TextBoxBuffer, 0, sizeof(StatAttack3TextBox.TextBoxBuffer));
+    StatAttack3TextBox.StringToDisplay.length = 0;
+
+    SDL_memset(StatAttack3DescTextBox.TextBoxBuffer, 0, sizeof(StatAttack3DescTextBox.TextBoxBuffer));
+    StatAttack3DescTextBox.StringToDisplay.length = 0;
+
+    SDL_memset(StatAttack4TextBox.TextBoxBuffer, 0, sizeof(StatAttack4TextBox.TextBoxBuffer));
+    StatAttack4TextBox.StringToDisplay.length = 0;
+
+    SDL_memset(StatAttack4DescTextBox.TextBoxBuffer, 0, sizeof(StatAttack4DescTextBox.TextBoxBuffer));
+    StatAttack4DescTextBox.StringToDisplay.length = 0;
+
+    SDL_memset(StatAttack5TextBox.TextBoxBuffer, 0, sizeof(StatAttack5TextBox.TextBoxBuffer));
+    StatAttack5TextBox.StringToDisplay.length = 0;
+
+    SDL_memset(StatAttack5DescTextBox.TextBoxBuffer, 0, sizeof(StatAttack5DescTextBox.TextBoxBuffer));
+    StatAttack5DescTextBox.StringToDisplay.length = 0;
+
+    SDL_memset(StatAttack6TextBox.TextBoxBuffer, 0, sizeof(StatAttack6TextBox.TextBoxBuffer));
+    StatAttack6TextBox.StringToDisplay.length = 0;
+
+    SDL_memset(StatAttack6DescTextBox.TextBoxBuffer, 0, sizeof(StatAttack6DescTextBox.TextBoxBuffer));
+    StatAttack6DescTextBox.StringToDisplay.length = 0;
+
+    // Legendary Actions
     SDL_memset(StatActionLegTextBox.TextBoxBuffer, 0, sizeof(StatActionLegTextBox.TextBoxBuffer));
     StatActionLegTextBox.StringToDisplay.length = 0;
 
@@ -1325,7 +1491,7 @@ static void ClearTextBoxes() {
     SDL_memset(StatActionLeg3DescTextBox.TextBoxBuffer, 0, sizeof(StatActionLeg3DescTextBox.TextBoxBuffer));
     StatActionLeg3DescTextBox.StringToDisplay.length = 0;
 
-    // --- Lair Actions ---
+    // Lair Actions
     SDL_memset(StatActionLairTextBox.TextBoxBuffer, 0, sizeof(StatActionLairTextBox.TextBoxBuffer));
     StatActionLairTextBox.StringToDisplay.length = 0;
 
@@ -1347,7 +1513,7 @@ static void ClearTextBoxes() {
     SDL_memset(StatActionLair3DescTextBox.TextBoxBuffer, 0, sizeof(StatActionLair3DescTextBox.TextBoxBuffer));
     StatActionLair3DescTextBox.StringToDisplay.length = 0;
 
-    // --- Regional Effects ---
+    // Regional Effects
     SDL_memset(StatRegionalEffectTextBox.TextBoxBuffer, 0, sizeof(StatRegionalEffectTextBox.TextBoxBuffer));
     StatRegionalEffectTextBox.StringToDisplay.length = 0;
 
@@ -1363,7 +1529,7 @@ static void ClearTextBoxes() {
     SDL_memset(StatEndRegionalEffectTextBox.TextBoxBuffer, 0, sizeof(StatEndRegionalEffectTextBox.TextBoxBuffer));
     StatEndRegionalEffectTextBox.StringToDisplay.length = 0;
 
-    // --- Breath Attacks / Environment ---
+    // Environment / Breath Attacks
     SDL_memset(StatEnvironmentTextBox.TextBoxBuffer, 0, sizeof(StatEnvironmentTextBox.TextBoxBuffer));
     StatEnvironmentTextBox.StringToDisplay.length = 0;
 
@@ -1391,7 +1557,7 @@ static void ClearTextBoxes() {
     SDL_memset(StatBa4DescTextBox.TextBoxBuffer, 0, sizeof(StatBa4DescTextBox.TextBoxBuffer));
     StatBa4DescTextBox.StringToDisplay.length = 0;
 
-    // --- Reactions ---
+    // Reactions
     SDL_memset(StatReaction1TextBox.TextBoxBuffer, 0, sizeof(StatReaction1TextBox.TextBoxBuffer));
     StatReaction1TextBox.StringToDisplay.length = 0;
 
@@ -1410,7 +1576,7 @@ static void ClearTextBoxes() {
     SDL_memset(StatReaction3DescTextBox.TextBoxBuffer, 0, sizeof(StatReaction3DescTextBox.TextBoxBuffer));
     StatReaction3DescTextBox.StringToDisplay.length = 0;
 
-    // --- Villain Actions ---
+    // Villain Actions
     SDL_memset(StatVillActionTextBox.TextBoxBuffer, 0, sizeof(StatVillActionTextBox.TextBoxBuffer));
     StatVillActionTextBox.StringToDisplay.length = 0;
 
@@ -1432,14 +1598,14 @@ static void ClearTextBoxes() {
     SDL_memset(StatVillAction3DescTextBox.TextBoxBuffer, 0, sizeof(StatVillAction3DescTextBox.TextBoxBuffer));
     StatVillAction3DescTextBox.StringToDisplay.length = 0;
 
-    // --- Utility Spells ---
+    // Utility Spells
     SDL_memset(StatUtilitySpellsTextBox.TextBoxBuffer, 0, sizeof(StatUtilitySpellsTextBox.TextBoxBuffer));
     StatUtilitySpellsTextBox.StringToDisplay.length = 0;
 
     SDL_memset(StatUtilitySpellsListTextBox.TextBoxBuffer, 0, sizeof(StatUtilitySpellsListTextBox.TextBoxBuffer));
     StatUtilitySpellsListTextBox.StringToDisplay.length = 0;
 
-    // --- Features ---
+    // Features
     SDL_memset(StatFeature1TextBox.TextBoxBuffer, 0, sizeof(StatFeature1TextBox.TextBoxBuffer));
     StatFeature1TextBox.StringToDisplay.length = 0;
 
@@ -1458,3 +1624,63 @@ static void ClearTextBoxes() {
     SDL_memset(StatFeature3DescTextBox.TextBoxBuffer, 0, sizeof(StatFeature3DescTextBox.TextBoxBuffer));
     StatFeature3DescTextBox.StringToDisplay.length = 0;
 }
+
+/* Callbacks*/
+
+void FocusWindowCallback(Clay_ElementId elementId, Clay_PointerData pointerData, void * userData) {
+    AppState *state = userData;
+    if (pointerData.state == CLAY_POINTER_DATA_PRESSED_THIS_FRAME) {
+        gAppState->focusedId = CLAY_ID("NULL");
+        gAppState->focusedId = elementId;
+        gAppState->IsTextInputFocused = false;
+    }
+}
+
+void ClearFocusCallback(Clay_ElementId elementId, Clay_PointerData pointerData, void * userData) {
+    AppState *state = userData;
+    if (pointerData.state == CLAY_POINTER_DATA_PRESSED_THIS_FRAME) {
+        ClearFocus();
+    }
+}
+
+void FocusWindowAndCallStatBlockCallback(Clay_ElementId elementId, Clay_PointerData pointerData, void * userData) {
+    if (pointerData.state == CLAY_POINTER_DATA_PRESSED_THIS_FRAME) {
+        gAppState->focusedId = CLAY_ID("NULL");
+        gAppState->focusedId = elementId;
+        gAppState->IsTextInputFocused = false;
+        int * GivenId = (int *) userData;
+        int LookUpId = *GivenId - 1;
+        LookUpCreatureStats(LookUpId);
+    }
+}
+
+void ReturnToMainScreenCallback(Clay_ElementId elementId, Clay_PointerData pointerData, void *userData) {
+    int * check = (int *) userData;
+    if (pointerData.state == CLAY_POINTER_DATA_PRESSED_THIS_FRAME) {
+        Turn = 0;
+        ClearFocus();
+
+        ClearTextBoxes();
+
+        WindowState = MAIN_SCREEN;
+
+        ResetVisibleCreatureHeaders();
+
+        FreeLinkedLists();
+
+        ResetBuildListData();        
+    }
+}
+
+void SearchButtonCallback(Clay_ElementId elementId, Clay_PointerData pointerData, void *userData) {
+    if (pointerData.state == CLAY_POINTER_DATA_PRESSED_THIS_FRAME) {
+        char * SearchText = &TextBuffer[0];
+        SearchCreatureNames(SearchText);
+    }
+}
+
+/*========================================================================* 
+ *  SECTION - Local functions
+ *========================================================================* 
+ */
+

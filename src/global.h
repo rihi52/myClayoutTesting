@@ -35,8 +35,9 @@
 #define COPY_TEXT                       0
 #define WRITE_TEXT                      1
 
-#define MAX_TEXT                        256
+#define MAX_TEXT                        2048
 #define BUILD_LIST_MAX                  50
+
 /*========================================================================* 
  *  SECTION - Global struct typedefs
  *========================================================================* 
@@ -208,17 +209,23 @@ typedef struct app_state {
     SDL_Window *window;
     Clay_SDL3RendererData rendererData;
     Clay_ElementId focusedId;
+    Clay_ElementId SliderId;
     bool IsTextInputFocused;
     Clay_String StringToModify;
     DisplayListMember **SortedListArray;
     int SortedListCount;
     StatBlock CurrentStatBlock;
     int ActiveScreen;
+    bool IsModalOpen;
+    Clay_ElementId ModalParentId;
+    char ModalMessage[256];
+    char EncounterSaved[256];
+    char CreatureSaved[256];
 } AppState;
 
 typedef struct BuildListMember {
     int initiative;
-    char name[BUILD_LIST_MAX][64];
+    char name[64];
     int Quantity;
     bool IsAdded;
     bool IsCreature;
@@ -230,6 +237,10 @@ extern BuildListMember BuildListMembers[BUILD_LIST_MAX];
  *  SECTION - Global variables
  *========================================================================*
  */
+extern double deltaTime;
+
+extern float MouseX;
+extern float MouseY;
 extern DisplayListMember * NewMember;
 extern DisplayListMember * Head;
 extern DisplayListMember * Tail;
@@ -238,6 +249,7 @@ extern int ListStarted;
 
 extern int StartEncounterState;
 
+extern TextBox EncounterName;
 extern TextBox BuildCreatureSearch;
 extern TextBox BuildPlayerSearch;
 extern TextBox DBCreatureSearch;
@@ -261,6 +273,7 @@ extern int WindowState;
 extern int WindowWidth;
 extern int WindowHeight;
 extern uint16_t TotalCreatures;
+extern uint16_t TotalPlayers;
 
 extern const int FONT_ID_BODY_16;
 extern const int FONT_ID_BODY_32;
@@ -277,10 +290,16 @@ void FreeStatBlock(StatBlock *sb);
 void ClearClayString(Clay_String *s);
 void InitializeOneTextBox(TextBox * TextBoxToInit);
 void FreeDisplayList(DisplayListMember *head);
+void ClearTextBoxes();
+void FreeLinkedLists();
+void ResetVisibleCreatureHeaders();
+void ClearFocus();
+void ResetBuildListData();
 
 void ReturnToMainScreenCallback(Clay_ElementId elementId, Clay_PointerData pointerData, void *userData);
 void FocusWindowCallback(Clay_ElementId elementId, Clay_PointerData pointerData, void * userData);
 void SearchButtonCallback(Clay_ElementId elementId, Clay_PointerData pointerData, void *userData);
 void FocusWindowAndCallStatBlockCallback(Clay_ElementId elementId, Clay_PointerData pointerData, void * userData);
+void ClearFocusCallback(Clay_ElementId elementId, Clay_PointerData pointerData, void * userData);
 
 #endif /* GLOBAL_H */

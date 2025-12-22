@@ -22,6 +22,7 @@ const Clay_Color COLOR_GRAY_BG      = (Clay_Color) {30, 30, 30, 255};
 const Clay_Color COLOR_GRAY_SELECT  = (Clay_Color) {70, 70, 70, 255};
 const Clay_Color COLOR_TRANSPARENT  = (Clay_Color) {0, 0, 0, 0};
 const Clay_Color COLOR_BUTTON_GRAY  = (Clay_Color) {50, 50, 50, 255};
+const Clay_Color COLOR_MODAL_BG     = (Clay_Color) {20, 20, 20, 255};
 
 /*========================================================================* 
  *  SECTION - Global style structs
@@ -164,6 +165,15 @@ Clay_LayoutConfig TypeContainerLayoutConfig = {
     .childAlignment =  { CLAY_ALIGN_X_LEFT, CLAY_ALIGN_Y_CENTER },
     .layoutDirection = CLAY_LEFT_TO_RIGHT
 };
+
+Clay_LayoutConfig PlayerACContainerLayoutConfig = {
+    .sizing = { CLAY_SIZING_GROW(0), CLAY_SIZING_GROW(0.33) },
+    .padding = { 0, 0, 0, 0},
+    .childGap = 16,
+    .childAlignment =  { CLAY_ALIGN_X_CENTER, CLAY_ALIGN_Y_CENTER },
+    .layoutDirection = CLAY_LEFT_TO_RIGHT
+};
+
 /**/
 Clay_LayoutConfig SourceContainerLayoutConfig = {
     .sizing = { CLAY_SIZING_PERCENT(0.5), CLAY_SIZING_GROW(0) },
@@ -194,6 +204,14 @@ Clay_LayoutConfig LongSingleLineInputLayoutConfig = {
     .padding = { 8, 8, 8, 8},
     .childGap = 16,
     .childAlignment =  { CLAY_ALIGN_X_LEFT, CLAY_ALIGN_Y_CENTER },
+    .layoutDirection = CLAY_TOP_TO_BOTTOM
+};
+
+Clay_LayoutConfig MultiLineInputLayoutConfig = {
+    .sizing = { CLAY_SIZING_FIXED(800), CLAY_SIZING_FIXED(128) },
+    .padding = { 8, 8, 8, 8},
+    .childGap = 16,
+    .childAlignment =  { CLAY_ALIGN_X_LEFT, CLAY_ALIGN_Y_TOP },
     .layoutDirection = CLAY_TOP_TO_BOTTOM
 };
 

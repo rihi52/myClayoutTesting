@@ -39,11 +39,13 @@ make
 
 ```sql
 CREATE TABLE encounters (id INTEGER PRIMARY KEY, encounter_name TEXT);
-CREATE TABLE enounterplayers (id INTEGER PRIMARY KEY, encounter_id INTEGER, player_id INTEGER, initiative INTEGER);
-CREATE TABLE enountercreatures (id INTEGER PRIMARY KEY, encounter_id INTEGER, creature_id INTEGER, initiative INTEGER);
+CREATE TABLE encounterplayers (id INTEGER PRIMARY KEY, encounter_id INTEGER, player_name TEXT, initiative INTEGER);
+CREATE TABLE encountercreatures (id INTEGER PRIMARY KEY, encounter_id INTEGER, creature_name TEXT, initiative INTEGER, quantity INTEGER);
+CREATE TABLE players (id INTEGER PRIMARY KEY, name TEXT, armor_class INTEGER);
 ```
 
 ### Spells Database
+
 ```sql
 CREATE TABLE spells (id INTEGER PRIMARY KEY, name TEXT, description TEXT, higher_level TEXT, range TEXT, components TEXT, material TEXT, duration TEXT, ritual BOOLEAN, casting_time TEXT, spell_level TEXT, attack_type TEXT, damage_type TEXT, school TEXT);
 ```
