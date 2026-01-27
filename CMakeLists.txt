@@ -21,6 +21,7 @@ set(SRC_FILES
     src/slider.c
     src/modal.c
     src/player_db.c
+    src/encounter_db.c
 )
 
 # === SDL3 (vendored) ===

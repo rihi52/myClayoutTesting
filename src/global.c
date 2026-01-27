@@ -20,6 +20,7 @@ int WindowWidth = 0;
 int WindowHeight = 0;
 uint16_t TotalCreatures = 0;
 uint16_t TotalPlayers = 0;
+uint16_t TotalEncounters = 0;
 
 bool MouseDown;
 

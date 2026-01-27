@@ -8,6 +8,7 @@
 sqlite3_int64 InsertEncounterNameToDB();
 int InsertEncounterCreaturesToDB(sqlite3_int64 EncounterID);
 void InsertEncounterPlayersToDB(sqlite3_int64 EncounterID);
+int LoadEncounters(int EncounterId);
 
 /*========================================================================*
  *  SECTION - External variables that cannot be defined in header files   *
@@ -17,9 +18,11 @@ sqlite3 * pGuidnbatterDB;
 
 CreatureHeader DBPageHeaders[MAX_DB_COUNT] = {0};
 PlayerHeader DBPlayerPageHeaders[MAX_DB_COUNT] = {0};
+EncounterHeader DBEncounterPageHeaders[MAX_DB_COUNT] = {0};
 
 int HeadersToShow[MAX_DB_COUNT];
 int PlayersToShow[MAX_DB_COUNT];
+int EncountersToShow[MAX_DB_COUNT];
 
 static const char * BoundedStrStr(const char * haystack, const char * needle, size_t haystackLen, size_t NeedleLen);
 
@@ -190,6 +193,19 @@ void LoadDatabasePlayers() {
     }
 }
 
+void LoadDatabaseEncounters() {
+    for (int i = 0; i < MAX_DB_COUNT; i++) {
+        if (0 == LoadEncounters(i)) {
+            TotalEncounters++;
+            EncountersToShow[i] = i;
+        }
+        else {
+            EncountersToShow[i] = -1;
+            break;
+        }
+    }
+}
+
 void RefreshDatabaseMonsters() {
     TotalCreatures = 0;
 
@@ -322,6 +338,36 @@ int LoadPlayers(int PlayerId) {
 
     sqlite3_finalize(stmt);
     if (NULL == DBPlayerPageHeaders[PlayerId].PlayerName.chars) return 1;
+    return 0;
+}
+
+int LoadEncounters(int EncounterId) {
+    sqlite3_stmt *stmt = NULL;
+    const char *sql = "SELECT encounter_name FROM encounters WHERE id = ?";
+
+    int rc = sqlite3_prepare_v2(pGuidnbatterDB, sql, -1, &stmt, NULL);
+    if (rc != SQLITE_OK)
+    {
+        SDL_Log("Failed to prepare statement: %s", sqlite3_errmsg(pGuidnbatterDB));
+        return -1;
+    }
+
+    sqlite3_bind_int(stmt, 1, EncounterId + 1);
+
+    rc = sqlite3_step(stmt);
+    if (rc == SQLITE_ROW)
+    {
+        const char *Name = sqlite3_column_text(stmt, 0);
+
+        DBEncounterPageHeaders[EncounterId].EncounterName = MakeClayString(Name);
+    }
+    else if (rc != SQLITE_DONE)
+    {
+        SDL_Log("Failed to execute statement: %s", sqlite3_errmsg(pGuidnbatterDB));
+    }
+
+    sqlite3_finalize(stmt);
+    if (NULL == DBEncounterPageHeaders[EncounterId].EncounterName.chars) return 1;
     return 0;
 }
 
@@ -777,28 +823,28 @@ void SaveNewStatBlockToDB() {
     int throwWis = 0;
     int throwCha = 0;
 
-    token = strtok_r(buffer, ",", &saveptr);
+    token = SDL_strtok_r(buffer, ",", &saveptr);
 
     while (token != NULL) {
 
         // trim whitespace
         while (*token == ' ') token++;
 
-        if (strcasecmp(token, "str") == 0) {
+        if (SDL_strcasecmp(token, "str") == 0) {
             throwStr = strMod;
-        } else if (strcasecmp(token, "dex") == 0) {
+        } else if (SDL_strcasecmp(token, "dex") == 0) {
             throwDex = dexMod;
-        } else if (strcasecmp(token, "con") == 0) {
+        } else if (SDL_strcasecmp(token, "con") == 0) {
             throwCon = conMod;
-        } else if (strcasecmp(token, "int") == 0) {
+        } else if (SDL_strcasecmp(token, "int") == 0) {
             throwInt = intMod;
-        } else if (strcasecmp(token, "wis") == 0) {
+        } else if (SDL_strcasecmp(token, "wis") == 0) {
             throwWis = wisMod;
-        } else if (strcasecmp(token, "cha") == 0) {
+        } else if (SDL_strcasecmp(token, "cha") == 0) {
             throwCha = chaMod;
         }
 
-        token = strtok_r(NULL, ",", &saveptr);
+        token = SDL_strtok_r(NULL, ",", &saveptr);
     }
 
     sqlite3_stmt *stmt = NULL;

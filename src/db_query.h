@@ -150,6 +150,10 @@ Clay_String PlayerName;
 Clay_String PlayerAC;
 }PlayerHeader;
 
+typedef struct EncounterHeader {
+Clay_String EncounterName;
+}EncounterHeader;
+
 /*========================================================================* 
  *  SECTION - External variables that cannot be defined in header files
  *========================================================================* 
@@ -285,9 +289,11 @@ extern sqlite3 * pGuidnbatterDB;
 
 extern int HeadersToShow[MAX_DB_COUNT];
 extern int PlayersToShow[MAX_DB_COUNT];
+extern int EncountersToShow[MAX_DB_COUNT];
 
 extern CreatureHeader DBPageHeaders[MAX_DB_COUNT];
 extern PlayerHeader DBPlayerPageHeaders[MAX_DB_COUNT];
+extern EncounterHeader DBEncounterPageHeaders[MAX_DB_COUNT];
 
 void DatabaseOpen(void);
 void DatabaseClose(void);
@@ -295,6 +301,7 @@ void LoadDatabaseMonsters();
 void LoadDatabasePlayers();
 void RefreshDatabaseMonsters();
 void RefreshDatabasePlayers();
+void LoadDatabaseEncounters();
 int LoadCreatureHeaderAlphabetical(int MonsterId);
 int LoadPlayers(int PlayerId);
 Clay_String MakeClayString(const char * string);

@@ -22,10 +22,6 @@ BuildListMember BuildListMembers[BUILD_LIST_MAX] = {0};
  *  SECTION - Local variables
  *========================================================================* 
  */
-static Clay_String FinnName = {0};
-static Clay_String RaviName = {0};
-static Clay_String PaxName = {0};
-static Clay_String TheonName = {0};
 
 /*========================================================================* 
  *  SECTION - Local prototypes
@@ -60,27 +56,6 @@ void BuildEncounterWindow(AppState * state, int CallingScreen) {
                         MakePlayerHeader(i, BUILD_ENCOUNTER_SCREEN);
                     }
                 }
-
-                // CLAY(CLAY_ID("PlayerOne"), {PlayerButtonLayoutConfig, .backgroundColor = COLOR_BUTTON_GRAY, .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_LG_PX)}) {
-                //     FinnName = CLAY_STRING("Finn");
-                //     Clay_OnHover(PlayerBuildListCallback, &FinnName);
-                //     CLAY_TEXT(CLAY_STRING("Finn"), CLAY_TEXT_CONFIG(ButtonTextConfig));
-                // };
-                // CLAY(CLAY_ID("PlayerTwo"), {PlayerButtonLayoutConfig, .backgroundColor = COLOR_BUTTON_GRAY, .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_LG_PX)}) {
-                //     RaviName = CLAY_STRING("Ravi");
-                //     Clay_OnHover(PlayerBuildListCallback, &RaviName);
-                //     CLAY_TEXT(CLAY_STRING("Ravi"), CLAY_TEXT_CONFIG(ButtonTextConfig));
-                // };
-                // CLAY(CLAY_ID("PlayerThree"), {PlayerButtonLayoutConfig, .backgroundColor = COLOR_BUTTON_GRAY, .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_LG_PX)}) {
-                //     PaxName = CLAY_STRING("Pax");
-                //     Clay_OnHover(PlayerBuildListCallback, &PaxName);
-                //     CLAY_TEXT(CLAY_STRING("Pax"), CLAY_TEXT_CONFIG(ButtonTextConfig));
-                // };
-                // CLAY(CLAY_ID("PlayerFour"), {PlayerButtonLayoutConfig, .backgroundColor = COLOR_BUTTON_GRAY, .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_LG_PX)}) {
-                //     TheonName = CLAY_STRING("Theon");
-                //     Clay_OnHover(PlayerBuildListCallback, &TheonName);
-                //     CLAY_TEXT(CLAY_STRING("Theon"), CLAY_TEXT_CONFIG(ButtonTextConfig));
-                // };
             };
             
             CLAY(CLAY_ID("PlayerSidebarBottom"), SidebarBottomLayoutConfig) {

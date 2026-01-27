@@ -70,6 +70,7 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
     DatabaseOpen();
     LoadDatabaseMonsters();
     LoadDatabasePlayers();
+    LoadDatabaseEncounters();
 
     InitializeTextBoxes();
     MouseDown = false;

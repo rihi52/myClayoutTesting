@@ -28,6 +28,7 @@
 #define BUILD_NEW_ENCOUNTER_SCREEN      10
 #define SELECT_EXISTING_SCREEN          11
 #define NEW_STATBLOCK_SCREEN            12
+#define ENCOUNTER_DB_SCREEN             13
 
 #define BACKSPACE_KEY                   8
 #define SPACEBAR_KEY                    32
@@ -274,6 +275,7 @@ extern int WindowWidth;
 extern int WindowHeight;
 extern uint16_t TotalCreatures;
 extern uint16_t TotalPlayers;
+extern uint16_t TotalEncounters;
 
 extern const int FONT_ID_BODY_16;
 extern const int FONT_ID_BODY_32;
