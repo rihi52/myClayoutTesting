@@ -216,7 +216,11 @@ void BuildEncounterChain(int position) {
         CLAY(CLAY_IDI("BuildListInitiative", position), {
             BuildInitiativeQuantityLayoutConfig,
             .backgroundColor = (gAppState->focusedId.id == CLAY_IDI("BuildListInitiative", position).id) ? COLOR_BLACK : COLOR_BUTTON_GRAY,
-            .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_SM_PX)
+            .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_SM_PX),
+            .border = {
+                    .width = CLAY_BORDER_ALL(INPUT_BORDER_WIDTH_PX),
+                    .color = COLOR_WHITE
+                }
         }){
             Clay_OnHover(FocusWindowCallback, gAppState);
             uint32_t CurrentFocus = gAppState->focusedId.id;
@@ -238,7 +242,11 @@ void BuildEncounterChain(int position) {
         CLAY(CLAY_IDI("BuildListQuantity", position), {
             BuildInitiativeQuantityLayoutConfig,
             .backgroundColor = (gAppState->focusedId.id == CLAY_IDI("BuildListQuantity", position).id) ? COLOR_BLACK : COLOR_BUTTON_GRAY,
-            .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_SM_PX)
+            .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_SM_PX),
+            .border = {
+                    .width = CLAY_BORDER_ALL(INPUT_BORDER_WIDTH_PX),
+                    .color = COLOR_WHITE
+                }
         }){
             Clay_OnHover(FocusWindowCallback, gAppState);
             uint32_t CurrentFocus = gAppState->focusedId.id;
@@ -292,6 +300,7 @@ void SaveEncounterButtonCallback(Clay_ElementId elementId, Clay_PointerData poin
     if (pointerData.state == CLAY_POINTER_DATA_PRESSED_THIS_FRAME) {
         gAppState->IsTextInputFocused = false;
         SaveEncounterToDB();
+        RefreshDatabaseEncounters();
 
         /* Saving encounter name before reset to display in modal */
         SDL_strlcpy(gAppState->EncounterSaved, EncounterName.StringToDisplay.chars, sizeof(gAppState->EncounterSaved));

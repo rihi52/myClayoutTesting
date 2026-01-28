@@ -301,6 +301,7 @@ void LoadDatabaseMonsters();
 void LoadDatabasePlayers();
 void RefreshDatabaseMonsters();
 void RefreshDatabasePlayers();
+void RefreshDatabaseEncounters();
 void LoadDatabaseEncounters();
 int LoadCreatureHeaderAlphabetical(int MonsterId);
 int LoadPlayers(int PlayerId);

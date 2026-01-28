@@ -28,6 +28,7 @@
  *========================================================================* 
  */
 static void CancelNewEncounterCallback(Clay_ElementId elementId, Clay_PointerData pointerData, void *userData);
+static void AddEncounterCallback(Clay_ElementId elementId, Clay_PointerData pointerData, void *userData);
 
 /*========================================================================* 
  *  SECTION - Global functions
@@ -48,7 +49,7 @@ void EncounterDatabaseWindow(AppState * state) {
                     CLAY_TEXT(CLAY_STRING("Return Home"), CLAY_TEXT_CONFIG(ButtonTextConfig));
                 };
                 CLAY(CLAY_ID("EncounterDBAddButton"), {MainScreenButtonLayoutConfig, .backgroundColor = COLOR_BUTTON_GRAY, .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_LG_PX)}) {
-                    // Clay_OnHover(AddEncounterCallback, &WindowState);
+                    Clay_OnHover(AddEncounterCallback, &WindowState);
                     CLAY_TEXT(CLAY_STRING("Add New"), CLAY_TEXT_CONFIG(ButtonTextConfig));
                 };
                 CLAY(CLAY_ID("EncounterDBRemoveButton"), {MainScreenButtonLayoutConfig, .backgroundColor = COLOR_BUTTON_GRAY, .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_LG_PX)}) {
@@ -95,7 +96,7 @@ void EncounterDatabaseWindow(AppState * state) {
                     .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_LG_PX),
                     .clip = {true, true, Clay_GetScrollOffset()}
                 }) {
-                    for (int i = 0; i < TotalPlayers; i++) {
+                    for (int i = 0; i < TotalEncounters; i++) {
                         if (EncountersToShow[i] != -1) {
                             MakeEncounterHeader(i, CREATURE_DB_SCREEN);
                         }                    
@@ -165,6 +166,15 @@ void MakeEncounterHeader(int i, int CallingWindow) {
  *  SECTION - Local functions
  *========================================================================* 
  */
+static void AddEncounterCallback(Clay_ElementId elementId, Clay_PointerData pointerData, void *userData) {
+    if (pointerData.state == CLAY_POINTER_DATA_PRESSED_THIS_FRAME) {
+        gAppState->focusedId = CLAY_ID("NULL");
+        gAppState->IsTextInputFocused = false;
+        ClearTextBoxes();
+        WindowState = BUILD_ENCOUNTER_SCREEN;
+        gAppState->ActiveScreen = BUILD_ENCOUNTER_SCREEN;
+    }
+}
 
 static void CancelNewEncounterCallback(Clay_ElementId elementId, Clay_PointerData pointerData, void *userData) {
     if (pointerData.state == CLAY_POINTER_DATA_PRESSED_THIS_FRAME) {

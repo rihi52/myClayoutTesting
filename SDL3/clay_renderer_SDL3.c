@@ -1,5 +1,7 @@
 #include "../src/clay.h"
-#include "../src/global.h"
+
+#include "clay_renderer_SDL3.h"
+#include "renderincludes.h"
 
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
@@ -140,7 +142,7 @@ static void SDL_Clay_RenderArc(Clay_SDL3RendererData *rendererData, const SDL_FP
 
 static SDL_Rect currentClippingRectangle;
 
-static void SDL_Clay_RenderClayCommands(Clay_SDL3RendererData *rendererData, Clay_RenderCommandArray *rcommands)
+void SDL_Clay_RenderClayCommands(Clay_SDL3RendererData *rendererData, Clay_RenderCommandArray *rcommands)
 {
     for (size_t i = 0; i < rcommands->length; i++) {
         Clay_RenderCommand *rcmd = Clay_RenderCommandArray_Get(rcommands, i);

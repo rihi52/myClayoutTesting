@@ -8,7 +8,8 @@
 
 #define CLAY_IMPLEMENTATION
 #include "clay.h"
-#include "../SDL3/clay_renderer_SDL3.c"
+//#include "../SDL3/clay_renderer_SDL3.c"
+#include "SDL3/clay_renderer_SDL3.h"
 
 #include <stdio.h>
 #include "global.h"

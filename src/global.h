@@ -4,8 +4,8 @@
 #include "clay.h"
 #include "stdio.h"
 #include "stdint.h"
+#include "../SDL3/renderincludes.h"
 #include <SDL3/SDL.h>
-#include <SDL3/SDL_main.h>
 #include <SDL3_ttf/SDL_ttf.h>
 #include <SDL3_image/SDL_image.h>
 #include <SDL3/SDL_keyboard.h>
@@ -64,11 +64,11 @@ typedef struct TextBox {
     struct DisplayListMember * Next;
 }DisplayListMember;
 
-typedef struct {
-    SDL_Renderer *renderer;
-    TTF_TextEngine *textEngine;
-    TTF_Font **fonts;
-} Clay_SDL3RendererData;
+// typedef struct {
+//     SDL_Renderer *renderer;
+//     TTF_TextEngine *textEngine;
+//     TTF_Font **fonts;
+// } Clay_SDL3RendererData;
 
 typedef struct StatBlock {
     Clay_String StatId;

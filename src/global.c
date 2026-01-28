@@ -1659,6 +1659,9 @@ void ReturnToMainScreenCallback(Clay_ElementId elementId, Clay_PointerData point
     int * check = (int *) userData;
     if (pointerData.state == CLAY_POINTER_DATA_PRESSED_THIS_FRAME) {
         Turn = 0;
+        RefreshDatabaseMonsters();
+        RefreshDatabasePlayers();
+        RefreshDatabaseEncounters();
         ClearFocus();
 
         ClearTextBoxes();

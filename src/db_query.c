@@ -175,7 +175,6 @@ void LoadDatabaseMonsters() {
         }
         else {
             HeadersToShow[i] = -1;
-            break;
         }
     }
 }
@@ -188,7 +187,6 @@ void LoadDatabasePlayers() {
         }
         else {
             PlayersToShow[i] = -1;
-            break;
         }
     }
 }
@@ -201,7 +199,6 @@ void LoadDatabaseEncounters() {
         }
         else {
             EncountersToShow[i] = -1;
-            break;
         }
     }
 }
@@ -234,6 +231,23 @@ void RefreshDatabasePlayers() {
         if (LoadPlayers(i) == 0) {
             PlayersToShow[TotalPlayers] = i;
             TotalPlayers++;
+        } else {
+            break;
+        }
+    }
+}
+
+void RefreshDatabaseEncounters() {
+    TotalEncounters = 0;
+
+    for (int i = 0; i < MAX_DB_COUNT; i++) {
+        EncountersToShow[i] = -1;
+    }
+
+    for (int i = 0; i < MAX_DB_COUNT; i++) {
+        if (LoadEncounters(i) == 0) {
+            EncountersToShow[TotalEncounters] = i;
+            TotalEncounters++;
         } else {
             break;
         }
@@ -342,6 +356,7 @@ int LoadPlayers(int PlayerId) {
 }
 
 int LoadEncounters(int EncounterId) {
+    int ReturnedValue = 0;
     sqlite3_stmt *stmt = NULL;
     const char *sql = "SELECT encounter_name FROM encounters WHERE id = ?";
 
@@ -349,7 +364,8 @@ int LoadEncounters(int EncounterId) {
     if (rc != SQLITE_OK)
     {
         SDL_Log("Failed to prepare statement: %s", sqlite3_errmsg(pGuidnbatterDB));
-        return -1;
+        ReturnedValue = -1;
+        return ReturnedValue;
     }
 
     sqlite3_bind_int(stmt, 1, EncounterId + 1);
@@ -367,8 +383,11 @@ int LoadEncounters(int EncounterId) {
     }
 
     sqlite3_finalize(stmt);
-    if (NULL == DBEncounterPageHeaders[EncounterId].EncounterName.chars) return 1;
-    return 0;
+    if (NULL == DBEncounterPageHeaders[EncounterId].EncounterName.chars){
+        ReturnedValue = 1;
+        return ReturnedValue;
+    }
+    return ReturnedValue;
 }
 
 void LookUpCreatureStats(int MonsterId) {
@@ -1109,7 +1128,7 @@ int InsertEncounterCreaturesToDB(sqlite3_int64 EncounterID) {
     }
 
     for (int i = 0; i < BUILD_LIST_MAX; i++) {
-        if ('\0' != BuildListMembers->name[i] && !BuildListMembers[i].IsAdded) {
+        if ('\0' != BuildListMembers[i].name[0] && !BuildListMembers[i].IsAdded) {
             if (!BuildListMembers[i].IsCreature) {
                 continue;
             }
@@ -1151,7 +1170,7 @@ void InsertEncounterPlayersToDB(sqlite3_int64 EncounterID) {
     }
 
     for (int i = 0; i < BUILD_LIST_MAX; i++) {
-        if ('\0' != BuildListMembers->name[i] && !BuildListMembers[i].IsAdded) {
+        if ('\0' != BuildListMembers[i].name[0] && !BuildListMembers[i].IsAdded) {
 
             if (BuildListMembers[i].IsCreature) {
                 continue;

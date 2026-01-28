@@ -190,7 +190,7 @@ static void SaveNewStatBlockCallback(Clay_ElementId elementId, Clay_PointerData 
         // /* Saving encounter name before reset to display in modal */
         // SDL_strlcpy(gAppState->PlayerSaved, StatNameTextBox.StringToDisplay.chars, sizeof(gAppState->PlayerSaved));
 
-        // RefreshDatabaseMonsters();
+        // RefreshDatabasePlayers();
 
         // WindowState = CREATURE_DB_SCREEN;
         // gAppState->ActiveScreen = CREATURE_DB_SCREEN;
