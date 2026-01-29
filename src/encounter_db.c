@@ -27,6 +27,10 @@
  *  SECTION - Local prototypes
  *========================================================================* 
  */
+static void FillEncounter();
+static void DisplayEncounterChain(int position);
+
+static void CallEncounterDetailsCallback(Clay_ElementId elementId, Clay_PointerData pointerData, void *userData);
 static void CancelNewEncounterCallback(Clay_ElementId elementId, Clay_PointerData pointerData, void *userData);
 static void AddEncounterCallback(Clay_ElementId elementId, Clay_PointerData pointerData, void *userData);
 
@@ -127,7 +131,10 @@ void EncounterDatabaseWindow(AppState * state) {
                     }) {
 
                     }
-                }         
+                }
+                if (WindowState == SHOW_ENCOUNTER_DETAILS) {
+                    FillEncounter();                
+                } 
             }
         };
         if (gAppState->IsModalOpen) {
@@ -156,16 +163,111 @@ void MakeEncounterHeader(int i, int CallingWindow) {
         CLAY_AUTO_ID({NameContainerLayoutConfig}){
             CLAY_TEXT(DBEncounterPageHeaders[i].EncounterName, CLAY_TEXT_CONFIG(ButtonTextConfig));
         };
-        if (BUILD_ENCOUNTER_SCREEN == CallingWindow) {
-            Clay_OnHover(PlayerBuildListCallback, &DBEncounterPageHeaders[i].EncounterName);
-        }
     };
+    Clay_OnHover(CallEncounterDetailsCallback, &DBEncounterPageHeaders[i].EncounterName);
+}
+
+static void FillEncounter() {
+    CLAY(CLAY_ID("StatPage"), {
+        StatPageContainer,
+        .backgroundColor = (WindowState == CREATURE_DB_SCREEN) ? COLOR_TRANSPARENT : COLOR_BUTTON_GRAY,
+        .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_LG_PX),
+        .clip = {false, true, Clay_GetScrollOffset()}
+    }) {
+
+        CLAY(CLAY_ID("EncounterNameContainer"), {
+            StatPageDivider,
+            .backgroundColor = COLOR_TRANSPARENT,
+            .border = { .width = { .bottom = 5 }, .color = COLOR_BLACK }
+        }) {
+            CLAY_TEXT(gAppState->CurrentStatBlock.StatName, CLAY_TEXT_CONFIG(StatPageTextConfig));
+        };
+        for (int i = 0; i < BUILD_LIST_MAX; i++) {
+                    if (SDL_strlen(BuildListMembers[i].name) != 0) {
+                        DisplayEncounterChain(i);
+                    }
+                }
+    }
 }
 
 /*========================================================================* 
  *  SECTION - Local functions
  *========================================================================* 
  */
+static void DisplayEncounterChain(int position) {
+    CLAY_AUTO_ID({
+        BuildWindowRow,
+        .backgroundColor = COLOR_BUTTON_GRAY,
+        .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_LG_PX)
+    }){
+        CLAY(CLAY_IDI("DislplayListInitiative", position), {
+            BuildInitiativeQuantityLayoutConfig,
+            .backgroundColor = (gAppState->focusedId.id == CLAY_IDI("DislplayListInitiative", position).id) ? COLOR_BLACK : COLOR_BUTTON_GRAY,
+            .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_SM_PX),
+            .border = {
+                    .width = CLAY_BORDER_ALL(INPUT_BORDER_WIDTH_PX),
+                    .color = COLOR_WHITE
+                }
+        }) {
+            char InitiativeBuffer[8] = {0};
+            SDL_itoa(BuildListMembers[position].initiative, InitiativeBuffer, 8);
+            Clay_String InitiativeAdd = {
+                .chars = InitiativeBuffer,
+                .length = (int32_t)SDL_strlen(InitiativeBuffer),
+                .isStaticallyAllocated = false
+            };
+            CLAY_TEXT(InitiativeAdd, CLAY_TEXT_CONFIG(StatPageTextConfig));
+        }
+        CLAY(CLAY_IDI("DisplayListName", position), {BuildWindowDescriptionHeader}){
+            if ('\0' != BuildListMembers[position].name[0]) {
+                char NameBuffer[64] = {0};
+                SDL_strlcpy(NameBuffer, BuildListMembers[position].name, 64);
+                Clay_String NameAdd = {
+                    .chars = BuildListMembers[position].name,
+                    .length = (int32_t)SDL_strlen(BuildListMembers[position].name),
+                    .isStaticallyAllocated = true
+                };
+                CLAY_TEXT(NameAdd, CLAY_TEXT_CONFIG(StatPageTextConfig));
+            }
+        }
+        CLAY(CLAY_IDI("DisplayListQuantity", position), {
+            BuildInitiativeQuantityLayoutConfig,
+            .backgroundColor = (gAppState->focusedId.id == CLAY_IDI("DisplayListQuantity", position).id) ? COLOR_BLACK : COLOR_BUTTON_GRAY,
+            .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_SM_PX),
+            .border = {
+                    .width = CLAY_BORDER_ALL(INPUT_BORDER_WIDTH_PX),
+                    .color = COLOR_WHITE
+                }
+        }) {
+            char QuantityBuffer[8] = {0};
+            SDL_itoa(BuildListMembers[position].Quantity, QuantityBuffer, 8);
+            Clay_String QuantityAdd = {
+                .chars = QuantityBuffer,
+                .length = (int32_t)SDL_strlen(QuantityBuffer),
+                .isStaticallyAllocated = false
+            };
+            CLAY_TEXT(QuantityAdd, CLAY_TEXT_CONFIG(StatPageTextConfig));
+        }
+    }
+}
+
+/* Callbacks */
+static void CallEncounterDetailsCallback(Clay_ElementId elementId, Clay_PointerData pointerData, void *userData) {
+    if (pointerData.state == CLAY_POINTER_DATA_PRESSED_THIS_FRAME) {
+        gAppState->focusedId = elementId;
+        gAppState->IsTextInputFocused = false;
+        Clay_String *EncounterName = (Clay_String *)userData;
+
+        /* copy into the fixed buffer and set length safely */
+        SDL_strlcpy((char *)gAppState->EncounterToDisplay.chars, EncounterName->chars, sizeof(gAppState->EncounterToDisplayBuffer));
+        gAppState->EncounterToDisplay.length = (int)SDL_strlen((char *)gAppState->EncounterToDisplay.chars);
+        gAppState->EncounterToDisplay.isStaticallyAllocated = true;
+        
+        LookUpEncounterDetails(EncounterName);
+        WindowState = SHOW_ENCOUNTER_DETAILS;
+    }
+}
+
 static void AddEncounterCallback(Clay_ElementId elementId, Clay_PointerData pointerData, void *userData) {
     if (pointerData.state == CLAY_POINTER_DATA_PRESSED_THIS_FRAME) {
         gAppState->focusedId = CLAY_ID("NULL");

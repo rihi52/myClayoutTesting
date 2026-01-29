@@ -62,7 +62,7 @@ Clay_RenderCommandArray MainWindow(AppState * state)
             };
 
             /* Build button */
-            CLAY(CLAY_ID("EncounterButton"), {MainScreenButtonLayoutConfig, .backgroundColor = COLOR_BUTTON_GRAY, .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_LG_PX)}) {
+            CLAY(CLAY_ID("EncounterDatabaseButton"), {MainScreenButtonLayoutConfig, .backgroundColor = COLOR_BUTTON_GRAY, .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_LG_PX)}) {
                 CLAY_TEXT(CLAY_STRING("Encounter Database"), CLAY_TEXT_CONFIG(ButtonTextConfig)); 
                 Clay_OnHover(EncounterDatabaseButtonCallback, &WindowState);
             };
@@ -107,6 +107,11 @@ Clay_RenderCommandArray MainWindow(AppState * state)
 
         case ENCOUNTER_DB_SCREEN:
             gAppState->ActiveScreen = ENCOUNTER_DB_SCREEN;
+            EncounterDatabaseWindow(state);
+            break;
+
+        case SHOW_ENCOUNTER_DETAILS:
+            gAppState->ActiveScreen = SHOW_ENCOUNTER_DETAILS;
             EncounterDatabaseWindow(state);
             break;
         

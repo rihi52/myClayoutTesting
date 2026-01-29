@@ -9,6 +9,8 @@ sqlite3_int64 InsertEncounterNameToDB();
 int InsertEncounterCreaturesToDB(sqlite3_int64 EncounterID);
 void InsertEncounterPlayersToDB(sqlite3_int64 EncounterID);
 int LoadEncounters(int EncounterId);
+void LoadEncounterCreaturesForDisplay(int EncounterId);
+void LoadEncounterPlayersForDisplay(int EncounterId);
 
 /*========================================================================*
  *  SECTION - External variables that cannot be defined in header files   *
@@ -388,6 +390,113 @@ int LoadEncounters(int EncounterId) {
         return ReturnedValue;
     }
     return ReturnedValue;
+}
+
+void LookUpEncounterDetails(Clay_String *EncounterName) {
+    char *EncounterToLookUp = NULL;
+    SDL_strlcpy(EncounterToLookUp, EncounterName->chars, EncounterName->length + 1);
+
+    sqlite3_stmt *stmt = NULL;
+    const char *sql = "SELECT id FROM encounters WHERE encounter_name = ?";
+
+    int rc = sqlite3_prepare_v2(pGuidnbatterDB, sql, -1, &stmt, NULL);
+    if (rc != SQLITE_OK)
+    {
+        SDL_Log("Failed to prepare statement: %s", sqlite3_errmsg(pGuidnbatterDB));
+        return;
+    }
+
+    sqlite3_bind_text(stmt, 1, EncounterToLookUp, -1, SQLITE_TRANSIENT);
+
+    rc = sqlite3_step(stmt);
+    if (rc == SQLITE_ROW)
+    {
+        int EncounterId = sqlite3_column_int(stmt, 0);
+        LoadEncounterCreaturesForDisplay(EncounterId);
+        LoadEncounterPlayersForDisplay(EncounterId);
+    }
+    else if (rc != SQLITE_DONE)
+    {
+        SDL_Log("Failed to execute statement: %s, no encounter named %s in database", sqlite3_errmsg(pGuidnbatterDB), EncounterToLookUp);
+    }
+
+    sqlite3_finalize(stmt);
+}
+
+void LoadEncounterCreaturesForDisplay(int EncounterId) {
+    sqlite3_stmt *stmt = NULL;
+    const char *sql = "SELECT creature_name, initiative, quantity FROM encounters WHERE encounter_id = ?";
+
+    int rc = sqlite3_prepare_v2(pGuidnbatterDB, sql, -1, &stmt, NULL);
+    if (rc != SQLITE_OK)
+    {
+        SDL_Log("Failed to prepare statement: %s", sqlite3_errmsg(pGuidnbatterDB));
+        return;
+    }
+
+    sqlite3_bind_int(stmt, 1, EncounterId);
+
+    rc = sqlite3_step(stmt);
+    if (rc == SQLITE_ROW)
+    {
+        for (int i = 0; i < BUILD_LIST_MAX; i++) {
+            if (BuildListMembers[i].IsAdded) {
+                continue;
+            }
+            const char *CreatureName = sqlite3_column_text(stmt, 0);
+
+            SDL_strlcpy(BuildListMembers[i].name, CreatureName, SDL_strlen(CreatureName) + 1);
+            BuildListMembers[i].initiative = sqlite3_column_int(stmt, 1);
+            BuildListMembers[i].Quantity = sqlite3_column_int(stmt, 2);
+            BuildListMembers[i].IsAdded = true;
+            BuildListMembers[i].IsCreature = true;
+        }
+    }
+    else if (rc != SQLITE_DONE)
+    {
+        SDL_Log("Failed to execute statement: %s", sqlite3_errmsg(pGuidnbatterDB));
+    }
+
+    sqlite3_finalize(stmt);
+    return;
+}
+
+void LoadEncounterPlayersForDisplay(int EncounterId) {
+    sqlite3_stmt *stmt = NULL;
+    const char *sql = "SELECT player_name, initiative FROM encounters WHERE encounter_id = ?";
+
+    int rc = sqlite3_prepare_v2(pGuidnbatterDB, sql, -1, &stmt, NULL);
+    if (rc != SQLITE_OK)
+    {
+        SDL_Log("Failed to prepare statement: %s", sqlite3_errmsg(pGuidnbatterDB));
+        return;
+    }
+
+    sqlite3_bind_int(stmt, 1, EncounterId);
+
+    rc = sqlite3_step(stmt);
+    if (rc == SQLITE_ROW)
+    {
+        for (int i = 0; i < BUILD_LIST_MAX; i++) {
+            if (BuildListMembers[i].IsAdded) {
+                continue;
+            }
+            const char *PlayerName = sqlite3_column_text(stmt, 0);
+
+            SDL_strlcpy(BuildListMembers[i].name, PlayerName, SDL_strlen(PlayerName) + 1);
+            BuildListMembers[i].initiative = sqlite3_column_int(stmt, 1);
+            BuildListMembers[i].Quantity = 1;
+            BuildListMembers[i].IsAdded = true;
+            BuildListMembers[i].IsCreature = false;
+        }
+    }
+    else if (rc != SQLITE_DONE)
+    {
+        SDL_Log("Failed to execute statement: %s", sqlite3_errmsg(pGuidnbatterDB));
+    }
+
+    sqlite3_finalize(stmt);
+    return;
 }
 
 void LookUpCreatureStats(int MonsterId) {

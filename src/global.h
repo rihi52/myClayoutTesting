@@ -29,6 +29,7 @@
 #define SELECT_EXISTING_SCREEN          11
 #define NEW_STATBLOCK_SCREEN            12
 #define ENCOUNTER_DB_SCREEN             13
+#define SHOW_ENCOUNTER_DETAILS          14
 
 #define BACKSPACE_KEY                   8
 #define SPACEBAR_KEY                    32
@@ -63,12 +64,6 @@ typedef struct TextBox {
     int TurnOrder;
     struct DisplayListMember * Next;
 }DisplayListMember;
-
-// typedef struct {
-//     SDL_Renderer *renderer;
-//     TTF_TextEngine *textEngine;
-//     TTF_Font **fonts;
-// } Clay_SDL3RendererData;
 
 typedef struct StatBlock {
     Clay_String StatId;
@@ -206,6 +201,20 @@ typedef struct StatBlock {
     Clay_String StatFeature5Desc;
 }StatBlock;
 
+typedef struct BuildListMember {
+    int initiative;
+    char name[64];
+    int Quantity;
+    bool IsAdded;
+    bool IsCreature;
+}BuildListMember;
+
+typedef struct Encounter {
+    Clay_String EncounterName;
+    BuildListMember Creatures[BUILD_LIST_MAX];
+    BuildListMember Players[BUILD_LIST_MAX];
+} Encounter;
+
 typedef struct app_state {
     SDL_Window *window;
     Clay_SDL3RendererData rendererData;
@@ -213,6 +222,8 @@ typedef struct app_state {
     Clay_ElementId SliderId;
     bool IsTextInputFocused;
     Clay_String StringToModify;
+    Clay_String EncounterToDisplay;
+    char EncounterToDisplayBuffer[256];
     DisplayListMember **SortedListArray;
     int SortedListCount;
     StatBlock CurrentStatBlock;
@@ -223,14 +234,6 @@ typedef struct app_state {
     char EncounterSaved[256];
     char CreatureSaved[256];
 } AppState;
-
-typedef struct BuildListMember {
-    int initiative;
-    char name[64];
-    int Quantity;
-    bool IsAdded;
-    bool IsCreature;
-}BuildListMember;
 
 extern BuildListMember BuildListMembers[BUILD_LIST_MAX];
 

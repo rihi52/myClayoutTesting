@@ -86,6 +86,12 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
     gAppState->StringToModify.chars = TextBuffer;
     gAppState->StringToModify.length = 0;
 
+    SDL_memset(gAppState->EncounterToDisplayBuffer, 0, sizeof(gAppState->EncounterToDisplayBuffer));
+
+    gAppState->EncounterToDisplay.isStaticallyAllocated = true;
+    gAppState->EncounterToDisplay.chars = gAppState->EncounterToDisplayBuffer;
+    gAppState->EncounterToDisplay.length = 0;
+
     gAppState->CurrentStatBlock = (StatBlock){0};
     InitStatBlock(&gAppState->CurrentStatBlock);
     gAppState->ActiveScreen = MAIN_SCREEN;

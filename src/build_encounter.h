@@ -27,6 +27,8 @@
  *========================================================================*
  */
 void BuildEncounterWindow(AppState * state, int CallingScreen);
+void AddToBuildChain(const char *ParticipantToAdd, bool IsCreature);
+
 void PlayerBuildListCallback(Clay_ElementId elementId, Clay_PointerData pointerData, void *userData);
 void CreatureBuildListCallback(Clay_ElementId elementId, Clay_PointerData pointerData, void *userData);
 

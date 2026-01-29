@@ -1,22 +1,5 @@
 # Instructions
 
-## Roadmap
-
-* Shift around initiaive in combat
-  * This is possible by going back to add, you can change the initiative of existing combatants
-  * Drag and drop would be ideal and will be investigated
-* Add custom enemies/statblocks
-* Editable name in combat screen, but not affect statblock of db
-* Database for saving encounters
-* Add math to show ability modifiers
-
-## Completed
-
-* Add participants mid comabt
-* Arrow keys or spacebar to progress through initiative order
-  * Highlight the current turn
-  * Still have others selectable to adjust HP or bring up statblocks
-
 ## For native builds
 
 ```bash

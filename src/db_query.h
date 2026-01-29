@@ -306,6 +306,7 @@ void LoadDatabaseEncounters();
 int LoadCreatureHeaderAlphabetical(int MonsterId);
 int LoadPlayers(int PlayerId);
 Clay_String MakeClayString(const char * string);
+void LookUpEncounterDetails(Clay_String *EncounterName);
 void LookUpCreatureStats(int MonsterId);
 void SearchCreatureNames(const char * SearchTerm);
 void ModifyTypedString(void);

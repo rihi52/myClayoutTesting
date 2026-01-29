@@ -28,9 +28,8 @@ BuildListMember BuildListMembers[BUILD_LIST_MAX] = {0};
  *========================================================================* 
  */
 void BuildEncounterChain(int position);
-void AddToBuildChain(const char *ParticipantToAdd, bool IsCreature);
-void StartButtonCallback(Clay_ElementId elementId, Clay_PointerData pointerData, void *userData);
-void SaveEncounterButtonCallback(Clay_ElementId elementId, Clay_PointerData pointerData, void *userData);
+static void StartButtonCallback(Clay_ElementId elementId, Clay_PointerData pointerData, void *userData);
+static void SaveEncounterButtonCallback(Clay_ElementId elementId, Clay_PointerData pointerData, void *userData);
 
 /*========================================================================* 
  *  SECTION - Global functions
@@ -296,7 +295,7 @@ void CreatureBuildListCallback(Clay_ElementId elementId, Clay_PointerData pointe
     }
 }
 
-void SaveEncounterButtonCallback(Clay_ElementId elementId, Clay_PointerData pointerData, void *userData) {
+static void SaveEncounterButtonCallback(Clay_ElementId elementId, Clay_PointerData pointerData, void *userData) {
     if (pointerData.state == CLAY_POINTER_DATA_PRESSED_THIS_FRAME) {
         gAppState->IsTextInputFocused = false;
         SaveEncounterToDB();
@@ -321,7 +320,7 @@ void SaveEncounterButtonCallback(Clay_ElementId elementId, Clay_PointerData poin
     }
 }
 
-void StartButtonCallback(Clay_ElementId elementId, Clay_PointerData pointerData, void *userData) {
+static void StartButtonCallback(Clay_ElementId elementId, Clay_PointerData pointerData, void *userData) {
     if (pointerData.state == CLAY_POINTER_DATA_PRESSED_THIS_FRAME) {
         gAppState->IsTextInputFocused = false;
         StartEncounterState = START_NEW_ENCOUNTER_SCREEN;
