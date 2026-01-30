@@ -146,7 +146,7 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
     SDL_GetWindowSize(gAppState->window, &width, &height);
     Clay_Initialize(clayMemory, (Clay_Dimensions) { (float) width, (float) height }, (Clay_ErrorHandler) { HandleClayErrors });
     Clay_SetMeasureTextFunction(SDL_MeasureText, gAppState->rendererData.fonts);
-    Clay_SetDebugModeEnabled(true);
+    Clay_SetDebugModeEnabled(false);
 
     *appstate = gAppState;
     return SDL_APP_CONTINUE;

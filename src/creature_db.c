@@ -208,7 +208,7 @@ void FillStats(void) {
         }) {
             CLAY_TEXT(gAppState->CurrentStatBlock.StatName, CLAY_TEXT_CONFIG(StatPageTextConfig));
         };
-        CLAY(CLAY_ID("ACHPContainer"), {StatPageDivider, .backgroundColor = COLOR_TRANSPARENT, .border = { .width = { .bottom = 5 }, .color = COLOR_BLACK }}) {
+        CLAY(CLAY_ID("ACHPSpeedContainer"), {StatPageDivider, .backgroundColor = COLOR_TRANSPARENT, .border = { .width = { .bottom = 5 }, .color = COLOR_BLACK }}) {
             CLAY(CLAY_ID("ACContainer"), {StatPageSubDivider, .backgroundColor = COLOR_TRANSPARENT}) {
                 CLAY_TEXT(CLAY_STRING("Armor Class"), CLAY_TEXT_CONFIG(StatPageTextConfig));
                 CLAY_TEXT(gAppState->CurrentStatBlock.StatArmorClass, CLAY_TEXT_CONFIG(StatPageTextConfig));
@@ -217,6 +217,29 @@ void FillStats(void) {
                 CLAY_TEXT(CLAY_STRING("Hit Points"), CLAY_TEXT_CONFIG(StatPageTextConfig));
                 CLAY_TEXT(gAppState->CurrentStatBlock.StatHitpointsAvg, CLAY_TEXT_CONFIG(StatPageTextConfig));
                 CLAY_TEXT(gAppState->CurrentStatBlock.StatHitpointsRoll, CLAY_TEXT_CONFIG(StatPageTextConfig));
+            }
+            CLAY(CLAY_ID("SpeedContainer"), {StatPageSubDivider, .backgroundColor = COLOR_TRANSPARENT}) {
+                CLAY_TEXT(CLAY_STRING("Speed"), CLAY_TEXT_CONFIG(StatPageTextConfig));               
+            }
+            CLAY(CLAY_ID("SpeedTypeContainer"), {StatPageSubDivider, .backgroundColor = COLOR_TRANSPARENT}) {
+                    CLAY_TEXT(gAppState->CurrentStatBlock.StatSpeedType, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                } 
+            CLAY(CLAY_ID("SpeedDistanceContainer"), {StatPageSubDivider, .backgroundColor = COLOR_TRANSPARENT}){
+                if (0 != SDL_strcmp("0", gAppState->CurrentStatBlock.StatSpeedWalk.chars) && 0 != SDL_strcmp("NULL", gAppState->CurrentStatBlock.StatSpeedWalk.chars)){
+                    CLAY_TEXT(gAppState->CurrentStatBlock.StatSpeedWalk, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                }
+                if (0 != SDL_strcmp("0", gAppState->CurrentStatBlock.StatSpeedBurrow.chars) && 0 != SDL_strcmp("NULL", gAppState->CurrentStatBlock.StatSpeedBurrow.chars)){
+                    CLAY_TEXT(gAppState->CurrentStatBlock.StatSpeedBurrow, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                }
+                if (0 != SDL_strcmp("0", gAppState->CurrentStatBlock.StatSpeedClimb.chars) && 0 != SDL_strcmp("NULL", gAppState->CurrentStatBlock.StatSpeedClimb.chars)){
+                    CLAY_TEXT(gAppState->CurrentStatBlock.StatSpeedClimb, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                }
+                if (0 != SDL_strcmp("0", gAppState->CurrentStatBlock.StatSpeedFly.chars) && 0 != SDL_strcmp("NULL", gAppState->CurrentStatBlock.StatSpeedFly.chars)){
+                    CLAY_TEXT(gAppState->CurrentStatBlock.StatSpeedFly, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                } 
+                if (0 != SDL_strcmp("0", gAppState->CurrentStatBlock.StatSpeedSwim.chars) && 0 != SDL_strcmp("NULL", gAppState->CurrentStatBlock.StatSpeedSwim.chars)){
+                    CLAY_TEXT(gAppState->CurrentStatBlock.StatSpeedSwim, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                }  
             }
         }; /* Start Ability Scores container*/
         CLAY(CLAY_ID("AbilityScoresContainer"), {StatPageDivider, .backgroundColor = COLOR_TRANSPARENT}) {
