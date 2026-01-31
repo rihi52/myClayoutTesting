@@ -227,6 +227,7 @@ typedef struct app_state {
     DisplayListMember **SortedListArray;
     int SortedListCount;
     StatBlock CurrentStatBlock;
+    bool ModifyCurrentEncounter;
     int ActiveScreen;
     bool IsModalOpen;
     Clay_ElementId ModalParentId;

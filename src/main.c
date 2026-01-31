@@ -94,6 +94,7 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
 
     gAppState->CurrentStatBlock = (StatBlock){0};
     InitStatBlock(&gAppState->CurrentStatBlock);
+    gAppState->ModifyCurrentEncounter = false;
     gAppState->ActiveScreen = MAIN_SCREEN;
     gAppState->IsTextInputFocused = false;
     gAppState->IsModalOpen = false;

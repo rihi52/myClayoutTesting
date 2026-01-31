@@ -35,6 +35,8 @@ void SelectExistingScreen();
 void FillCombatScreen(int position);
 static void NewEncounterButtonCallback(Clay_ElementId elementId, Clay_PointerData pointerData, void *userData);
 static void SelectExistingEncounterButtonCallback(Clay_ElementId elementId, Clay_PointerData pointerData, void *userData);
+static void BuildMemberChain(int i);
+static void RemoveExcessNodes(const char *name, int keepCount);
 
 /*========================================================================* 
  *  SECTION - Global functions
@@ -112,42 +114,93 @@ int CompareInitiative(const void *a, const void *b) {
     return B->Initiative - A->Initiative;
 }
 
+static void BuildMemberChain(int i) {
+    
+    // Add a single member
+    if (BuildListMembers[i].IsCreature) {
+        NewMember = LookupCreatureForCombat(BuildListMembers[i].name, BuildListMembers[i].initiative, BuildListMembers[i].IsCreature);
+    }
+    else {
+        NewMember = LookupPlayerForCombat(BuildListMembers[i].name, BuildListMembers[i].initiative, BuildListMembers[i].IsCreature);
+    }                
+
+    if (NewMember == NULL) {
+        printf("Error: NewMember returned NULL.\n");
+        return;
+    }
+    BuildListMembers[i].IsAdded = true;
+
+    if (NULL == Head) {
+        Head = NewMember;
+    }
+    else {
+        Tail->Next = NewMember;
+    }
+
+    Tail = NewMember;
+
+    Tail->Next = NULL;
+    
+}
+
+static void RemoveExcessNodes(const char *name, int keepCount) {
+    DisplayListMember *current = Head;
+    DisplayListMember *prev = NULL;
+    int kept = 0;
+    while (current) {
+        if (SDL_strcmp(current->Name.chars, name) == 0) {
+            if (kept >= keepCount) {
+                // Remove this node
+                if (prev) {
+                    prev->Next = current->Next;
+                } else {
+                    Head = current->Next;
+                }
+                if (current == Tail) {
+                    Tail = prev;
+                }
+                // Move to next, but don't free the node
+                current = current->Next;
+                continue;
+            } else {
+                kept++;
+            }
+        }
+        prev = current;
+        current = current->Next;
+    }
+}
 
 void NewEncounterScreen() {
     /* Build linked list */
     if (0 == ListStarted) {
-        //Head = NULL;
-        //Tail = NULL;
         for (int i = 0; i < BUILD_LIST_MAX; i++) {
-        if (SDL_strlen(BuildListMembers[i].name) != 0 && !BuildListMembers[i].IsAdded) {
-            for (int j = 0; j < BuildListMembers[i].Quantity; j++) {
-                if (BuildListMembers[i].IsCreature) {
-                    NewMember = LookupCreatureForCombat(BuildListMembers[i].name, BuildListMembers[i].initiative, BuildListMembers[i].IsCreature);
-                }
-                else {
-                    NewMember = LookupPlayerForCombat(BuildListMembers[i].name, BuildListMembers[i].initiative, BuildListMembers[i].IsCreature);
-                }                
             
-                if (NewMember == NULL) {
-                    printf("Error: NewMember returned NULL.\n");
-                    return;
+            if (gAppState->ModifyCurrentEncounter) {
+                int currentCount = 0;
+                DisplayListMember *temp = Head;
+                while (temp) {
+                    if (SDL_strcmp(temp->Name.chars, BuildListMembers[i].name) == 0) {
+                        currentCount++;
+                    }
+                    temp = temp->Next;
+                }
+                if (currentCount < BuildListMembers[i].Quantity) {
+                    int toAdd = BuildListMembers[i].Quantity - currentCount;
+                    for (int k = 0; k < toAdd; k++) {
+                        BuildMemberChain(i);
+                    }
+                } else if (currentCount > BuildListMembers[i].Quantity) {
+                    RemoveExcessNodes(BuildListMembers[i].name, BuildListMembers[i].Quantity);
                 }
                 BuildListMembers[i].IsAdded = true;
-
-                if (NULL == Head) {
-                    Head = NewMember;
+            } else {
+                if (SDL_strlen(BuildListMembers[i].name) != 0 && !BuildListMembers[i].IsAdded) {
+                    for (int m = 0; m < BuildListMembers[i].Quantity; m++) {
+                        BuildMemberChain(i);
+                    }
                 }
-                else {
-                    Tail->Next = NewMember;
-                }
-
-                Tail = NewMember;
-
-                Tail->Next = NULL;
-
-            }            
-        }
-
+            }        
         }
         int count = CountNodes(Head);
         if (count == 0) {
@@ -327,12 +380,13 @@ static void NewEncounterButtonCallback(Clay_ElementId elementId, Clay_PointerDat
             Turn = 0;
 
         /* Free appstate sorted array of combat linked list */
-        if (gAppState->SortedListArray) {
-            free(gAppState->SortedListArray);
-            gAppState->SortedListArray = NULL;
-            gAppState->SortedListCount = 0;
-            StartEncounterState = MAIN_SCREEN;
-        }
+            // if (gAppState->SortedListArray) {
+            //     free(gAppState->SortedListArray);
+            //     gAppState->SortedListArray = NULL;
+            //     gAppState->SortedListCount = 0;
+            //     StartEncounterState = MAIN_SCREEN;
+            // }
+            gAppState->ModifyCurrentEncounter = true;
         }
         StartEncounterState = BUILD_NEW_ENCOUNTER_SCREEN;
     }
