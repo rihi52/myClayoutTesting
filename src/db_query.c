@@ -658,6 +658,13 @@ void LookUpCreatureStats(int MonsterId) {
         gAppState->CurrentStatBlock.StatHitpointsRoll     = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
 
         gAppState->CurrentStatBlock.StatSpeedType         = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
+
+        gAppState->CurrentStatBlock.SpeedValues[WALK]     = MakeClayIntString(sqlite3_column_int(stmt, col++));
+        gAppState->CurrentStatBlock.SpeedValues[FLY]      = MakeClayIntString(sqlite3_column_int(stmt, col++));
+        gAppState->CurrentStatBlock.SpeedValues[SWIM]     = MakeClayIntString(sqlite3_column_int(stmt, col++));
+        gAppState->CurrentStatBlock.SpeedValues[CLIMB]    = MakeClayIntString(sqlite3_column_int(stmt, col++));
+        gAppState->CurrentStatBlock.SpeedValues[BURROW]   = MakeClayIntString(sqlite3_column_int(stmt, col++));
+
         gAppState->CurrentStatBlock.StatSpeedWalk         = MakeClayIntString(sqlite3_column_int(stmt, col++));
         gAppState->CurrentStatBlock.StatSpeedFly          = MakeClayIntString(sqlite3_column_int(stmt, col++));
         gAppState->CurrentStatBlock.StatSpeedSwim         = MakeClayIntString(sqlite3_column_int(stmt, col++));

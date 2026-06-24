@@ -40,6 +40,9 @@
 #define MAX_TEXT                        2048
 #define BUILD_LIST_MAX                  50
 
+#define SPEED_TYPES                     5
+#define NUM_ABILITIES                   6
+
 /*========================================================================* 
  *  SECTION - Global struct typedefs
  *========================================================================* 
@@ -65,6 +68,14 @@ typedef struct TextBox {
     struct DisplayListMember * Next;
 }DisplayListMember;
 
+enum Speed {
+    WALK,
+    FLY,
+    SWIM,
+    CLIMB,
+    BURROW
+};
+
 typedef struct StatBlock {
     Clay_String StatId;
     Clay_String StatName;
@@ -78,6 +89,9 @@ typedef struct StatBlock {
     Clay_String StatHitpointsRoll;
 
     Clay_String StatSpeedType;
+
+    Clay_String SpeedValues[SPEED_TYPES];
+
     Clay_String StatSpeedWalk;
     Clay_String StatSpeedFly;
     Clay_String StatSpeedSwim;

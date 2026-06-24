@@ -22,6 +22,8 @@ static void SaveNewStatBlockCallback(Clay_ElementId elementId, Clay_PointerData 
 static void CancelNewStatBlockCallback(Clay_ElementId elementId, Clay_PointerData pointerData, void *userData);
 void NewStatblockPage(void);
 
+static char AbilityModName[NUM_ABILITIES][4] = {"STR", "DEX", "CON", "INT", "WIS", "CHA"};
+
 /*========================================================================* 
  *  SECTION - Global functions
  *========================================================================* 
@@ -235,44 +237,60 @@ void FillStats(void) {
                     CLAY_TEXT(gAppState->CurrentStatBlock.StatSpeedType, CLAY_TEXT_CONFIG(StatPageTextConfig));
                 } 
             CLAY(CLAY_ID("SpeedDistanceContainer"), {StatPageSubDivider, .backgroundColor = COLOR_TRANSPARENT}){
-                if (0 != SDL_strcmp("0", gAppState->CurrentStatBlock.StatSpeedWalk.chars) && 0 != SDL_strcmp("NULL", gAppState->CurrentStatBlock.StatSpeedWalk.chars)){
-                    CLAY_TEXT(gAppState->CurrentStatBlock.StatSpeedWalk, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                for(int i = 0; i < SPEED_TYPES; i++){
+                    if(IsStringValid(gAppState->CurrentStatBlock.SpeedValues[i])){
+                        CLAY_TEXT(gAppState->CurrentStatBlock.SpeedValues[i], CLAY_TEXT_CONFIG(StatPageTextConfig));
+                    }
                 }
-                if (0 != SDL_strcmp("0", gAppState->CurrentStatBlock.StatSpeedBurrow.chars) && 0 != SDL_strcmp("NULL", gAppState->CurrentStatBlock.StatSpeedBurrow.chars)){
-                    CLAY_TEXT(gAppState->CurrentStatBlock.StatSpeedBurrow, CLAY_TEXT_CONFIG(StatPageTextConfig));
-                }
-                if (0 != SDL_strcmp("0", gAppState->CurrentStatBlock.StatSpeedClimb.chars) && 0 != SDL_strcmp("NULL", gAppState->CurrentStatBlock.StatSpeedClimb.chars)){
-                    CLAY_TEXT(gAppState->CurrentStatBlock.StatSpeedClimb, CLAY_TEXT_CONFIG(StatPageTextConfig));
-                }
-                if (0 != SDL_strcmp("0", gAppState->CurrentStatBlock.StatSpeedFly.chars) && 0 != SDL_strcmp("NULL", gAppState->CurrentStatBlock.StatSpeedFly.chars)){
-                    CLAY_TEXT(gAppState->CurrentStatBlock.StatSpeedFly, CLAY_TEXT_CONFIG(StatPageTextConfig));
-                } 
-                if (0 != SDL_strcmp("0", gAppState->CurrentStatBlock.StatSpeedSwim.chars) && 0 != SDL_strcmp("NULL", gAppState->CurrentStatBlock.StatSpeedSwim.chars)){
-                    CLAY_TEXT(gAppState->CurrentStatBlock.StatSpeedSwim, CLAY_TEXT_CONFIG(StatPageTextConfig));
-                }  
+
+                // if (0 != SDL_strcmp("0", gAppState->CurrentStatBlock.StatSpeedWalk.chars) && 0 != SDL_strcmp("NULL", gAppState->CurrentStatBlock.StatSpeedWalk.chars)){
+                //     CLAY_TEXT(gAppState->CurrentStatBlock.StatSpeedWalk, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                // }
+                // if (0 != SDL_strcmp("0", gAppState->CurrentStatBlock.StatSpeedBurrow.chars) && 0 != SDL_strcmp("NULL", gAppState->CurrentStatBlock.StatSpeedBurrow.chars)){
+                //     CLAY_TEXT(gAppState->CurrentStatBlock.StatSpeedBurrow, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                // }
+                // if (0 != SDL_strcmp("0", gAppState->CurrentStatBlock.StatSpeedClimb.chars) && 0 != SDL_strcmp("NULL", gAppState->CurrentStatBlock.StatSpeedClimb.chars)){
+                //     CLAY_TEXT(gAppState->CurrentStatBlock.StatSpeedClimb, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                // }
+                // if (0 != SDL_strcmp("0", gAppState->CurrentStatBlock.StatSpeedFly.chars) && 0 != SDL_strcmp("NULL", gAppState->CurrentStatBlock.StatSpeedFly.chars)){
+                //     CLAY_TEXT(gAppState->CurrentStatBlock.StatSpeedFly, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                // } 
+                // if (0 != SDL_strcmp("0", gAppState->CurrentStatBlock.StatSpeedSwim.chars) && 0 != SDL_strcmp("NULL", gAppState->CurrentStatBlock.StatSpeedSwim.chars)){
+                //     CLAY_TEXT(gAppState->CurrentStatBlock.StatSpeedSwim, CLAY_TEXT_CONFIG(StatPageTextConfig));
+                // }  
             }
         }; /* Start Ability Scores container*/
         CLAY(CLAY_ID("AbilityScoresContainer"), {StatPageDivider, .backgroundColor = COLOR_TRANSPARENT}) {
             /* Ability score labels*/
             CLAY_AUTO_ID({StatPageSubDivider, .backgroundColor = COLOR_TRANSPARENT}) {
-                CLAY_AUTO_ID({StatPageAbilityDivider, .backgroundColor = COLOR_TRANSPARENT}) {
-                    CLAY_TEXT(CLAY_STRING("STR"), CLAY_TEXT_CONFIG(StatPageAbilityScoreTextConfig));
+                for(int i = 0; i < NUM_ABILITIES; i++){
+                    CLAY_AUTO_ID({StatPageAbilityDivider, .backgroundColor = COLOR_TRANSPARENT}) {
+                        CLAY_TEXT((Clay_String){
+                            .chars = AbilityModName[i],
+                            .length = 3,
+                            .isStaticallyAllocated = true
+                        },
+                        CLAY_TEXT_CONFIG(StatPageAbilityScoreTextConfig));
+                    }
                 }
-                CLAY_AUTO_ID({StatPageAbilityDivider, .backgroundColor = COLOR_TRANSPARENT}) {
-                    CLAY_TEXT(CLAY_STRING("DEX"), CLAY_TEXT_CONFIG(StatPageAbilityScoreTextConfig));
-                }
-                CLAY_AUTO_ID({StatPageAbilityDivider, .backgroundColor = COLOR_TRANSPARENT}) {
-                    CLAY_TEXT(CLAY_STRING("CON"), CLAY_TEXT_CONFIG(StatPageAbilityScoreTextConfig));
-                }
-                CLAY_AUTO_ID({StatPageAbilityDivider, .backgroundColor = COLOR_TRANSPARENT}) {
-                    CLAY_TEXT(CLAY_STRING("INT"), CLAY_TEXT_CONFIG(StatPageAbilityScoreTextConfig));
-                }
-                CLAY_AUTO_ID({StatPageAbilityDivider, .backgroundColor = COLOR_TRANSPARENT}) {
-                    CLAY_TEXT(CLAY_STRING("WIS"), CLAY_TEXT_CONFIG(StatPageAbilityScoreTextConfig));
-                }
-                CLAY_AUTO_ID({StatPageAbilityDivider, .backgroundColor = COLOR_TRANSPARENT}) {
-                    CLAY_TEXT(CLAY_STRING("CHA"), CLAY_TEXT_CONFIG(StatPageAbilityScoreTextConfig));
-                }
+                // CLAY_AUTO_ID({StatPageAbilityDivider, .backgroundColor = COLOR_TRANSPARENT}) {
+                //     CLAY_TEXT(CLAY_STRING("STR"), CLAY_TEXT_CONFIG(StatPageAbilityScoreTextConfig));
+                // }
+                // CLAY_AUTO_ID({StatPageAbilityDivider, .backgroundColor = COLOR_TRANSPARENT}) {
+                //     CLAY_TEXT(CLAY_STRING("DEX"), CLAY_TEXT_CONFIG(StatPageAbilityScoreTextConfig));
+                // }
+                // CLAY_AUTO_ID({StatPageAbilityDivider, .backgroundColor = COLOR_TRANSPARENT}) {
+                //     CLAY_TEXT(CLAY_STRING("CON"), CLAY_TEXT_CONFIG(StatPageAbilityScoreTextConfig));
+                // }
+                // CLAY_AUTO_ID({StatPageAbilityDivider, .backgroundColor = COLOR_TRANSPARENT}) {
+                //     CLAY_TEXT(CLAY_STRING("INT"), CLAY_TEXT_CONFIG(StatPageAbilityScoreTextConfig));
+                // }
+                // CLAY_AUTO_ID({StatPageAbilityDivider, .backgroundColor = COLOR_TRANSPARENT}) {
+                //     CLAY_TEXT(CLAY_STRING("WIS"), CLAY_TEXT_CONFIG(StatPageAbilityScoreTextConfig));
+                // }
+                // CLAY_AUTO_ID({StatPageAbilityDivider, .backgroundColor = COLOR_TRANSPARENT}) {
+                //     CLAY_TEXT(CLAY_STRING("CHA"), CLAY_TEXT_CONFIG(StatPageAbilityScoreTextConfig));
+                // }
             } /* Ability score values*/
             CLAY_AUTO_ID({StatPageSubDivider, .backgroundColor = COLOR_TRANSPARENT, .border = { .width = { .bottom = 5 }, .color = COLOR_BLACK }}) {
                 CLAY_AUTO_ID({StatPageAbilityDivider, .backgroundColor = COLOR_TRANSPARENT}) {

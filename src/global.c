@@ -941,6 +941,11 @@ void InitStatBlock(StatBlock *sb)
     sb->StatHitpointsRoll = MakeClayString("");
 
     sb->StatSpeedType = MakeClayString("");
+
+    for(int i = 0; i < SPEED_TYPES; i++) {
+        sb->SpeedValues[i] = MakeClayString("");
+    };
+
     sb->StatSpeedWalk = MakeClayString("");
     sb->StatSpeedFly = MakeClayString("");
     sb->StatSpeedSwim = MakeClayString("");
@@ -1083,6 +1088,11 @@ void FreeStatBlock(StatBlock *sb)
     ClearClayString(&sb->StatHitpointsRoll);
 
     ClearClayString(&sb->StatSpeedType);
+
+    for(int i = 0; i < SPEED_TYPES; i++) {
+        ClearClayString(& sb->SpeedValues[i]);
+    };
+
     ClearClayString(&sb->StatSpeedWalk);
     ClearClayString(&sb->StatSpeedFly);
     ClearClayString(&sb->StatSpeedSwim);
