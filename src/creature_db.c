@@ -15,6 +15,7 @@
  *  SECTION - Local prototypes
  *========================================================================* 
  */
+static bool IsStringValid(Clay_String str);
 static void CallStatBlockCallback(Clay_ElementId elementId, Clay_PointerData pointerData, void *userData);
 static void AddStatBlockCallback(Clay_ElementId elementId, Clay_PointerData pointerData, void *userData);
 static void SaveNewStatBlockCallback(Clay_ElementId elementId, Clay_PointerData pointerData, void *userData);
@@ -208,7 +209,16 @@ void FillStats(void) {
         }) {
             CLAY_TEXT(gAppState->CurrentStatBlock.StatName, CLAY_TEXT_CONFIG(StatPageTextConfig));
         };
-        CLAY(CLAY_ID("ACHPSpeedContainer"), {StatPageDivider, .backgroundColor = COLOR_TRANSPARENT, .border = { .width = { .bottom = 5 }, .color = COLOR_BLACK }}) {
+        CLAY(CLAY_ID("ACHPSpeedContainer"), {
+            StatPageDivider, 
+            .backgroundColor = COLOR_TRANSPARENT, 
+            .border = { 
+                .width = { 
+                    .bottom = 5
+                }, 
+                .color = COLOR_BLACK 
+            }
+        }) {
             CLAY(CLAY_ID("ACContainer"), {StatPageSubDivider, .backgroundColor = COLOR_TRANSPARENT}) {
                 CLAY_TEXT(CLAY_STRING("Armor Class"), CLAY_TEXT_CONFIG(StatPageTextConfig));
                 CLAY_TEXT(gAppState->CurrentStatBlock.StatArmorClass, CLAY_TEXT_CONFIG(StatPageTextConfig));
@@ -286,7 +296,8 @@ void FillStats(void) {
             }
         }; /* Write senses  */
         CLAY(CLAY_ID("SensesContainer"), {StatPageDivider, .backgroundColor = COLOR_TRANSPARENT, .border = { .width = { .bottom = 5 }, .color = COLOR_BLACK }}) {
-            if (0 != SDL_strcmp("0", gAppState->CurrentStatBlock.StatSavingThrows.chars) && 0 != SDL_strcmp("NULL", gAppState->CurrentStatBlock.StatSavingThrows.chars)){
+            // 0 != SDL_strcmp("0", gAppState->CurrentStatBlock.StatSavingThrows.chars) && 0 != SDL_strcmp("NULL", gAppState->CurrentStatBlock.StatSavingThrows.chars)
+            if (IsStringValid(gAppState->CurrentStatBlock.StatSavingThrows)){
                 CLAY_AUTO_ID({StatPageSubDivider, .backgroundColor = COLOR_TRANSPARENT}) {
                     CLAY_TEXT(gAppState->CurrentStatBlock.StatSavingThrows, CLAY_TEXT_CONFIG(StatPageTextConfig));
                 }
@@ -1053,7 +1064,12 @@ void NewStatblockPage(void) {
 /*========================================================================* 
  *  SECTION - Local functions
  *========================================================================* 
- */
+ 0 != SDL_strcmp("0", gAppState->CurrentStatBlock.StatActionLeg.chars) && 0 != SDL_strcmp("NULL", gAppState->CurrentStatBlock.StatActionLeg.chars) */
+
+static bool IsStringValid(Clay_String *str) {
+    return 0 != SDL_strcmp("0", str.chars) && 0 != SDL_strcmp("NULL", str.chars)    
+}
+
 static void CallStatBlockCallback(Clay_ElementId elementId, Clay_PointerData pointerData, void *userData) {
     if (pointerData.state == CLAY_POINTER_DATA_PRESSED_THIS_FRAME) {
         gAppState->focusedId = elementId;
