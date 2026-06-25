@@ -257,13 +257,26 @@ void RefreshDatabaseEncounters() {
 }
 
 Clay_String MakeClayString(const char * string) {
-    char * copy = SDL_malloc(SDL_strlen(string)+1);
+    if (string == NULL) {
+        string = "";
+    }
 
-    SDL_strlcpy(copy, string, SDL_strlen(string)+1);
+    size_t length = SDL_strlen(string);
+    char * copy = SDL_malloc(length + 1);
+    if (!copy) {
+        Clay_String str = {
+            .isStaticallyAllocated = false,
+            .length = 0,
+            .chars = NULL
+        };
+        return str;
+    }
 
-    Clay_String str= {
+    SDL_strlcpy(copy, string, length + 1);
+
+    Clay_String str = {
         .isStaticallyAllocated = false,
-        .length = SDL_strlen(copy),
+        .length = length,
         .chars = copy
     };
 
@@ -512,6 +525,9 @@ void LookUpCreatureStats(int MonsterId) {
     ClearClayString(&gAppState->CurrentStatBlock.StatHitpointsRoll);
 
     ClearClayString(&gAppState->CurrentStatBlock.StatSpeedType);
+    for (int i = 0; i < SPEED_TYPES; i++) {
+        ClearClayString(&gAppState->CurrentStatBlock.SpeedValues[i]);
+    }
     ClearClayString(&gAppState->CurrentStatBlock.StatSpeedWalk);
     ClearClayString(&gAppState->CurrentStatBlock.StatSpeedFly);
     ClearClayString(&gAppState->CurrentStatBlock.StatSpeedSwim);
