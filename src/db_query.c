@@ -681,30 +681,37 @@ void LookUpCreatureStats(int MonsterId) {
         gAppState->CurrentStatBlock.SpeedValues[CLIMB]    = MakeClayIntString(sqlite3_column_int(stmt, col++));
         gAppState->CurrentStatBlock.SpeedValues[BURROW]   = MakeClayIntString(sqlite3_column_int(stmt, col++));
 
-        gAppState->CurrentStatBlock.StatSpeedWalk         = MakeClayIntString(sqlite3_column_int(stmt, col++));
-        gAppState->CurrentStatBlock.StatSpeedFly          = MakeClayIntString(sqlite3_column_int(stmt, col++));
-        gAppState->CurrentStatBlock.StatSpeedSwim         = MakeClayIntString(sqlite3_column_int(stmt, col++));
-        gAppState->CurrentStatBlock.StatSpeedClimb        = MakeClayIntString(sqlite3_column_int(stmt, col++));
-        gAppState->CurrentStatBlock.StatSpeedBurrow       = MakeClayIntString(sqlite3_column_int(stmt, col++));
+        // gAppState->CurrentStatBlock.StatSpeedWalk         = MakeClayIntString(sqlite3_column_int(stmt, col++));
+        // gAppState->CurrentStatBlock.StatSpeedFly          = MakeClayIntString(sqlite3_column_int(stmt, col++));
+        // gAppState->CurrentStatBlock.StatSpeedSwim         = MakeClayIntString(sqlite3_column_int(stmt, col++));
+        // gAppState->CurrentStatBlock.StatSpeedClimb        = MakeClayIntString(sqlite3_column_int(stmt, col++));
+        // gAppState->CurrentStatBlock.StatSpeedBurrow       = MakeClayIntString(sqlite3_column_int(stmt, col++));
 
         gAppState->CurrentStatBlock.StatAlignment         = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
         gAppState->CurrentStatBlock.StatLegendary         = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
 
-        gAppState->CurrentStatBlock.StatStr               = MakeClayIntString(sqlite3_column_int(stmt, col++));
-        gAppState->CurrentStatBlock.StatDex               = MakeClayIntString(sqlite3_column_int(stmt, col++));
-        gAppState->CurrentStatBlock.StatCon               = MakeClayIntString(sqlite3_column_int(stmt, col++));
-        gAppState->CurrentStatBlock.StatInt               = MakeClayIntString(sqlite3_column_int(stmt, col++));
-        gAppState->CurrentStatBlock.StatWis               = MakeClayIntString(sqlite3_column_int(stmt, col++));
-        gAppState->CurrentStatBlock.StatCha               = MakeClayIntString(sqlite3_column_int(stmt, col++));
+        gAppState->CurrentStatBlock.StatValues[STR]       = MakeClayIntString(sqlite3_column_int(stmt, col++));       
+        gAppState->CurrentStatBlock.StatValues[DEX]       = MakeClayIntString(sqlite3_column_int(stmt, col++));
+        gAppState->CurrentStatBlock.StatValues[CON]       = MakeClayIntString(sqlite3_column_int(stmt, col++));
+        gAppState->CurrentStatBlock.StatValues[INT]       = MakeClayIntString(sqlite3_column_int(stmt, col++));
+        gAppState->CurrentStatBlock.StatValues[WIS]       = MakeClayIntString(sqlite3_column_int(stmt, col++));
+        gAppState->CurrentStatBlock.StatValues[CHA]       = MakeClayIntString(sqlite3_column_int(stmt, col++));
+
+        // gAppState->CurrentStatBlock.StatStr               = MakeClayIntString(sqlite3_column_int(stmt, col++));
+        // gAppState->CurrentStatBlock.StatDex               = MakeClayIntString(sqlite3_column_int(stmt, col++));
+        // gAppState->CurrentStatBlock.StatCon               = MakeClayIntString(sqlite3_column_int(stmt, col++));
+        // gAppState->CurrentStatBlock.StatInt               = MakeClayIntString(sqlite3_column_int(stmt, col++));
+        // gAppState->CurrentStatBlock.StatWis               = MakeClayIntString(sqlite3_column_int(stmt, col++));
+        // gAppState->CurrentStatBlock.StatCha               = MakeClayIntString(sqlite3_column_int(stmt, col++));
 
         gAppState->CurrentStatBlock.StatProfBonus         = MakeClayIntString(sqlite3_column_int(stmt, col++));
 
-        int strScore = atoi(gAppState->CurrentStatBlock.StatStr.chars);
-        int dexScore = atoi(gAppState->CurrentStatBlock.StatDex.chars);
-        int conScore = atoi(gAppState->CurrentStatBlock.StatCon.chars);
-        int intScore = atoi(gAppState->CurrentStatBlock.StatInt.chars);
-        int wisScore = atoi(gAppState->CurrentStatBlock.StatWis.chars);
-        int chaScore = atoi(gAppState->CurrentStatBlock.StatCha.chars);
+        int strScore = atoi(gAppState->CurrentStatBlock.StatValues[STR].chars);
+        int dexScore = atoi(gAppState->CurrentStatBlock.StatValues[DEX].chars);
+        int conScore = atoi(gAppState->CurrentStatBlock.StatValues[CON].chars);
+        int intScore = atoi(gAppState->CurrentStatBlock.StatValues[INT].chars);
+        int wisScore = atoi(gAppState->CurrentStatBlock.StatValues[WIS].chars);
+        int chaScore = atoi(gAppState->CurrentStatBlock.StatValues[CHA].chars);
 
 
         #define DND_MOD(score) \

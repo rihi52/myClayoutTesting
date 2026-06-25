@@ -76,6 +76,15 @@ enum Speed {
     BURROW
 };
 
+enum Abilities {
+    STR,
+    DEX,
+    CON,
+    INT,
+    WIS,
+    CHA
+};
+
 typedef struct StatBlock {
     Clay_String StatId;
     Clay_String StatName;
@@ -100,6 +109,8 @@ typedef struct StatBlock {
 
     Clay_String StatAlignment;
     Clay_String StatLegendary;
+
+    Clay_String StatValues[NUM_ABILITIES];
 
     Clay_String StatStr;
     Clay_String StatDex;
