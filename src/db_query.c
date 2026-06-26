@@ -681,12 +681,6 @@ void LookUpCreatureStats(int MonsterId) {
         gAppState->CurrentStatBlock.SpeedValues[CLIMB]    = MakeClayIntString(sqlite3_column_int(stmt, col++));
         gAppState->CurrentStatBlock.SpeedValues[BURROW]   = MakeClayIntString(sqlite3_column_int(stmt, col++));
 
-        // gAppState->CurrentStatBlock.StatSpeedWalk         = MakeClayIntString(sqlite3_column_int(stmt, col++));
-        // gAppState->CurrentStatBlock.StatSpeedFly          = MakeClayIntString(sqlite3_column_int(stmt, col++));
-        // gAppState->CurrentStatBlock.StatSpeedSwim         = MakeClayIntString(sqlite3_column_int(stmt, col++));
-        // gAppState->CurrentStatBlock.StatSpeedClimb        = MakeClayIntString(sqlite3_column_int(stmt, col++));
-        // gAppState->CurrentStatBlock.StatSpeedBurrow       = MakeClayIntString(sqlite3_column_int(stmt, col++));
-
         gAppState->CurrentStatBlock.StatAlignment         = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
         gAppState->CurrentStatBlock.StatLegendary         = MakeClayString((const char*)sqlite3_column_text(stmt, col++));
 
@@ -696,13 +690,6 @@ void LookUpCreatureStats(int MonsterId) {
         gAppState->CurrentStatBlock.StatValues[INT]       = MakeClayIntString(sqlite3_column_int(stmt, col++));
         gAppState->CurrentStatBlock.StatValues[WIS]       = MakeClayIntString(sqlite3_column_int(stmt, col++));
         gAppState->CurrentStatBlock.StatValues[CHA]       = MakeClayIntString(sqlite3_column_int(stmt, col++));
-
-        // gAppState->CurrentStatBlock.StatStr               = MakeClayIntString(sqlite3_column_int(stmt, col++));
-        // gAppState->CurrentStatBlock.StatDex               = MakeClayIntString(sqlite3_column_int(stmt, col++));
-        // gAppState->CurrentStatBlock.StatCon               = MakeClayIntString(sqlite3_column_int(stmt, col++));
-        // gAppState->CurrentStatBlock.StatInt               = MakeClayIntString(sqlite3_column_int(stmt, col++));
-        // gAppState->CurrentStatBlock.StatWis               = MakeClayIntString(sqlite3_column_int(stmt, col++));
-        // gAppState->CurrentStatBlock.StatCha               = MakeClayIntString(sqlite3_column_int(stmt, col++));
 
         gAppState->CurrentStatBlock.StatProfBonus         = MakeClayIntString(sqlite3_column_int(stmt, col++));
 

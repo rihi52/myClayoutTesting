@@ -278,7 +278,7 @@ void FillStats(void) {
             CLAY_AUTO_ID({StatPageSubDivider, .backgroundColor = COLOR_TRANSPARENT, .border = { .width = { .bottom = 5 }, .color = COLOR_BLACK }}) {
                 for(int i = 0; i < NUM_ABILITIES; i++){
                     CLAY_AUTO_ID({StatPageAbilityDivider, .backgroundColor = COLOR_TRANSPARENT}) {
-                        CLAY_TEXT(gAppState->CurrentStatBlock.StatValues[i] CLAY_TEXT_CONFIG(StatPageAbilityScoreTextConfig));
+                        CLAY_TEXT(gAppState->CurrentStatBlock.StatValues[i], CLAY_TEXT_CONFIG(StatPageAbilityScoreTextConfig));
                     }
                 };
                 // CLAY_AUTO_ID({StatPageAbilityDivider, .backgroundColor = COLOR_TRANSPARENT}) {
@@ -302,7 +302,6 @@ void FillStats(void) {
             }
         }; /* Write senses  */
         CLAY(CLAY_ID("SensesContainer"), {StatPageDivider, .backgroundColor = COLOR_TRANSPARENT, .border = { .width = { .bottom = 5 }, .color = COLOR_BLACK }}) {
-            // 0 != SDL_strcmp("0", gAppState->CurrentStatBlock.StatSavingThrows.chars) && 0 != SDL_strcmp("NULL", gAppState->CurrentStatBlock.StatSavingThrows.chars)
             if (IsStringValid(gAppState->CurrentStatBlock.StatSavingThrows.chars)){
                 CLAY_AUTO_ID({StatPageSubDivider, .backgroundColor = COLOR_TRANSPARENT}) {
                     CLAY_TEXT(gAppState->CurrentStatBlock.StatSavingThrows, CLAY_TEXT_CONFIG(StatPageTextConfig));
@@ -440,17 +439,17 @@ void FillStats(void) {
                     CLAY_TEXT(gAppState->CurrentStatBlock.StatRegionalEffect, CLAY_TEXT_CONFIG(StatPageTextConfig));
                 }
             }
-            if (IsStringValid(gAppState->CurrentStatBlock.StatRegionalEffect1.chars)chars)){
+            if (IsStringValid(gAppState->CurrentStatBlock.StatRegionalEffect1.chars)){
                 CLAY_AUTO_ID({StatPageActionDivider, .backgroundColor = COLOR_TRANSPARENT}) {
                     CLAY_TEXT(gAppState->CurrentStatBlock.StatRegionalEffect1, CLAY_TEXT_CONFIG(StatPageTextConfig));
                 }
             }
-            if (IsStringValid(gAppState->CurrentStatBlock.StatRegionalEffect2.chars)chars)){
+            if (IsStringValid(gAppState->CurrentStatBlock.StatRegionalEffect2.chars)){
                 CLAY_AUTO_ID({StatPageActionDivider, .backgroundColor = COLOR_TRANSPARENT}) {
                     CLAY_TEXT(gAppState->CurrentStatBlock.StatRegionalEffect2, CLAY_TEXT_CONFIG(StatPageTextConfig));
                 }
             }
-            if (IsStringValid(gAppState->CurrentStatBlock.StatRegionalEffect3.chars)chars)){
+            if (IsStringValid(gAppState->CurrentStatBlock.StatRegionalEffect3.chars)){
                 CLAY_AUTO_ID({StatPageActionDivider, .backgroundColor = COLOR_TRANSPARENT}) {
                     CLAY_TEXT(gAppState->CurrentStatBlock.StatRegionalEffect3, CLAY_TEXT_CONFIG(StatPageTextConfig));
                 }
@@ -939,7 +938,7 @@ void NewStatblockPage(void) {
             }
         };
         CLAY(CLAY_ID("LegendaryBonusContainerFill"), {StatPageDivider, .backgroundColor = COLOR_TRANSPARENT, .border = { .width = { .bottom = 5 }, .color = COLOR_BLACK }}) {
-            if (0 != SDL_strcmp("0", gAppState->CurrentStatBlock.StatActionLeg.chars) && 0 != SDL_strcmp("NULL", gAppState->CurrentStatBlock.StatActionLeg.chars)){
+            if (IsStringValid( gAppState->CurrentStatBlock.StatActionLeg.chars)){
                 CLAY_AUTO_ID({StatPageActionDivider, .backgroundColor = COLOR_TRANSPARENT}) {
                     CLAY_TEXT(CLAY_STRING("(Optional) The creature can take 3 legendary actions, choosing from the options below. Only one legendary action can be used at a time and only at the end of another creature's turn. The creature regains spent legendary actions at the start of its turn."), CLAY_TEXT_CONFIG(StatPageTextConfig));
                     CLAY_AUTO_ID({StatPageSubDivider, .backgroundColor = COLOR_TRANSPARENT}) {
@@ -970,7 +969,7 @@ void NewStatblockPage(void) {
                     }
                 }
             }
-            if (0 != SDL_strcmp("0", gAppState->CurrentStatBlock.StatActionLeg2.chars) && 0 != SDL_strcmp("NULL", gAppState->CurrentStatBlock.StatActionLeg2.chars)){
+            if (IsStringValid(gAppState->CurrentStatBlock.StatActionLeg2.chars)){
                 CLAY_AUTO_ID({StatPageActionDivider, .backgroundColor = COLOR_TRANSPARENT}) {
                     CLAY_AUTO_ID({StatPageSubDivider, .backgroundColor = COLOR_TRANSPARENT}) {
                         CLAY_TEXT(CLAY_STRING("Legendary Action Two Name"), CLAY_TEXT_CONFIG(StatPageTextConfig));
@@ -1000,7 +999,7 @@ void NewStatblockPage(void) {
                     }
                 }
             }
-            if (0 != SDL_strcmp("0", gAppState->CurrentStatBlock.StatActionLeg3.chars) && 0 != SDL_strcmp("NULL", gAppState->CurrentStatBlock.StatActionLeg3.chars)){
+            if (IsStringValid(gAppState->CurrentStatBlock.StatActionLeg3.chars)){
                 CLAY_AUTO_ID({StatPageActionDivider, .backgroundColor = COLOR_TRANSPARENT}) {
                     CLAY_AUTO_ID({StatPageSubDivider, .backgroundColor = COLOR_TRANSPARENT}) {
                         CLAY_TEXT(CLAY_STRING("Legendary Action Three Name"), CLAY_TEXT_CONFIG(StatPageTextConfig));
