@@ -247,15 +247,6 @@ void FillStats(void) {
         CLAY(CLAY_ID("AbilityScoresContainer"), {StatPageDivider, .backgroundColor = COLOR_TRANSPARENT}) {
             /* Ability score labels*/
             CLAY_AUTO_ID({StatPageSubDivider, .backgroundColor = COLOR_TRANSPARENT}) {
-                // for(int i = 0; i < NUM_ABILITIES; i++){
-                //     CLAY_AUTO_ID({StatPageAbilityDivider, .backgroundColor = COLOR_TRANSPARENT}) {
-                //         Clay_String abilityStr = {
-                //             .chars = AbilityModName[i],
-                //             .length = SDL_strlen(AbilityModName[i])
-                //         };
-                //         CLAY_TEXT(abilityStr, CLAY_TEXT_CONFIG(StatPageAbilityScoreTextConfig));
-                //     }
-                // };
                 CLAY_AUTO_ID({StatPageAbilityDivider, .backgroundColor = COLOR_TRANSPARENT}) {
                     CLAY_TEXT(CLAY_STRING("STR"), CLAY_TEXT_CONFIG(StatPageAbilityScoreTextConfig));
                 }
@@ -1066,8 +1057,7 @@ void NewStatblockPage(void) {
 
 /*========================================================================* 
  *  SECTION - Local functions
- *========================================================================* 
- 0 != SDL_strcmp("0", gAppState->CurrentStatBlock.StatActionLeg.chars) && 0 != SDL_strcmp("NULL", gAppState->CurrentStatBlock.StatActionLeg.chars) */
+ *========================================================================*/
 
 static bool IsStringValid(const char *str) {
     if (str == NULL || str[0] == '\0' || str == "") {
