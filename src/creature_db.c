@@ -507,6 +507,18 @@ void NewStatblockPage(void) {
                     FocusAndWriteTextBox(CLAY_ID("HPTextBox"), CurrentFocus, &StatHitpointsAvgTextBox); 
                 } 
             }
+            CLAY(CLAY_ID("SpeedContainerFill"), {StatPageSubDivider, .backgroundColor = COLOR_TRANSPARENT}) {
+                CLAY_TEXT(CLAY_STRING("Speed (comma separated list)"), CLAY_TEXT_CONFIG(StatPageTextConfig));
+                CLAY(CLAY_ID("SpeedTextBox"), {
+                    SingleLineInputLayoutConfig,
+                    .backgroundColor = (gAppState->focusedId.id == CLAY_ID("SpeedTextBox").id) ? COLOR_BLACK : COLOR_GRAY_BG,
+                    .cornerRadius = CLAY_CORNER_RADIUS(GLOBAL_RADIUS_SM_PX),
+                }) {
+                    Clay_OnHover(FocusWindowCallback, gAppState);
+                    uint32_t CurrentFocus = gAppState->focusedId.id;
+                    FocusAndWriteTextBox(CLAY_ID("SpeedTextBox"), CurrentFocus, &StatSpeedTextBox); 
+                } 
+            }
         }; /* Start Ability Scores container*/
         CLAY(CLAY_ID("AbilityScoresContainerFill"), {StatPageDivider, .backgroundColor = COLOR_TRANSPARENT}) {
             CLAY_TEXT(CLAY_STRING("Ability Scores (not modifiers)"), CLAY_TEXT_CONFIG(StatPageAbilityScoreTextConfig));

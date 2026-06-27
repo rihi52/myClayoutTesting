@@ -41,6 +41,7 @@ typedef enum
     TXT_NAME = 0,
     TXT_TYPE,
     TXT_SIZE,
+    TXT_SPEED,
     TXT_SPEED_TYPE,
     TXT_SPEED_WALK,
     TXT_SPEED_FLY,
@@ -162,6 +163,7 @@ Clay_String EncounterName;
 extern TextBox StatCrTextBox;
 extern TextBox StatArmorClassTextBox;
 extern TextBox StatHitpointsAvgTextBox;
+extern TextBox StatSpeedTextBox;
 extern TextBox StatHitDiceTextBox;
 extern TextBox StatHitpointsRollTextBox;
 extern TextBox StatStrTextBox;

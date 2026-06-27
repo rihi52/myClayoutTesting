@@ -54,6 +54,7 @@ TextBox StatThrowChaTextBox;
 TextBox StatNameTextBox;
 TextBox StatTypeTextBox;
 TextBox StatSizeTextBox;
+TextBox StatSpeedTextBox;
 TextBox StatSpeedTypeTextBox;
 TextBox StatSpeedWalkTextBox;
 TextBox StatSpeedFlyTextBox;
@@ -1091,6 +1092,7 @@ void StructureFieldArrays() {
     TextFields[TXT_NAME]                        = &StatNameTextBox;
     TextFields[TXT_TYPE]                        = &StatTypeTextBox;
     TextFields[TXT_SIZE]                        = &StatSizeTextBox;
+    TextFields[TXT_SPEED]                       = &StatSpeedTextBox;
     TextFields[TXT_SPEED_TYPE]                  = &StatSpeedTypeTextBox;
     TextFields[TXT_SPEED_WALK]                  = &StatSpeedWalkTextBox;
     TextFields[TXT_SPEED_FLY]                   = &StatSpeedFlyTextBox;

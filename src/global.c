@@ -269,6 +269,12 @@ void InitializeTextBoxes() {
     StatNameTextBox.StringToDisplay.isStaticallyAllocated = false;
     StatNameTextBox.IsInitialized = true;
 
+    SDL_memset(StatSpeedTextBox.TextBoxBuffer, 0, sizeof(StatSpeedTextBox.TextBoxBuffer));
+    StatSpeedTextBox.StringToDisplay.chars = StatSpeedTextBox.TextBoxBuffer;
+    StatSpeedTextBox.StringToDisplay.length = 0;
+    StatSpeedTextBox.StringToDisplay.isStaticallyAllocated = false;
+    StatSpeedTextBox.IsInitialized = true;
+
     SDL_memset(StatCrTextBox.TextBoxBuffer, 0, sizeof(StatCrTextBox.TextBoxBuffer));
     StatCrTextBox.StringToDisplay.chars = StatCrTextBox.TextBoxBuffer;
     StatCrTextBox.StringToDisplay.length = 0;
@@ -1314,6 +1320,9 @@ void ClearTextBoxes() {
     // Core Info
     SDL_memset(StatNameTextBox.TextBoxBuffer, 0, sizeof(StatNameTextBox.TextBoxBuffer));
     StatNameTextBox.StringToDisplay.length = 0;
+
+    SDL_memset(StatSpeedTextBox.TextBoxBuffer, 0, sizeof(StatSpeedTextBox.TextBoxBuffer));
+    StatSpeedTextBox.StringToDisplay.length = 0;
 
     SDL_memset(StatCrTextBox.TextBoxBuffer, 0, sizeof(StatCrTextBox.TextBoxBuffer));
     StatCrTextBox.StringToDisplay.length = 0;
